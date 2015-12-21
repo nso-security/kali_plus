@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -v
 apt-get update
 apt-get upgrade -y
 apt-get install linux-headers-$(uname -r) -y
