@@ -6,7 +6,7 @@
 
 
 #Report
-use reporting/html_report
+use reporting/html
 #set filename ./company.html
 run
 
@@ -19,8 +19,8 @@ run
 #query select * from hosts where host like '%office365%'
 #query delete from hosts where host like '%outlook.com%'
 #query delete from hosts where rowid >2 and rowid <19
-
-
+#to change workspaces
+workspaces select Stalwart
 #
 #TO BE RESEARCHED
 #
