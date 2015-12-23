@@ -1,0 +1,15 @@
+#you need to run the following commands
+
+#keys add [keyname] [Retrieve from the password vault]
+keys add bing_api 
+keys add ipinfodb_api 
+keys add builtwith_api
+
+#define workspace name, domain, client, engineer at end of these lines
+workspaces add 
+add domains 
+set customer 
+set creator 
+
+#this is a dialog
+add companies

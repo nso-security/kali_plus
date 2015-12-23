@@ -1,0 +1,71 @@
+#Look through Bing for domain names
+use recon/domains-hosts/bing_domain_web 
+run
+#Look through Google for domain names
+use recon/domains-hosts/google_site_web
+run
+#Look through Baidu
+use recon/domains-hosts/baidu_site 
+run
+#Brute-force subdomains
+use recon/domains-hosts/brute_hosts
+run
+#Look at netcraft for domain names
+use recon/domains-hosts/netcraft
+run
+#Shodan requires subscription
+#use recon/domains-hosts/shodan_hostname
+
+run
+use recon/hosts-hosts/reverse_resolve
+run
+use recon/hosts-hosts/resolve
+run
+use recon/hosts-hosts/bing_ip
+run
+use recon/hosts-hosts/ipinfodb
+run
+use recon/domains-hosts/ssl_san
+run
+use recon/domains-hosts/vpnhunter
+run
+use discovery/info_disclosure/interesting_files
+run
+
+#Should probably manually clean out the database.
+use recon/domains-hosts/builtwith
+run
+#you may have to review builtwith manually
+
+#
+#VULNS
+#
+use recon/domains-vulnerabilities/punkspider
+run
+#note, you may have to set vulns true to get the actual results
+
+use recon/domains-vulnerabilities/xssed
+run
+
+#Note, had trouble with this module on 12/22/2015
+use recon/netblocks-ports/census_2012
+run
+
+
+
+#
+#CONTACTS
+#
+use recon/domains-contacts/pgp_search
+run
+use recon/domains-contacts/whois_pocs
+run
+use recon/domains-contacts/salesmaple
+run
+use recon/domains-contacts/metacrawler
+run
+
+use recon/contacts-contacts/mailtester
+run
+#Note, you may have to [Ctrl]-[C] if mail server doesn't validate
+

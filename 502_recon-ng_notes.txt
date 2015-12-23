@@ -1,0 +1,43 @@
+#To find an account that may be used on other services
+#use recon/profiles-profiles/namechk
+#set SOURCE [username]
+#run
+
+
+
+#Report
+use reporting/html_report
+#set filename ./company.html
+run
+
+
+
+#
+# OTHER USEFUL COMMANDS
+#
+#query select * from hosts
+#query select * from hosts where host like '%office365%'
+#query delete from hosts where host like '%outlook.com%'
+#query delete from hosts where rowid >2 and rowid <19
+
+
+#
+#TO BE RESEARCHED
+#
+#APIcost? recon/contacts/gather/http/api/linkedin_auth
+#APIcost? recon/companies-contacts/jigsaw/search_contacts
+#APIcost? recon/hosts-ports/shodan_ip
+#APIcost? use recon/domains-credentials/pwnedlist/doman_ispwned
+# Could not find: recon/hosts/enum/http/api/whatweb
+# Could not find: recon/hosts/enum/http/web/urlvoid
+# Could not find: recon/contacts/enum/http/web/haveibeenpwned
+#mangle - builds contact list based on naming convention
+
+#Not working When Attempted
+#use recon/contacts-credentials/pwnedlst #responses not understood
+#recon/credentials-credentials/leakdb #must have hashes
+#recon/netblocks-ports/census_2012 
+
+#Other tool http://whatweb.net/
+#Reference: http://www.irongeek.com/i.php?page=videos/derbycon3/1104-look-ma-no-exploits-the-recon-ng-framework-tim-lanmaster53-tomes
+#Reference: https://bitbucket.org/LaNMaSteR53/recon-ng/wiki/Usage%20Guide#!acquiring-api-keys
