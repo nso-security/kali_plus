@@ -6,7 +6,7 @@ use warnings;
   my($payload, $platform_arch , $commandControl );
   my($currentFileName, $encoder);
 
-  $targetFolder="/tmp/Meterpreters";
+  $targetFolder="/opt/local/";
   $LHOST='169.254.70.157';
   $LPORT='443'; 
   $IoE="I";#Denote file as intended for internal or external use
