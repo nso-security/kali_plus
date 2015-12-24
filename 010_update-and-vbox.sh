@@ -1,6 +1,7 @@
 #!/bin/bash -v
 apt-get update
 apt-get upgrade -y
+apt-get dist-upgrade -y
 apt-get install linux-headers-$(uname -r) -y
 echo "Virtual Box > Devices > Insert Guest Additions > and then press any key\n"
 pause
