@@ -6,5 +6,3 @@ git clone https://github.com/wbmartin/masscan.git /opt/masscan
 cd /opt/masscan
 make 
 make install
-
-
