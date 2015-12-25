@@ -9,7 +9,7 @@ gpg --export 3EE67F3D0FF405B2 > 3EE67F3D0FF405B2.gpg
 apt-key add ./3EE67F3D0FF405B2.gpg
 rm ./3EE67F3D0FF405B2.gpg
 apt-get update
-apt-get install firefox 
+apt-get install -y firefox 
 
 
 #When you get ready for web penetration testing you need to add these additions"
