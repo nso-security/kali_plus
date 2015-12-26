@@ -15,6 +15,8 @@ def buildConfigurationFiles():
   filewrite.close()
 
 
+call(["git", "config --global user.name 'wbmartin'"])
+call(["git", "config --global user.email donotreply@gmail.com"])
 
 
 
