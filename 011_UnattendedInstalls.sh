@@ -66,6 +66,7 @@ cd /opt/wbm_kali
 ./054_Veil.sh
 
 cd /opt/wbm_kali
+./100_tmuxlogging.sh
 
 cd /opt/wbm_kali
 
