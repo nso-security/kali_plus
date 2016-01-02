@@ -1,0 +1,9 @@
+#
+# ACTIVE DIRECTORY GROUP MEMBERSHIP
+#
+Get-ADGroupMember [-Identity] <ADGroup> [-AuthType {<Negotiate> | <Basic>}] [-Credential <PSCredential>] [-Partition <string>] [-Recursive <switch>] [-Server <string>] [<CommonParameters>]
+
+#Reference: https://technet.microsoft.com/en-us/library/ee617193.aspx
+#Examples
+#  get-adgroupmember "Enterprise Admins" -recursive
+#  get-adgroupmember -Identity administrators 
