@@ -70,3 +70,5 @@ cd /opt/wbm_kali
 
 cd /opt/wbm_kali
 
+#misc apt-get
+sudo apt-get -y install pdftk
