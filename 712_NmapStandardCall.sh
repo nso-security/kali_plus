@@ -1,5 +1,5 @@
 #!/bin/bash
-nmap -n -Pn -A -iL IPList.txt  -oA [CLIENT]-[PROJECT]-NmapScan
+nmap -n -Pn -A -iL IPList.txt  -oA ./nmapresults/[CLIENT]-[PROJECT]-NmapScan
 
 #-n says don't resolve DNS
 #-Pn says don't depend on ping Sweep
