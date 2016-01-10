@@ -1,0 +1,51 @@
+#Linux change to DHCP
+#two options, command line and GUI
+
+#GUI for Kali - Upper right hand corner
+#
+#==========================
+#
+sudo vi /etc/network/interfaces
+      ## To configure a dynamic IP address
+      auto eth0
+      iface eth0 inet dhcp
+      
+      ## Or configure a static IP
+      auto eth0
+      iface eth0 inet static
+        address 192.168.1.14
+        gateway 192.168.1.1
+        netmask 255.255.255.0
+        network 192.168.1.0
+        broadcast 192.168.1.255
+
+#
+#=====================
+#Debian Linux restart network
+sudo /etc/init.d/networking restart
+
+
+#
+#===========================
+# Virtual Box 
+#vlan management
+File > Preferences 
+#remember when using nat over wireless dhcp is not going to work because it attaches to wired interface
+
+#For Device specific
+Device > Settings > Network
+
+#
+#===========================
+#
+#WINDOWS
+netsh interface ip show interfaces
+#confirm, but most likely named "Local Area Connection" and then
+netsh interface ip set address ”Local Area Connection” static 10.0.2.16 255.255.255.0 10.0.2.2
+# netsh interface ip set address local ”Local Area Connection” static [IP] [NETMASK] [GATEWAY]
+#then to set DNS
+netsh interface ip set dns "Local Area Connection" static 8.8.8.8
+
+#to set windows dhcp
+netsh interface ip set address ”Local Area Connection” dhcp
+
