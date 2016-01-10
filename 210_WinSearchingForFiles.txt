@@ -1,0 +1,6 @@
+#
+#SEARCHING BY FILENAME
+#
+dir /S /P "Path\FileName" *Searchfor*
+#/S is recursive
+#/P is path
