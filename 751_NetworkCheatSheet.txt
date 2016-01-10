@@ -5,6 +5,7 @@
 #
 #==========================
 #
+#reference: https://help.ubuntu.com/community/NetworkConfigurationCommandLine/Automatic
 sudo vi /etc/network/interfaces
       ## To configure a dynamic IP address
       auto eth0
