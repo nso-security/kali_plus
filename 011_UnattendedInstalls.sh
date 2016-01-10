@@ -69,4 +69,5 @@ cd /opt/wbm_kali
 ./100_tmuxlogging.sh
 
 cd /opt/wbm_kali
+./055_NessusParser.sh
 

@@ -12,6 +12,7 @@ cd /opt/wbm_kali
 ./047_smbexec.sh
 
 cd /opt/wbm_kali
+#./055_NessusParser.sh
 
 cd /opt/wbm_kali
 
