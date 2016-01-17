@@ -1,4 +1,6 @@
 #!/bin/bash -v
+
+cpan -i XML::TreePP # Needed to install other perl dependencies
 cd /opt/wbm_kali
 ./020_Metasploit.sh
 
