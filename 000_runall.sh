@@ -1,7 +1,7 @@
 #!/bin/bash -v
 #ls >000_runall.sh
 #%sv/^0/\.\/0/
-009_UpdateRepos.sh
+./009_UpdateRepos.sh
 ./010_vbox.sh
 ./020_Metasploit.sh
 ./030_back-door-factory.sh
