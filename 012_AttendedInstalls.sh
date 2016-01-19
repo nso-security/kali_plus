@@ -19,6 +19,8 @@ cd /opt/kali_plus
 
 cd /opt/kali_plus
 ./054_Veil.sh
+cd /opt/kali_plus
+./056_GoogleEarth.sh
 
 cd /opt/kali_plus
 
