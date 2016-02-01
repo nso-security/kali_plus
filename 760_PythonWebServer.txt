@@ -1,0 +1,2 @@
+#This command will start the simple Python web server on port 80
+python -m SimpleHTTPServer 80
