@@ -1,0 +1,7 @@
+# To connect to serial interface
+modprobe usbserial
+modprobe ftdi-sio
+echo 9e88 9e8f > /sys/bus/usb-serial/drivers/ftdi_sio/new_id
+screen /dev/ttyUSB0 115200
+#reference https://bbs.archlinux.org/viewtopic.php?id=175499
+#reference https://www.pwnieexpress.com/wp-content/uploads/2014/08/PwnieExpressUserManual-FixedSensorProductLine.pdf
