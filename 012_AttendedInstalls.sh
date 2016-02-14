@@ -1,30 +1,36 @@
 #!/bin/bash -v
-cd /opt/wbm_kali
+
+cpan -i XML::TreePP # Needed to install other perl dependencies
+cd /opt/kali_plus
 ./020_Metasploit.sh
 
-cd /opt/wbm_kali
+cd /opt/kali_plus
 ./033_gitrob.sh
 
-cd /opt/wbm_kali
+cd /opt/kali_plus
 ./036_BEef.sh
 
-cd /opt/wbm_kali
+cd /opt/kali_plus
 ./047_smbexec.sh
 
-cd /opt/wbm_kali
+cd /opt/kali_plus
 #./055_NessusParser.sh
 
-cd /opt/wbm_kali
 
-cd /opt/wbm_kali
+cd /opt/kali_plus
+./054_Veil.sh
+cd /opt/kali_plus
+./056_GoogleEarth.sh
 
-cd /opt/wbm_kali
+cd /opt/kali_plus
 
-cd /opt/wbm_kali
+cd /opt/kali_plus
 
-cd /opt/wbm_kali
+cd /opt/kali_plus
 
-cd /opt/wbm_kali
+cd /opt/kali_plus
+
+cd /opt/kali_plus
 
 
-cd /opt/wbm_kali
+cd /opt/kali_plus

@@ -1,7 +1,7 @@
 #!/bin/bash -v
 
 #referenced http://www.drchaos.com/installing-firefox-on-kali-linux/
-apt-get remove iceweasel
+apt-get remove -y iceweasel
 echo -e "\ndeb http://packages.linuxmint.com debian import" | tee -a /etc/apt/sources.list > /dev/null
 
 gpg --keyserver pgp.mit.edu --recv-keys 3EE67F3D0FF405B2
