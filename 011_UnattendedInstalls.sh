@@ -71,5 +71,8 @@ cd /opt/wbm_kali
 cd /opt/wbm_kali
 ./055_NessusParser.sh
 
+cd /opt/wbm_kali
+./056_Impacket.sh
+
 #misc apt-get
 sudo apt-get -y install pdftk
