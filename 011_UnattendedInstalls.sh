@@ -1,5 +1,8 @@
 #!/bin/bash -v
 cd /opt/kali_plus
+./018_StartupServices.sh
+
+cd /opt/kali_plus
 ./030_back-door-factory.sh
 
 cd /opt/kali_plus
