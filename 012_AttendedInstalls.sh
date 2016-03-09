@@ -23,7 +23,7 @@ cd /opt/kali_plus
 ./056_GoogleEarth.sh
 
 cd /opt/kali_plus
-#Accept defaults and use a passphrase
+#Accept defaults
 ssh-keygen
 
 
