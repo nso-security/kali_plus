@@ -6,4 +6,7 @@ fi
 
 autossh -M 10984 -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -i /root/.ssh/nopwd -R 6666:localhost:22 remy@$1 -p 2222
 
+#to make this run on startup, add the following to /etc/rc.local and make sure Certificates are in configured
+/opt/kali_plus/801_ReverseSSH.sh [Remote Listener IP]
+
 #reference - https://raymii.org/s/tutorials/Autossh_persistent_tunnels.html
