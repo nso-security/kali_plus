@@ -1,0 +1,11 @@
+#to enable a service on startup
+update-rc.d [service] enable
+
+#to list services
+service --status-all
+
+#to manage startup
+sysv-rc-conf
+rcconf
+
+#There is typically a skeleton file in /etc/init.d to use as a starting point for new services.
