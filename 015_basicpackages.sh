@@ -5,3 +5,4 @@ sudo apt-get install -y libpcap-dev
 sudo apt-get install -y gpsd gpsd-clients
 #Revers Shells
 sudo apt-get install autossh ssh
+sudo apt-get install autossh x11vnc
