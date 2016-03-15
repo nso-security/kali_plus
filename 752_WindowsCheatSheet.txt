@@ -4,3 +4,6 @@ dsadd user "CN=[USERNAME],CN=Users,DC=[DOMAIN],DC=local" -pwd P@ssword123 -membe
 
 #Windows System components
 Taskschd.msc
+
+#Windows 8.1 Directory for adding a link to start menu
+ C:\ProgramData\Microsoft\Windows\Start Menu\Programs
