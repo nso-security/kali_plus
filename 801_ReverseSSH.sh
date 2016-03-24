@@ -13,3 +13,5 @@ autossh -M 10984 -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -i
 #/usr/bin/autossh -M 10986 -N -f -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -i /root/.ssh/nopwd -R 8888:localhost:5900 kali_rvs@[CLOUD_IP] &
 
 #reference - https://raymii.org/s/tutorials/Autossh_persistent_tunnels.html
+
+#also adding "AUTOSSH_POLL=120" to /etc/environment will cause autossh to check the connections every 2 minutes.
