@@ -15,3 +15,6 @@ autossh -M 10984 -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -i
 #reference - https://raymii.org/s/tutorials/Autossh_persistent_tunnels.html
 
 #also adding "AUTOSSH_POLL=120" to /etc/environment will cause autossh to check the connections every 2 minutes.
+
+#To check for listeners on the middleman IP
+#netstat -tulpn |egrep 6666\|6665\|8888\|9999\|9998
