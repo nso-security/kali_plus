@@ -1,3 +1,7 @@
+#
+# Services
+#
+
 #to enable a service on startup
 update-rc.d [service] enable
 
@@ -9,3 +13,11 @@ sysv-rc-conf
 rcconf
 
 #There is typically a skeleton file in /etc/init.d to use as a starting point for new services.
+
+
+#
+# Disk
+#
+
+#to find the largest files
+du -a [path] | sort -n -r | 
