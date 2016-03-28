@@ -21,3 +21,11 @@ rcconf
 
 #to find the largest files
 du -a [path] | sort -n -r | 
+
+# to verify ubuntu default encryption
+cat /etc/crypttab
+#that will show the partition and mapper name
+#command will probably look like this to change the password
+# sudo cryptsetup luksAddKey /dev/sda5
+#will require old password and then you enter the new one twice as expected
+
