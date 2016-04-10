@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 #
-# StartListener.py
-# Simple python script to start a Meterpreter HTTPs Handler
-# by Chris Campbell (obscuresec)
+# MetasploitListeners.py
+# Simple python script to create multiple Meterpreter HTTPs handlers
+# by Chris Campbell (obscuresec) editted by Brandon Martin and Cornel du Preez (stalwartsystems)
 #
 import sys
-import subprocess
+import os
 
 def build(lhost,lport):
   listenerPath="/opt/local/malwaredefense"
@@ -16,9 +16,15 @@ def build(lhost,lport):
   options += "set ExitOnSession false\n"
   options += "set EnableStageEncoding false\n"
   options += "exploit -j\n"
-  filewrite = file(listenerFileName, "w")
-  filewrite.write(options)
-  filewrite.close()
+  if not os.path.exists(os.path.dirname(listenerFileName)):
+    try:
+        os.makedirs(os.path.dirname(listenerFileName))
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+  with open(listenerFileName, "w") as f:
+    f.write(options)
+    f.close()
 
 
 #====================================================
@@ -32,9 +38,15 @@ def build(lhost,lport):
   options += "set EnableStageEncoding false\n"
   options += "set AutoRunScript post/windows/manage/smart_migrate\n"
   options += "exploit -j\n"
-  filewrite = file(listenerFileName, "w")
-  filewrite.write(options)
-  filewrite.close()
+  if not os.path.exists(os.path.dirname(listenerFileName)):
+    try:
+        os.makedirs(os.path.dirname(listenerFileName))
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+  with open(listenerFileName, "w") as f:
+    f.write(options)
+    f.close()
 
 #====================================================
   listenerFileName="{0}/{1}".format(listenerPath,"502-reverse_tcp.rc")
@@ -43,10 +55,16 @@ def build(lhost,lport):
   options += "set ExitOnSession false\n"
   options += "set EnableStageEncoding true\n"
   options += "exploit -j\n"
-  filewrite = file(listenerFileName, "w")
-  filewrite.write(options)
-  filewrite.close()
- 
+  if not os.path.exists(os.path.dirname(listenerFileName)):
+    try:
+        os.makedirs(os.path.dirname(listenerFileName))
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+  with open(listenerFileName, "w") as f:
+    f.write(options)
+    f.close()
+
 
 
 
