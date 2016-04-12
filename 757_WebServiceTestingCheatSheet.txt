@@ -2,3 +2,5 @@ Acunetix
 Nessus
 Sparta
 dirb
+  dirb https://IP:PORT /usr/share/wordlists/dirb/common.txt 
+
