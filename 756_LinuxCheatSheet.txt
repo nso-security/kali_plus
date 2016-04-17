@@ -29,3 +29,8 @@ cat /etc/crypttab
 # sudo cryptsetup luksAddKey /dev/sda5
 #will require old password and then you enter the new one twice as expected
 
+
+#BOOT Tricks
+#reference: http://www.tldp.org/HOWTO/Keyboard-and-Console-HOWTO-7.html
+Console Switching: Alt-Fn or Ctrl-Alt-Fn
+
