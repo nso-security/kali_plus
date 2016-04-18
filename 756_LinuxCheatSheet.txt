@@ -34,3 +34,10 @@ cat /etc/crypttab
 #reference: http://www.tldp.org/HOWTO/Keyboard-and-Console-HOWTO-7.html
 Console Switching: Alt-Fn or Ctrl-Alt-Fn
 
+
+Change DHCP Name
+#reference http://www.virtxpert.com/allow-linux-to-register-records-with-windows-dns-and-dhcp/
+edit /etc/dhcp3/dhclient.config and update the following line
+send host-name "hostname"
+
+
