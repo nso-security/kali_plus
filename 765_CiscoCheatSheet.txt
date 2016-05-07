@@ -1,0 +1,14 @@
+#to setup a span port on a Cisco2960 type switch
+=================================
+#to find what port an ip address is on
+ping 10.1.1.3
+sh ip arp
+#get the mac address
+sho mac address-table address [mac Address]
+
+#to setup a mirror port
+enable
+no monitor session all
+monitor session 1 source interface fa0/1 both
+#repeat above statement for all interfaces.
+monitor session 1 destination interface fa0/13
