@@ -1,0 +1,2 @@
+#capture internal IP
+curl -k https://IP.AD.DR.ES/ -D - --http1.0 -v -l --Header 'HOST: '
