@@ -1,0 +1,43 @@
+#
+# Services
+#
+
+#to enable a service on startup
+update-rc.d [service] enable
+
+#to list services
+service --status-all
+
+#to manage startup
+sysv-rc-conf
+rcconf
+
+#There is typically a skeleton file in /etc/init.d to use as a starting point for new services.
+
+
+#
+# Disk
+#
+
+#to find the largest files
+du -a [path] | sort -n -r | 
+
+# to verify ubuntu default encryption
+cat /etc/crypttab
+#that will show the partition and mapper name
+#command will probably look like this to change the password
+# sudo cryptsetup luksAddKey /dev/sda5
+#will require old password and then you enter the new one twice as expected
+
+
+#BOOT Tricks
+#reference: http://www.tldp.org/HOWTO/Keyboard-and-Console-HOWTO-7.html
+Console Switching: Alt-Fn or Ctrl-Alt-Fn
+
+
+Change DHCP Name
+#reference http://www.virtxpert.com/allow-linux-to-register-records-with-windows-dns-and-dhcp/
+edit /etc/dhcp3/dhclient.config and update the following line
+send host-name "hostname"
+
+

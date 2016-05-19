@@ -23,6 +23,9 @@ cd /opt/kali_plus
 ./056_GoogleEarth.sh
 
 cd /opt/kali_plus
+#Accept defaults, but place file /root/.ssh/nopwd
+ssh-keygen
+
 
 cd /opt/kali_plus
 

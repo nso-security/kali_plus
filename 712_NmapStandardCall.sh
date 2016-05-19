@@ -5,3 +5,8 @@ nmap -n -Pn -A -iL IPList.txt  -oA ./nmapresults/[CLIENT]-[PROJECT]-NmapScan
 #-Pn says don't depend on ping Sweep
 #-A says to enable OS and version detection, script scanning, and traceroute;
 #no need to put extension on the filename the -A will genreate them all
+# add -T polite  (or sneaky) to slow the scan down
+
+
+#poodle test
+nmap -sV --version-light --script ssl-poodle -p 443 [IP]

@@ -1,0 +1,9 @@
+#If you ever need to move nessus files around between users/systems during an assessment, they are stored here
+/opt/nessus/var/nessus/users/
+
+#To install, reference http://www.tenable.com/blog/installing-and-using-nessus-on-kali-linux
+1.  Log into support.tenable.com
+2.  Downloads
+3.  download nessus agent, probably amd64
+4.  dpkg -i filename
+5.  Get activation code
