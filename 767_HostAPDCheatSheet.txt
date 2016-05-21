@@ -1,0 +1,26 @@
+apt-get install libssl-dev libnl-3-dev libnl-genl-3-dev
+
+git clone https://github.com/OpenSecurityResearch/hostapd-wpe
+
+wget http://hostap.epitest.fi/releases/hostapd-2.2.tar.gz
+tar -zxf hostapd-2.2.tar.gz
+cd hostapd-2.2
+patch -p1 < ../hostapd-wpe/hostapd-wpe.patch
+cd hostapd
+#attended install
+#vi .config
+#uncommnet CONFIG_LIBNL32=y
+make
+
+#Generae certificates
+cd /opt/hostapd-wpe/certs
+./bootstrap
+
+#Edit Config
+vi /opt/hostapd-wpe/hostapd-2.2/hostapd/hostapd-wpe.conf
+
+cd /opt/hostapd-wpe/hostapd-2.2/hostapd
+sudo ./hostapd-wpe hostapd-wpe.conf
+
+#reference http://askubuntu.com/questions/617973/fatal-error-netlink-genl-genl-h-no-such-file-or-directory
+#reference http://blog.opensecurityresearch.com/2014/09/hostapd-wpe-now-with-more-pwnage.html
