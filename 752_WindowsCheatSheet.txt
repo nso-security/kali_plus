@@ -1,6 +1,9 @@
 
 #Add a domain user and make them a domain admin.
 dsadd user "CN=[USERNAME],CN=Users,DC=[DOMAIN],DC=local" -pwd P@ssword123 -memberof "CN=Domain Admins,CN=Users,DC=domain,DC=local"
+-or-
+net user [USER] [PASSWORD] /DOMAIN /ADD
+  net group "Domain Admins" [USER] /ADD
 
 #Windows System components
 Taskschd.msc
