@@ -49,8 +49,10 @@ aircrack-ng -b [BSSID MAC] [FILE NAME]
 
 --Wireshark EAP display filter --
 eapol
---wireshark ssid display filter
+--wireshark ssid display filter--
 wlan_mgt.ssid == "[SSID]"
+--Additional wireshark reference--
+https://wiki.wireshark.org/Wi-Fi
 
 
 
