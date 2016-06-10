@@ -41,3 +41,7 @@ edit /etc/dhcp3/dhclient.config and update the following line
 send host-name "hostname"
 
 
+#Finding dependencies
+apt-file search [missing .h file]
+
+
