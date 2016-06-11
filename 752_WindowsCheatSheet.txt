@@ -4,6 +4,8 @@ dsadd user "CN=[USERNAME],CN=Users,DC=[DOMAIN],DC=local" -pwd P@ssword123 -membe
 -or-
 net user [USER] [PASSWORD] /DOMAIN /ADD
   net group "Domain Admins" [USER] /ADD
+  
+#additional net user reference: http://retrohack.com/net-user-command-reference-and-examples/
 
 #Windows System components
 Taskschd.msc
