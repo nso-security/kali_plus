@@ -1,0 +1,8 @@
+
+--------~/.vimrc commands
+set backupdir-=.
+set backupdir^=~/tmp,/tmp or %TEMP% for win
+set expandtab
+set shiftwidth=2
+set tabstop=2
+inoremap <F3> <C-R>=strftime("%m%d%y-%H:%M:%S ")<CR>
