@@ -1,9 +1,12 @@
 #!/bin/bash
-sudo apt-get install -y nmap
-sudo apt-get install -y traceroute
-sudo apt-get install -y libpcap-dev
-sudo apt-get install -y gpsd gpsd-clients
+apt-get install -y nmap
+apt-get install -y traceroute
+apt-get install -y libpcap-dev
+apt-get install -y gpsd gpsd-clients
 #Revers Shells
-sudo apt-get install autossh ssh
-sudo apt-get install autossh x11vnc
-sudo apt-get install vinagre
+apt-get install autossh ssh
+apt-get install autossh x11vnc
+apt-get install vinagre
+#smbexec
+apt-get install -y libxml2-dev
+apt-get install -y libxlst-dev

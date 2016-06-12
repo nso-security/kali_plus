@@ -6,3 +6,12 @@
 git clone https://github.com/wbmartin/smbexec.git /opt/smbexec 
 cd /opt/smbexec && ./install.sh 
 ./install.sh 
+
+#SMBExec has trouble installing on the rolling Kali.  These two links will get it going
+#1 Symlink the built in libs https://github.com/pentestgeek/smbexec/issues/125
+#    from smbexec\progs:
+#    ln -s /usr/bin/pth-winexe smbwinexe
+#    ln -s /usr/bin/pth-smbclient smbexeclient
+
+#2 Install NTDSXtract and mingw32
+# http://hackers-workshop.net/howto-get-smbexec-work-with-kali-2-0/
