@@ -1,0 +1,15 @@
+Standard Plugins
+1.  WSDLER
+2.  CO2 (SQLMapper)
+3.  Retire.js
+4.  FuzzDB - https://github.com/fuzzdb-project/fuzzdb/wiki/regexerrors
+
+Plugins for Review
+W3AF: http://blog.ombrepixel.com/post/2010/09/09/Running-w3af-plugins-in-Burp-Suite
+
+Firefox Plugins
+1.  Foxy Proxy Standard
+2.  User Agent Overrider - https://addons.mozilla.org/en-US/firefox/addon/user-agent-overrider/
+
+
+
