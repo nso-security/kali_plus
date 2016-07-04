@@ -1,12 +1,14 @@
 #!/bin/bash
-apt-get install -y nmap
-apt-get install -y traceroute
-apt-get install -y libpcap-dev
+apt-get install -y nmap traceroute libpcap-dev
+
+#GPS libs for wireless mapping
 apt-get install -y gpsd gpsd-clients
-#Revers Shells
-apt-get install autossh ssh
-apt-get install autossh x11vnc
-apt-get install vinagre
+
+#Reverse Shells
+apt-get install autossh ssh x11vnc
+#apt-get install vinagre  ##2016-07-04 thought to be unneeded
 #smbexec
 apt-get install -y libxml2-dev
 apt-get install -y libxlst-dev
+# Sound Utilities
+apt-get install -y libasound2 alsa-utils alsa-oss
