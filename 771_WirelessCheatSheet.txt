@@ -4,6 +4,13 @@ John the Ripper
 
 --Abbreviations
 PMK - Pairwise Master Key
+STA - Station (Client)
+PTK - Pairwise Transient Key
+GTK - Group Temporal Key
+RSN - Robust Secure Network (802.11i)
+MIC - Message Integrity Check
+TKIP - Temporal Key Integrity Protocol
+CCMP - Count Mode with CBC-MAC
 
 --Set Environment Variables for attacks
 --  add the ::MAC notation
