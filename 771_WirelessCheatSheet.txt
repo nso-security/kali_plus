@@ -11,6 +11,7 @@ RSN - Robust Secure Network (802.11i)
 MIC - Message Integrity Check
 TKIP - Temporal Key Integrity Protocol
 CCMP - Count Mode with CBC-MAC
+VAP - Virtual Access Point
 
 --Set Environment Variables for attacks
 --  add the ::MAC notation
@@ -407,3 +408,18 @@ ettercap -G
 # -G GTK interface
 # Sniff > Unified sniffing > [bridge interface]> start sniffing
 # this will harvest clear text credentials
+
+
+
+################
+###
+###  VMWAre Fix
+###
+################
+-- The following commands provide a fix for VMWare Realtek 8187 compatibility issue with shutdowns.
+rmmod rtl8187
+rfkill block all
+rfkill unblock all
+modprobe rtl8187
+rfkill unblock all
+ifconfig wlan0 up
