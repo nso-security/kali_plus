@@ -1,0 +1,13 @@
+--spider the website
+cewl -a -v http://target.com/  -w [FileName]
+
+--brutescrape
+cd /opt/brutescrape
+#edit the sites.scrape
+python brutescrape.py
+#output will be a password list in brutescrape directory
+
+--wordhound
+#difficulty getting this to work. Details in Hacker Playbook 2 for install and running
+
+
