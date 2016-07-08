@@ -1,0 +1,2 @@
+The following should be manually downloaded and installed
+Eicar: http://www.eicar.org/85-0-Download.html to /opt/eicar
