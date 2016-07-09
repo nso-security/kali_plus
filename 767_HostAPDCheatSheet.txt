@@ -19,7 +19,9 @@ cd /opt/hostapd-wpe/certs
 #Edit Config
 vi /opt/hostapd-wpe/hostapd-2.2/hostapd/hostapd-wpe.conf
 
+#Run it
 cd /opt/hostapd-wpe/hostapd-2.2/hostapd
+airmon-ng check kill
 sudo ./hostapd-wpe hostapd-wpe.conf
 
 #reference http://askubuntu.com/questions/617973/fatal-error-netlink-genl-genl-h-no-such-file-or-directory
