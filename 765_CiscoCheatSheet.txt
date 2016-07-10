@@ -12,3 +12,6 @@ no monitor session all
 monitor session 1 source interface fa0/1 both
 #repeat above statement for all interfaces.
 monitor session 1 destination interface fa0/13
+
+# to control pagination
+terminal length 0
