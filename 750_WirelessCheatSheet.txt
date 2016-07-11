@@ -51,8 +51,26 @@ aircrack-ng -b [BSSID MAC] [FILE NAME]
 eapol
 --wireshark ssid display filter--
 wlan_mgt.ssid == "[SSID]"
+--Filter out Wireless frames
+tcp
 --Additional wireshark reference--
 https://wiki.wireshark.org/Wi-Fi
+
+
+--GIS Kismet
+#Extract GIS and Wireless information from GIS enabled kismet .netxml file 
+giskismet -x Kismet-20160708-07-08-41-1.netxml --database site1.dbl
+
+#All SSID's
+giskismet -q "select * from wireless" -o "Customer - Project - Address - site1.kml" --database site1.dbl
+
+#Out Of Scope SSID's
+giskismet -q "select * from wireless where wireless.essid !='SSID1' and wireless.essid !='SSID2'" -o "Customer - PROJ - site1 - OutOfScope.kml" --database site1.dbl
+
+#In Scope SSID's
+giskismet -q "select * from wireless where wireless.essid ='SSID1' or wireless.essid ='SSID2'" -o "Customer - PROJ - site1 - InScope.kml" --database site1.dbl
+
+#These .kml files can be opened in google earth, edited and saved as .kmz files.
 
 
 
