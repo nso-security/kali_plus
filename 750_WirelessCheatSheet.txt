@@ -73,4 +73,5 @@ giskismet -q "select * from wireless where wireless.essid ='SSID1' or wireless.e
 #These .kml files can be opened in google earth, edited and saved as .kmz files.
 
 
-
+--Windows Clients Wireless Commands
+netsh wlan show profile "guest" key=clear
