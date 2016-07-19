@@ -12,3 +12,7 @@ apt-get install -y libxml2-dev
 apt-get install -y libxlst-dev
 # Sound Utilities
 apt-get install -y libasound2 alsa-utils alsa-oss
+
+#cve-search
+apt-get install -y mongodb python3-pymongo python3-dateutil python3-redis
+
