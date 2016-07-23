@@ -20,7 +20,7 @@ run
 #query delete from hosts where host like '%outlook.com%'
 #query delete from hosts where rowid >2 and rowid <19
 #to change workspaces
-workspaces select Stalwart
+workspaces select [workspace]
 #
 #TO BE RESEARCHED
 #
