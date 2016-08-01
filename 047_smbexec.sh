@@ -7,6 +7,7 @@ git clone https://github.com/wbmartin/smbexec.git /opt/smbexec
 cd /opt/smbexec && ./install.sh 
 ./install.sh 
 
+apt-get install -y libxslt-dev libxml2-dev
 #SMBExec has trouble installing on the rolling Kali.  These two links will get it going
 #1 Symlink the built in libs https://github.com/pentestgeek/smbexec/issues/125
 #    from smbexec\progs:
