@@ -75,6 +75,21 @@ giskismet -q "select * from wireless where wireless.essid ='SSID1' or wireless.e
 
 --Windows Clients Wireless Commands
 netsh wlan show profile "guest" key=clear
+netsh wlan show profile name="guest" key=clear
+--Windows Show interffaces
+netsh wlan show interfaces
+
+--Windows wirelss drivers
+netsh wlan show drivers
+
+--Show Networks available
+netsh wlan show networsk mode=bssid
+
+--Start a wireless network on windows
+netsh wlan set hostednetwork mode=allow ssid=[NAME] key=[PASSWORD]
+netsh wlan start hostednetwork
+--to stop a wireless network on windows
+netsh wlan stop hostednetwork
 
 #############################################Consolidated from Other Cheat Sheet############################
 --Wordlists
