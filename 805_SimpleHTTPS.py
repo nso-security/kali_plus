@@ -1,11 +1,12 @@
 #copy this to web root, change to executable and then python fielneam
-#for creating the cert, Check out the kali
-import BaseHTTPServer, SimpleHTTPServer
+#for creating the cert, run this command
+#openssl req -x509 -new -keyout server.pem -out server.pem -days 10 -nodes
+
+import BaseHTTPServer
+import SimpleHTTPServer
 import ssl
 import logging
 import cgi
-
-
 class ServerHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def do_GET(self):
@@ -28,7 +29,17 @@ class ServerHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         logging.warning("\n")
         SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
 
-httpd = BaseHTTPServer.HTTPServer(('localhost', 443), ServerHandler)
-httpd.socket = ssl.wrap_socket (httpd.socket, certfile='localhost.pem', server_side=True)
+listenPort=4443
+print ('Listening on {0}\n').format(listenPort);
 
+httpd = BaseHTTPServer.HTTPServer(('0.0.0.0', listenPort), ServerHandler)
+httpd.socket = ssl.wrap_socket (httpd.socket, certfile='./server.pem', server_side=True)
 httpd.serve_forever()
+
+
+
+#For Python 3
+# import http.server
+#httpd = http.server.HTTPServer(('0.0.0.0', listenPort), http.server.SimpleHTTPRequestHandler)
+#httpd.socket = ssl.wrap_socket (httpd.socket, certfile='./server.pem', server_side=True)
+#httpd.serve_forever()

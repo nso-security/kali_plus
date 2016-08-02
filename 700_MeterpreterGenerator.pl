@@ -737,6 +737,14 @@ BAPENC2
     `cp $targetFolder/$originalFile $targetFolder/$maskedFile`; 
   }
   closedir(DIR);
+  ###################
+  ##
+  ##  HTTPS
+  ##
+  ##################
+  `openssl req -x509 -new -keyout $targetFolder/server.pem -out $targetFolder/server.pem -days 10 -nodes`;
+  `cp /opt/kali_plus/805_SimpleHTTPS.py $targetFolder/950_SimpleHTTPS.py`;
+  
 
   ###################
   ##
@@ -754,11 +762,11 @@ BAPENC2
   ##
   ##################
 
-  `cp /opt/eicar/eicar.com /opt/malwaredefense/current/0001-eicar.com`;
-  `cp /opt/eicar/eicar.com.txt /opt/malwaredefense/current/0002-eicar.com.txt`;
-  `cp /opt/eicar/eicar.com.txt /opt/malwaredefense/current/0003-eicar.com.jpg`;
-  `cp /opt/eicar/eicar_com.zip /opt/malwaredefense/current/0004-eicar.zip`;
-  `cp /opt/eicar/eicarcom2.zip /opt/malwaredefense/current/0005-eicar2.zip`;
+  `cp /opt/eicar/eicar.com $targetFolder/0001-eicar.com`;
+  `cp /opt/eicar/eicar.com.txt $targetFolder/0002-eicar.com.txt`;
+  `cp /opt/eicar/eicar.com.txt $targetFolder/0003-eicar.com.jpg`;
+  `cp /opt/eicar/eicar_com.zip $targetFolder/0004-eicar.zip`;
+  `cp /opt/eicar/eicarcom2.zip $targetFolder/0005-eicar2.zip`;
   `zip -j -r $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip $targetFolder/*`;
   print "***Set 123 for the password\n\n";
   `zip -j -r $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBatteryEnc-pw123.zip $targetFolder/999-$PROJECT-$PROJECTNUM-Malware-CurrentBattery.zip -e --pasword 123`;
