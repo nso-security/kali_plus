@@ -1,0 +1,184 @@
+#1.1.1 (Level 1 Scored) Web content on non system partition
+%systemroot%\system32\inetsrv\appcmd list vdir
+
+#1.1.2 (Level 1 Scored) Host Headers on all sites
+%systemroot%\system32\inetsrv\appcmd list sites
+
+#1.1.3 (Level 1 Scored) Directory Brwosing
+%systemroot%\system32\inetsrv\appcmd list config /section:directoryBrowse
+
+#1.1.4 (Level 1 Scored) App pool identity
+%systemroot%\system32\inetsrv\appcmd list app
+
+#1.1.5 (Level 1 Scored) Unique App pools
+#same as 1.1.4
+
+#1.1.6 (Level 1 Scored)
+#Manual review ApplicationHost.config for username attribute of anonymousAuthentication tag
+#Probably located here: C:\Windows\System32\inetsrv\config
+
+#1.2.1 (Level 1 not scored) Global authorization rule
+#manual review of web.config
+#Probably located in c:\inetpub\
+
+#1.2.2 (Level 1 not scored) Restricted Feature Access
+#manual review of web.config
+#Probably located in c:\inetpub\
+
+#1.2.3 (Level 1 scored) SSL in forms auth
+#manual review of web.config
+#Probably located in c:\inetpub\
+
+#1.2.4 (Level 2 Scored) Forms auth for cookies
+
+#1.2.5 (Level 1 Scored) Cookie protection for forms auth
+#manual review of web.config
+#Probably located in c:\inetpub\
+
+#1.2.6 (Level 2 Scored) Encryption providers
+reg query HKLM\SOFTWARE\Microsoft\CRYPTOGRAPHY
+#this will give you the guid to put in the next command
+icacls %ALLUSERSPROFILE%\Microsoft\Crypto\RSA\MachineKeys\76944fb33636aeddb9590521c2e8815a_<GUID>
+
+#1.2.7 (Level 1 not scored) SSL for basic auth
+
+#1.2.8 (Level 1 scored) credentials not in clear text
+#machine.config, root level or app level web.config
+
+#1.2.9 (Level 2 scored)Credentials not in files
+
+#1.3.1 (Level 1 scored) Deployment Method to retail
+#machine.config should be in %windir\Microsoft.NET\Framework\Version\Config
+
+#1.3.2 (Level 1 scored) Turn Debug Off
+#manual review of web.config
+
+#1.3.3 (Level 2 Scored) Custom Error Message On
+
+#1.3.4 (Level 2 Scored).Net Stack tracing
+#manual review of web.config
+
+#1.3.5 (Level 2 Scored) Cookies mode for session state
+#manual  review web.config
+
+#1.3.6 (Level 2 Scored) Cookies with HTTP Only
+#manual review of web.config
+
+#1.3.7 (Level 1 Scored) Machinekey validation .net 3.5
+#GUI validation
+
+#1.3.8 (Level 1 Scored) Machine key Validation Method .net 4.5
+#GUI validation
+
+#1.3.9 (Level 1 not scored) Configure Global >net Trust Level
+#GUI Validation
+
+#1.3.10 (Level 1 Scored) Hide detailed errors
+#manual review web.config
+
+#1.4.1 (Level 2 Not scored) max allowed Content Length
+#manual review web.config
+
+#1.4.2 (Level 2 Scored) maxURL
+#manual review of web.config
+
+#1.4.3 (Level 2 scored) Max Query String
+#Manual Review web.config
+
+#1.4.4 (Level 2 scored) non ASCII chars in url
+#manual review of web.config
+
+#1.4.5 (Level 1 scored) Reject Double encoded requests
+
+#1.4.6 (Level 1 scored)Disallow unlisted file extensions 
+#manual review of web.config
+
+#1.4.7 (level 1 Scored) Handler not granted script/execute
+#manual review of ApplicatiohnHost.config in %windir%\system32\inetsrv\config
+
+#1.4.8 (Level 1 Scored) notListedIsapisAllowed = false
+#manual review of ApplicatiohnHost.config in %windir%\system32\inetsrv\config
+
+#1.4.9 (Level 1 not scored) notListedCgisAllowed = false
+#manual review of ApplicatiohnHost.config in %windir%\system32\inetsrv\config
+
+#1.4.10 (Level 1 Scored) HTTP Trace
+#manual review of web.config
+
+#1.4.11 (Level 1 not scored) Dynamic IP Address Restrictions 
+#GUI Review
+
+#1.5.1 (Level 1 Scored) IIS Web Log Location
+%systemroot%\system32\inetsrv\appcmd list config /section:sites
+
+#1.5.2 (Level 1 Scored) Advanced Logging
+#manual Review
+
+#1.5.3 (Level 1 Scored) ETW Logging
+#GUI valdiation
+
+#1.6.1 (Level 1 Not Scored) Encrypt FTP
+#GUI Review
+
+#1.6.2 (Level 1 not scored) Logon attemt limit
+#Gui Review
+
+
+#1.7.1 (Level 1 Scored) PCT 1.0
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Server\Enabled"
+
+#1.7.2 (Level 1 Scored) SSL 2.0
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server\Enabled"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server\DisabledByDefault"
+
+#1.7.3 (Level 1 Scored) SSL 3.0
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Server\Enabled"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Server\DisabledByDefault"
+
+#1.7.4 (Level 1 Not Scored)TLS 1.0
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server\DisabledByDefault"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server\Enabled"
+
+#1.7.5 (Level 1 Not Scored)TLS 1.1 
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server\DisabledByDefault"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server\Enabled"
+
+#1.7.6 (Level 1 Not Scored) TLS 1.2
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server\DisabledByDefault"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server\Enabled"
+
+#1.7.7 (Level 1 Scored ) Null Ciphers Make Sure enabled is set to 0
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\NULL\Enabled"
+
+#1.7.8 (Level 1 Scored ) 3DES Make sure Enabled is set to 0
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56\Enabled"
+
+#1.7.9 (Level 1 Scored ) RC2 Make sure Enabled is set to 0
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 40/128"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 40/128\Enabled"
+
+#1.7.10 (Level 1 Scored ) RC4 Make sure Enabled is set to 0
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128\Enabled"
+
+#1.7.11 (Level 1 Not Scored ) 3DES Make sure Enabled is set to 0
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168/168"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168/168\Enabled"
+
+#1.7.12 (Level 1 Not Scored )  AES 128 Should Be enabled
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\AES 128/128"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\AES 128/128\Enabled"
+
+#1.7.13 (Level 1 Scored ) AES 256 Should Be enabled
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\AES 256/256"
+reg query "HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\AES 256/256\Enabled"
+
+#1.7.14 (Level 2 Scored ) Cipher Ordering
+reg query "HKLM\System\CurrentControlSet\Control\Cryptography\Configureatio\Local\SSL\00010002\Functions"
