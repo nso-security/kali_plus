@@ -1,4 +1,4 @@
-FOR /F "usebackq" %%i IN (`hostname`) DO SET HOST_NAME=%%i
+FOR /F "usebackq" %%i IN (`hostname`) DO SET HOST_NAME=%%i-BasicEnum
 echo ===============System Profile Results===============> %HOST_NAME%.txt
 echo ####################Basic Information####################>> %HOST_NAME%.txt
 hostname >> %HOST_NAME%.txt
