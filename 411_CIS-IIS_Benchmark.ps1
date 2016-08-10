@@ -15,9 +15,6 @@ function printTestSeparator($testName){
 }
 
 Start-Transcript -path $outFile -append -IncludeInvocationHeader
-$cmd = "dir"
-showAndRun($cmd)
-
 
 echo "===============System Profile Results==============="
 echo "####################Section 1####################"
@@ -38,6 +35,8 @@ printCheckPointSeparator
 
 printTestSeparator "#1.1.4 (Level 1 Scored) App pool identity "
 $cmd="$env:SystemRoot\system32\inetsrv\appcmd list app"
+showAndRun($cmd)
+printCheckPointSeparator
 
 printTestSeparator "#1.1.5 (Level 1 Scored) Unique App pools "
 echo "#same as 1.1.4"
@@ -136,7 +135,7 @@ printTestSeparator "#1.4.10 (Level 1 Scored) HTTP Trace "
 echo "#manual review of web.config "
 
 printTestSeparator "#1.4.11 (Level 1 not scored) Dynamic IP Address Restrictions"
-echo "#GUI Review 
+echo "#GUI Review" 
 
 echo "#1.5.1 (Level 1 Scored) IIS Web Log Location "
 $cmd="$env:SystemRoot\system32\inetsrv\appcmd list config /section:sites"
