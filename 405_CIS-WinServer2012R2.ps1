@@ -89,7 +89,18 @@ printTestSeparator "2.2.39 Set 'Take ownership of files or other objects' to 'Ad
 printTestSeparator "2.3 Security Options"
 printTestSeparator "2.3.1 Accounts"
 printTestSeparator "2.3.1.1 Set 'Accounts: Block Microsoft accounts' to 'Users can't add or log on with Microsoft accounts' (Scored L1)"
+echo "registry check"
+$cmd="reg query 'HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System'"
+showAndRun($cmd)
+echo "test command"
+$cmd="reg query 'HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System\NoConnectedUser'"
+showAndRun($cmd)
+
 printTestSeparator "2.3.1.2 Set 'Accounts: Guest account status' to 'Disabled' (Scored L1)"
+$cmd="reg query 'HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Lsa\LimitBlankPasswordUse'"
+showAndRun($cmd)
+
+
 printTestSeparator "2.3.1.3 Set 'Accounts: Limit local account use of blank passwords to console logon only' to 'Enabled' (Scored L1)"
 printTestSeparator "2.3.1.4 Configure 'Accounts: Rename administrator account' (Scored L1)"
 printTestSeparator "2.3.1.5 Configure 'Accounts: Rename guest account' (Scored L1)"
@@ -206,6 +217,9 @@ echo "NA"
 printTestSeparator "9 Windows Firewall With Advanced Security"
 printTestSeparator "9.1 Domain Profile"
 printTestSeparator "9.1.1 Set 'Windows Firewall: Domain: Firewall state' to 'On (recommended)' (Scored L1)"
+$cmd="reg query 'HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\WindowsFirewall\DomainProfile\EnableFirewall'"
+showAndRun($cmd)
+
 printTestSeparator "9.1.2 Set 'Windows Firewall: Domain: Inbound connections' to 'Block (default)' (Scored L1)"
 printTestSeparator "9.1.3 Set 'Windows Firewall: Domain: Outbound connections' to 'Allow (default)' (Scored L1)"
 printTestSeparator "9.1.4 Set 'Windows Firewall: Domain: Display a notification' to 'Yes (default)' (Scored L1)"
@@ -303,6 +317,9 @@ echo "NA"
 printTestSeparator "18.4 SCM: Pass the Hash Mitigations"
 printTestSeparator "18.4.1 Set 'Apply UAC restrictions to local accounts on network logons' to 'Enabled' (Scored L1)"
 printTestSeparator "18.4.2 Set 'WDigest Authentication' to 'Disabled' (Scored L1)"
+$cmd="reg query 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest\UseLogonCredential'"
+showAndRun($cmd)
+
 
 printTestSeparator "18.5 Start Menu and Taskbar"
 echo "NA"
@@ -446,13 +463,14 @@ printTestSeparator "18.7.39.3.9.1 Set 'Always prompt for password upon connectio
 printTestSeparator "18.7.39.3.9.2 Set 'Set client connection encryption level: Encryption Level' to 'Enabled: High Level' (Scored L1)"
 
 printTestSeparator "18.7.40 RSS Feeds"
-echo "NA"
 
 printTestSeparator "18.7.41 Search"
-echo "NA"
 
 printTestSeparator "18.7.41.1 OCR"
 printTestSeparator "18.7.41.2 Set 'Allow indexing of encrypted files' to 'Disabled' (Scored L1)"
+$cmd="reg query 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search\AllowIndexingEncryptedStoresOrItems'"
+showAndRun($cmd)
+
 
 printTestSeparator "18.7.42 -55"
 echo "NA"
