@@ -161,7 +161,7 @@ $cmd="reg query 'HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNE
 showAndRun($cmd)
 
 printTestSeparator "#1.7.2 (Level 1 Scored) SSL 2.0" 
-$cmd="reg query 'HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\'"
+$cmd="reg query 'HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0'"
 showAndRun($cmd)
 $cmd="reg query 'HKLM\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server\Enabled'"
 showAndRun($cmd) 
