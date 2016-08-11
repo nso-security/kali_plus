@@ -7,3 +7,5 @@ dirb
 #Excel formula for bulk dirb Cell A1 = https://  B1 = IP Address
 =CONCATENATE("dirb ",A1, B1, " /usr/share/wordlists/dirb/common.txt -o CLIENT-PROJ-DIRBResults",B1,".txt")
 
+##################
+if OWA discovered, check for admin page /ecp (instead of /owa)
