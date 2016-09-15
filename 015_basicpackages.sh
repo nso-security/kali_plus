@@ -16,3 +16,6 @@ apt-get install -y libasound2 alsa-utils alsa-oss
 #cve-search
 apt-get install -y mongodb python3-pymongo python3-dateutil python3-redis
 
+#search for header files
+apt-get install -y apt-file
+
