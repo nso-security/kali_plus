@@ -1,3 +1,4 @@
+#!/bin/sh
 echo "***CIS Ref: Ubuntu 14.04 – CIS Benchmark***"
 
 
