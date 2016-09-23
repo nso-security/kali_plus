@@ -1,9 +1,8 @@
 #!/bin/sh
-echo "***CIS Ref: CentOS 7.0 – CIS Benchmark***"
+echo "*** CentOS 7.0 – CIS Benchmark***"
 echo "***CIS Ref: CIS Benchmark Index***"
 
 echo "***CIS Ref: 1 Initial Setup***"
-
 echo "***CIS Ref: 1.1 Filesystem Configuration***"
 
 
@@ -284,9 +283,9 @@ stat /boot/grub2/grub.cfg
 
 
 echo "***CIS Ref: 1.4.2 Ensure bootloader password is set (Scored)***"
-echo "   Command: grep "^set superusers" /boot/grub2/grub.cfg "
+echo "   Command: grep '^set superusers' /boot/grub2/grub.cfg "
 grep "^set superusers" /boot/grub2/grub.cfg 
-echo "   Command: grep "^password" /boot/grub2/grub.cfg"
+echo "   Command: grep '^password' /boot/grub2/grub.cfg"
 grep "^password" /boot/grub2/grub.cfg
 
 
@@ -307,7 +306,7 @@ echo "***CIS Ref: 1.5 Additional Process Hardening***"
 
 
 echo "***CIS Ref: 1.5.1 Ensure core dumps are restricted (Scored)***"
-echo "   Command: grep "hard core" /etc/security/limits.conf /etc/security/limits.d/*"
+echo "   Command: grep 'hard core' /etc/security/limits.conf /etc/security/limits.d/*"
 grep "hard core" /etc/security/limits.conf /etc/security/limits.d/*
 echo "   Command: sysctl fs.suid_dumpable"
 sysctl fs.suid_dumpable
@@ -342,7 +341,7 @@ echo "***CIS Ref: 1.6 Mandatory Access Control***"
 
 
 echo "***CIS Ref: 1.6.1.1 Ensure SELinux is not disabled in bootloader configuration (L2 Scored)***"
-echo "   Command: grep "^\s*linux" /boot/grub2/grub.cfg"
+echo "   Command: grep '^\s*linux' /boot/grub2/grub.cfg"
 grep "^\s*linux" /boot/grub2/grub.cfg
 
 
@@ -379,7 +378,7 @@ rpm -q mcstrans
 
 
 echo "***CIS Ref: 1.6.1.6 Ensure no unconfined daemons exist (L2 Scored)***"
-echo "   Command: ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{ print $NF }'"
+echo "   Command: ps -eZ | egrep 'initrc' | egrep -vw 'tr|ps|egrep|bash|awk' | tr ':' ' ' | awk '{ print $NF }'"
 ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{ print $NF }'
 
 
@@ -535,18 +534,18 @@ rpm -q chrony
 
 
 echo "***CIS Ref: 2.2.1.2 Ensure ntp is configured (Scored)***"
-echo "   Command: grep "^restrict" /etc/ntp.conf"
+echo "   Command: grep '^restrict' /etc/ntp.conf"
 grep "^restrict" /etc/ntp.conf
-echo "   Command: grep "^server" /etc/ntp.conf"
+echo "   Command: grep '^server' /etc/ntp.conf"
 grep "^server" /etc/ntp.conf
-echo "   Command: grep "^OPTIONS" /etc/sysconfig/ntpd"
+echo "   Command: grep '^OPTIONS' /etc/sysconfig/ntpd"
 grep "^OPTIONS" /etc/sysconfig/ntpd
 
 
 
 
 echo "***CIS Ref: 2.2.1.3 Ensure chrony is configured (Scored)***"
-echo "   Command: grep "^server" /etc/chrony.conf"
+echo "   Command: grep '^server' /etc/chrony.conf"
 grep "^server" /etc/chrony.conf
 echo "   Command: grep ^OPTIONS /etc/sysconfig/chronyd"
 grep ^OPTIONS /etc/sysconfig/chronyd
@@ -648,7 +647,7 @@ systemctl is-enabled snmpd
 
 
 echo "***CIS Ref: 2.2.15 Ensure mail transfer agent is configured for local-only mode (Scored***"
-echo "   Command: netstat -an | grep LIST | grep ":25[[:space:]]""
+echo "   Command: netstat -an | grep LIST | grep ':25[[:space:]]'"
 netstat -an | grep LIST | grep ":25[[:space:]]"
 
 
@@ -1046,7 +1045,7 @@ systemctl is-enabled auditd
 
 
 echo "***CIS Ref: 4.1.3 Ensure auditing for processes that start prior to auditd is enabled (L2 Scored)***"
-echo "   Command: grep "^\s*linux" /boot/grub2/grub.cfg"
+echo "   Command: grep '^\s*linux' /boot/grub2/grub.cfg"
 grep "^\s*linux" /boot/grub2/grub.cfg
 
 
@@ -1111,7 +1110,7 @@ grep access /etc/audit/audit.rules
 
 
 echo "***CIS Ref: 4.1.12 Ensure use of privileged commands is collected (L2 Scored)***"
-echo "   Command: # Manual find <partition> -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print "-a always,exit -F path=" $1 " -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" }'"
+echo "   Command: MANUAL'"
 # Manual find <partition> -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print "-a always,exit -F path=" $1 " -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" }'
 
 
@@ -1153,7 +1152,7 @@ grep modules /etc/audit/audit.rules
 
 
 echo "***CIS Ref: 4.1.18 Ensure the audit configuration is immutable (L2 Scored)***"
-echo "   Command: grep "^\s*[^#]" /etc/audit/audit.rules | tail -1"
+echo "   Command: grep '^\s*[^#]' /etc/audit/audit.rules | tail -1"
 grep "^\s*[^#]" /etc/audit/audit.rules | tail -1
 
 
@@ -1186,7 +1185,7 @@ grep ^\$FileCreateMode /etc/rsyslog.conf
 
 
 echo "***CIS Ref: 4.2.1.4 Ensure rsyslog is configured to send logs to a remote log host (Scored)***"
-echo "   Command: grep "^*.*[^I][^I]*@" /etc/rsyslog.conf"
+echo "   Command: grep '^*.*[^I][^I]*@' /etc/rsyslog.conf"
 grep "^*.*[^I][^I]*@" /etc/rsyslog.conf
 
 
@@ -1340,56 +1339,56 @@ stat /etc/ssh/sshd_config
 
 
 echo "***CIS Ref: 5.2.2 Ensure SSH Protocol is set to 2 (Scored)***"
-echo "   Command: grep "^Protocol" /etc/ssh/sshd_config"
+echo "   Command: grep '^Protocol' /etc/ssh/sshd_config"
 grep "^Protocol" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.3 Ensure SSH LogLevel is set to INFO (Scored)***"
-echo "   Command: grep "^LogLevel" /etc/ssh/sshd_config"
+echo "   Command: grep '^LogLevel' /etc/ssh/sshd_config"
 grep "^LogLevel" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.4 Ensure SSH X11 forwarding is disabled (Scored)***"
-echo "   Command: grep "^X11Forwarding" /etc/ssh/sshd_config"
+echo "   Command: grep '^X11Forwarding' /etc/ssh/sshd_config"
 grep "^X11Forwarding" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.5 Ensure SSH MaxAuthTries is set to 4 or less (Scored)***"
-echo "   Command: grep "^MaxAuthTries" /etc/ssh/sshd_config"
+echo "   Command: grep '^MaxAuthTries' /etc/ssh/sshd_config"
 grep "^MaxAuthTries" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.6 Ensure SSH IgnoreRhosts is enabled (Scored)***"
-echo "   Command: grep "^IgnoreRhosts" /etc/ssh/sshd_config"
+echo "   Command: grep '^IgnoreRhosts' /etc/ssh/sshd_config"
 grep "^IgnoreRhosts" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.7 Ensure SSH HostbasedAuthentication is disabled (Scored)***"
-echo "   Command: grep "^HostbasedAuthentication" /etc/ssh/sshd_config"
+echo "   Command: grep '^HostbasedAuthentication' /etc/ssh/sshd_config"
 grep "^HostbasedAuthentication" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.8 Ensure SSH root login is disabled (Scored)***"
-echo "   Command: grep "^PermitRootLogin" /etc/ssh/sshd_config"
+echo "   Command: grep '^PermitRootLogin' /etc/ssh/sshd_config"
 grep "^PermitRootLogin" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.9 Ensure SSH PermitEmptyPasswords is disabled (Scored)***"
-echo "   Command: grep "^PermitEmptyPasswords" /etc/ssh/sshd_config"
+echo "   Command: grep '^PermitEmptyPassword' /etc/ssh/sshd_config"
 grep "^PermitEmptyPasswords" /etc/ssh/sshd_config
 
 
@@ -1403,50 +1402,50 @@ grep PermitUserEnvironment /etc/ssh/sshd_config
 
 
 echo "***CIS Ref: 5.2.11 Ensure only approved ciphers are used (Scored)***"
-echo "   Command: grep "Ciphers" /etc/ssh/sshd_config"
+echo "   Command: grep 'Ciphers' /etc/ssh/sshd_config"
 grep "Ciphers" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.12 Ensure only approved MAC algorithms are used (Scored)***"
-echo "   Command: grep "MACs" /etc/ssh/sshd_config"
+echo "   Command: grep 'MACs' /etc/ssh/sshd_config"
 grep "MACs" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.13 Ensure SSH Idle Timeout Interval is configured (Scored)***"
-echo "   Command: grep "^ClientAliveInterval" /etc/ssh/sshd_config "
+echo "   Command: grep '^ClientAliveInterval' /etc/ssh/sshd_config "
 grep "^ClientAliveInterval" /etc/ssh/sshd_config 
-echo "   Command:  grep "^ClientAliveCountMax" /etc/ssh/sshd_config"
+echo "   Command:  grep '^ClientAliveCountMax' /etc/ssh/sshd_config"
  grep "^ClientAliveCountMax" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.14 Ensure SSH LoginGraceTime is set to one minute or less (Scored***"
-echo "   Command: grep "^LoginGraceTime" /etc/ssh/sshd_config"
+echo "   Command: grep '^LoginGraceTime' /etc/ssh/sshd_config"
 grep "^LoginGraceTime" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.15 Ensure SSH access is limited (Scored)***"
-echo "   Command: grep "^AllowUsers" /etc/ssh/sshd_config "
+echo "   Command: grep '^AllowUsers' /etc/ssh/sshd_config "
 grep "^AllowUsers" /etc/ssh/sshd_config 
-echo "   Command: grep "^AllowGroups" /etc/ssh/sshd_config "
+echo "   Command: grep '^AllowGroups' /etc/ssh/sshd_config "
 grep "^AllowGroups" /etc/ssh/sshd_config 
-echo "   Command: grep "^DenyUsers" /etc/ssh/sshd_config "
+echo "   Command: grep '^DenyUsers' /etc/ssh/sshd_config "
 grep "^DenyUsers" /etc/ssh/sshd_config 
-echo "   Command: grep "^DenyGroups" /etc/ssh/sshd_config"
+echo "   Command: grep '^DenyGroups' /etc/ssh/sshd_config"
 grep "^DenyGroups" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 5.2.16 Ensure SSH warning banner is configured (Scored)***"
-echo "   Command: grep "^Banner" /etc/ssh/sshd_config"
+echo "   Command: grep '^Banner' /etc/ssh/sshd_config"
 grep "^Banner" /etc/ssh/sshd_config
 
 
@@ -1543,23 +1542,23 @@ echo "   Command: # manual chage --list <user>"
 
 
 echo "***CIS Ref: 5.4.2 Ensure system accounts are non-login (Scored)***"
-echo "   Command: egrep -v "^\+" /etc/passwd | awk -F: '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $3<1000 && $7!="/sbin/nologin" && $7!="/bin/false") {print}'"
+echo "   Command: [ESCAPED]"
 egrep -v "^\+" /etc/passwd | awk -F: '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $3<1000 && $7!="/sbin/nologin" && $7!="/bin/false") {print}'
 
 
 
 
 echo "***CIS Ref: 5.4.3 Ensure default group for the root account is GID 0 (Scored)***"
-echo "   Command: grep "^root:" /etc/passwd | cut -f4 -d:"
+echo "   Command: grep '^root:' /etc/passwd | cut -f4 -d:"
 grep "^root:" /etc/passwd | cut -f4 -d:
 
 
 
 
 echo "***CIS Ref: 5.4.4 Ensure default user umask is 027 or more restrictive (Scored)***"
-echo "   Command: grep "^umask" /etc/bashrc "
+echo "   Command: grep '^umask' /etc/bashrc "
 grep "^umask" /etc/bashrc 
-echo "   Command: grep "^umask" /etc/profile"
+echo "   Command: grep '^umask' /etc/profile"
 grep "^umask" /etc/profile
 
 
@@ -1695,27 +1694,27 @@ echo "***CIS Ref: 6.2 User and Group Settings***"
 
 
 echo "***CIS Ref: 6.2.1 Ensure password fields are not empty (Scored)***"
-echo "   Command: cat /etc/shadow | awk -F: '($2 == "" ) { print $1 " does not have a password "}'"
+echo "   Command: [ESCAPED]"
 cat /etc/shadow | awk -F: '($2 == "" ) { print $1 " does not have a password "}'
 
 
 
 
-echo "***CIS Ref: 6.2.2 Ensure no legacy "+" entries exist in /etc/passwd (Scored)***"
+echo "***CIS Ref: 6.2.2 Ensure no legacy + entries exist in /etc/passwd (Scored)***"
 echo "   Command: grep '^+:' /etc/passwd"
 grep '^+:' /etc/passwd
 
 
 
 
-echo "***CIS Ref: 6.2.3 Ensure no legacy "+" entries exist in /etc/shadow (Scored)***"
+echo "***CIS Ref: 6.2.3 Ensure no legacy + entries exist in /etc/shadow (Scored)***"
 echo "   Command: grep '^+:' /etc/shadow"
 grep '^+:' /etc/shadow
 
 
 
 
-echo "***CIS Ref: 6.2.4 Ensure no legacy "+" entries exist in /etc/group (Scored)***"
+echo "***CIS Ref: 6.2.4 Ensure no legacy + entries exist in /etc/group (Scored)***"
 echo "   Command: grep '^+:' /etc/group"
 grep '^+:' /etc/group
 
