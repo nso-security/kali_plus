@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 echo "*** CentOS 7.0 – CIS Benchmark***"
 echo "***CIS Ref: CIS Benchmark Index***"
 

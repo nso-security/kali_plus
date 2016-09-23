@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 echo "***CIS Ref: Ubuntu 14.04 – CIS Benchmark***"
 #  run this file as the following to get output and error
 # ./450_CIS-Ubuntu14.04-Review.sh > /tmp/file.txt 2>&1
