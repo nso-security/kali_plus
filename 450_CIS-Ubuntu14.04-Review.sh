@@ -1,15 +1,8 @@
 #!/bin/sh
 echo "***CIS Ref: Ubuntu 14.04 – CIS Benchmark***"
-
-
-
-
+#  run this file as the following to get output and error
+# ./450_CIS-Ubuntu14.04-Review.sh > /tmp/file.txt 2>&1
 echo "***CIS Ref: CIS Benchmark Index***"
-echo "   Command: Audit"
-Audit
-
-
-
 
 echo "***CIS Ref: 1 Patching and Software Updates***"
 
@@ -36,7 +29,7 @@ echo "***CIS Ref: 2 Filesystem Configuration***"
 
 
 echo "***CIS Ref: 2.1 Create Separate Partition for /tmp (Scored)***"
-echo "   Command: grep "[[:space:]]/tmp[[:space:]]" /etc/fstab"
+echo "   [Escaped command]"
 grep "[[:space:]]/tmp[[:space:]]" /etc/fstab
 
 
@@ -70,37 +63,37 @@ mount | grep /tmp | grep noexec
 
 
 echo "***CIS Ref: 2.5 Create Separate Partition for /var (Scored)***"
-echo "   Command: grep "[[:space:]]/var[[:space:]]" /etc/fstab"
+echo "   [ESCAPED COMMAND]"
 grep "[[:space:]]/var[[:space:]]" /etc/fstab
 
 
 
 
 echo "***CIS Ref: 2.6 Bind Mount the /var/tmp directory to /tmp (Scored)***"
-echo "   Command: grep -e "^/tmp" /etc/fstab | grep /var/tmp"
+echo "   [ESCAPED COMMAND]"
 grep -e "^/tmp" /etc/fstab | grep /var/tmp
-echo "   Command: mount | grep -e "^/tmp" | grep /var/tmp"
+echo "   [ESCAPED COMMAND]"
 mount | grep -e "^/tmp" | grep /var/tmp
 
 
 
 
 echo "***CIS Ref: 2.7 Create Separate Partition for /var/log (Scored)***"
-echo "   Command: grep "[[:space:]]/var/log[[:space:]]" /etc/fstab"
+echo "   Command: [ESCAPED]"
 grep "[[:space:]]/var/log[[:space:]]" /etc/fstab
 
 
 
 
 echo "***CIS Ref: 2.8 Create Separate Partition for /var/log/audit (Scored)***"
-echo "   Command: grep "[[:space:]]/var/log/audit[[:space:]]" /etc/fstab"
+echo "   Command: grep [[:space:]]/var/log/audit[[:space:]] /etc/fstab"
 grep "[[:space:]]/var/log/audit[[:space:]]" /etc/fstab
 
 
 
 
 echo "***CIS Ref: 2.9 Create Separate Partition for /home (Scored)***"
-echo "   Command: grep "[[:space:]]/home[[:space:]]" /etc/fstab"
+echo "   Command: grep [[:space:]]/home[[:space:]] /etc/fstab"
 grep "[[:space:]]/home[[:space:]]" /etc/fstab
 
 
@@ -240,25 +233,24 @@ echo "***CIS Ref: 3 Secure Boot Settings***"
 
 
 
-
 echo "***CIS Ref: 3.1 Set User/Group Owner on bootloader config (Scored)***"
-echo "   Command: stat -c "%u %g" /boot/grub/grub.cfg | egrep "^0 0""
+echo "   Command: stat -c %u %g /boot/grub/grub.cfg | egrep "^0 0""
 stat -c "%u %g" /boot/grub/grub.cfg | egrep "^0 0"
 
 
 
 
 echo "***CIS Ref: 3.2 Set Permissions on bootloader config (Scored)***"
-echo "   Command: stat -L -c "%a" /boot/grub/grub.cfg | egrep ".00""
+echo "   Command: stat -L -c '%a' /boot/grub/grub.cfg | egrep ".00""
 stat -L -c "%a" /boot/grub/grub.cfg | egrep ".00"
 
 
 
 
 echo "***CIS Ref: 3.3 Set Boot Loader Password (Scored)***"
-echo "   Command: grep "^set superusers" /boot/grub/grub.cfg "
+echo "   Command: grep '^set superusers' /boot/grub/grub.cfg "
 grep "^set superusers" /boot/grub/grub.cfg 
-echo "   Command: grep "^password" /boot/grub/grub.cfg"
+echo "   Command: grep '^password' /boot/grub/grub.cfg"
 grep "^password" /boot/grub/grub.cfg
 
 
@@ -266,7 +258,8 @@ grep "^password" /boot/grub/grub.cfg
 
 echo "***CIS Ref: 3.4 Require Authentication for Single-User Mode (Scored)***"
 echo "   Command: grep ^root:[*\!]: /etc/shadow"
-grep ^root:[*\!]: /etc/shadow
+# run manually, don't save to file
+# grep ^root:[*\!]: /etc/shadow
 
 
 
@@ -277,7 +270,7 @@ echo "***CIS Ref: 4 Additional Process Hardening***"
 
 
 echo "***CIS Ref: 4.1 Restrict Core Dumps (Scored)***"
-echo "   Command: grep "hard core" /etc/security/limits.conf "
+echo "   Command: grep 'hard core' /etc/security/limits.conf "
 grep "hard core" /etc/security/limits.conf 
 echo "   Command: sysctl fs.suid_dumpable"
 sysctl fs.suid_dumpable
@@ -460,11 +453,11 @@ initctl show-config isc-dhcp-server6
 echo "***CIS Ref: 6.5 Configure Network Time Protocol (NTP) (Scored)***"
 echo "   Command: dpkg -s ntp"
 dpkg -s ntp
-echo "   Command: grep "restrict .* default" /etc/ntp.conf"
+echo "   Command: grep 'restrict .* default' /etc/ntp.conf"
 grep "restrict .* default" /etc/ntp.conf
-echo "   Command: grep "^server" /etc/ntp.conf"
+echo "   Command: grep '^server' /etc/ntp.conf"
 grep "^server" /etc/ntp.conf
-echo "   Command: grep "RUNASUSER=ntp" /etc/init.d/ntp"
+echo "   Command: grep 'RUNASUSER=ntp' /etc/init.d/ntp"
 grep "RUNASUSER=ntp" /etc/init.d/ntp
 
 
@@ -536,7 +529,7 @@ ls /etc/rc*.d/S*snmpd
 
 
 echo "***CIS Ref: 6.15 Configure Mail Transfer Agent for Local-Only Mode (Scored)***"
-echo "   Command: netstat -an | grep LIST | grep ":25[[:space:]]""
+echo "   Command: netstat -an | grep LIST | grep ':25[[:space:]]'"
 netstat -an | grep LIST | grep ":25[[:space:]]"
 
 
@@ -710,7 +703,7 @@ echo "   Command: /bin/ls -l /etc/hosts.allow"
 
 
 echo "***CIS Ref: 7.4.4 Create /etc/hosts.deny (Not Scored)***"
-echo "   Command: grep "ALL: ALL" /etc/hosts.deny"
+echo "   Command: grep 'ALL: ALL' /etc/hosts.deny"
 grep "ALL: ALL" /etc/hosts.deny
 
 
@@ -729,28 +722,28 @@ echo "***CIS Ref: 7.5 Uncommon Network Protocols***"
 
 
 echo "***CIS Ref: 7.5.1 Disable DCCP (Not Scored)***"
-echo "   Command: grep "install dccp /bin/true" /etc/modprobe.d/CIS.conf"
+echo "   Command: grep 'install dccp /bin/true' /etc/modprobe.d/CIS.conf"
 grep "install dccp /bin/true" /etc/modprobe.d/CIS.conf
 
 
 
 
 echo "***CIS Ref: 7.5.2 Disable SCTP (Not Scored)***"
-echo "   Command: grep "install sctp /bin/true" /etc/modprobe.d/CIS.conf"
+echo "   Command: grep 'install sctp /bin/true' /etc/modprobe.d/CIS.conf"
 grep "install sctp /bin/true" /etc/modprobe.d/CIS.conf
 
 
 
 
 echo "***CIS Ref: 7.5.3 Disable RDS (Not Scored)***"
-echo "   Command: grep "install rds /bin/true" /etc/modprobe.d/CIS.conf"
+echo "   Command: grep 'install rds /bin/true' /etc/modprobe.d/CIS.conf"
 grep "install rds /bin/true" /etc/modprobe.d/CIS.conf
 
 
 
 
 echo "***CIS Ref: 7.5.4 Disable TIPC (Not Scored)***"
-echo "   Command: grep "install tipc /bin/true" /etc/modprobe.d/CIS.conf"
+echo "   Command: grep 'install tipc /bin/true' /etc/modprobe.d/CIS.conf"
 grep "install tipc /bin/true" /etc/modprobe.d/CIS.conf
 
 
@@ -818,7 +811,7 @@ dpkg -s auditd
 
 
 echo "***CIS Ref: 8.1.3 Enable Auditing for Processes That Start Prior to auditd (L2 Scored)***"
-echo "   Command: grep "linux" /boot/grub/grub.cfg"
+echo "   Command: grep 'linux' /boot/grub/grub.cfg"
 grep "linux" /boot/grub/grub.cfg
 
 
@@ -959,7 +952,7 @@ echo "   Command: # nanual ls -l <logfile>"
 
 
 echo "***CIS Ref: 8.2.5 Configure rsyslog to Send Logs to a Remote Log Host (Scored)***"
-echo "   Command: grep "^*.*[^I][^I]*@" /etc/rsyslog.conf"
+echo "   Command: grep '^*.*[^I][^I]*@' /etc/rsyslog.conf"
 grep "^*.*[^I][^I]*@" /etc/rsyslog.conf
 
 
@@ -1018,42 +1011,42 @@ echo "   Command: /sbin/initctl show-config cron"
 
 
 echo "***CIS Ref: 9.1.2 Set User/Group Owner and Permission on /etc/crontab (Scored)***"
-echo "   Command: stat -c "%a %u %g" /etc/crontab | egrep ".00 0 0""
+echo "   Command: stat -c '%a %u %g' /etc/crontab | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/crontab | egrep ".00 0 0"
 
 
 
 
 echo "***CIS Ref: 9.1.3 Set User/Group Owner and Permission on /etc/cron.hourly (Scored)***"
-echo "   Command: stat -c "%a %u %g" /etc/cron.hourly | egrep ".00 0 0""
+echo "   Command: stat -c '%a %u %g' /etc/cron.hourly | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/cron.hourly | egrep ".00 0 0"
 
 
 
 
 echo "***CIS Ref: 9.1.4 Set User/Group Owner and Permission on /etc/cron.daily (Scored)***"
-echo "   Command: stat -c "%a %u %g" /etc/cron.daily | egrep ".00 0 0""
+echo "   Command: stat -c '%a %u %g' /etc/cron.daily | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/cron.daily | egrep ".00 0 0"
 
 
 
 
 echo "***CIS Ref: 9.1.5 Set User/Group Owner and Permission on /etc/cron.weekly (Scored)***"
-echo "   Command: stat -c "%a %u %g" /etc/cron.weekly | egrep ".00 0 0""
+echo "   Command: stat -c '%a %u %g' /etc/cron.weekly | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/cron.weekly | egrep ".00 0 0"
 
 
 
 
 echo "***CIS Ref: 9.1.6 Set User/Group Owner and Permission on /etc/cron.monthly (Scored)***"
-echo "   Command: stat -c "%a %u %g" /etc/cron.monthly | egrep ".00 0 0""
+echo "   Command: stat -c '%a %u %g' /etc/cron.monthly | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/cron.monthly | egrep ".00 0 0"
 
 
 
 
 echo "***CIS Ref: 9.1.7 Set User/Group Owner and Permission on /etc/cron.d (Scored)***"
-echo "   Command: stat -c "%a %u %g" /etc/cron.d | egrep ".00 0 0""
+echo "   Command: stat -c '%a %u %g' /etc/cron.d | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/cron.d | egrep ".00 0 0"
 
 
@@ -1081,14 +1074,14 @@ grep pam_cracklib.so /etc/pam.d/common-password
 
 
 echo "***CIS Ref: 9.2.2 Set Lockout for Failed Password Attempts (Not Scored)***"
-echo "   Command: grep "pam_tally2" /etc/pam.d/login"
+echo "   Command: grep 'pam_tally2' /etc/pam.d/login"
 grep "pam_tally2" /etc/pam.d/login
 
 
 
 
 echo "***CIS Ref: 9.2.3 Limit Password Reuse (Scored)***"
-echo "   Command: grep "remember" /etc/pam.d/common-password"
+echo "   Command: grep 'remember' /etc/pam.d/common-password"
 grep "remember" /etc/pam.d/common-password
 
 
@@ -1102,14 +1095,14 @@ dpkg -s openssh-server
 
 
 echo "***CIS Ref: 9.3.1 Set SSH Protocol to 2 (Scored)***"
-echo "   Command: grep "^Protocol" /etc/ssh/sshd_config"
+echo "   Command: grep '^Protocol' /etc/ssh/sshd_config"
 grep "^Protocol" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 9.3.2 Set LogLevel to INFO (Scored)***"
-echo "   Command: grep "^LogLevel" /etc/ssh/sshd_config"
+echo "   Command: grep '^LogLevel' /etc/ssh/sshd_config"
 grep "^LogLevel" /etc/ssh/sshd_config
 
 
@@ -1123,42 +1116,42 @@ echo "   Command: /bin/ls -l /etc/ssh/sshd_config"
 
 
 echo "***CIS Ref: 9.3.4 Disable SSH X11 Forwarding (Scored)***"
-echo "   Command: grep "^X11Forwarding" /etc/ssh/sshd_config"
+echo "   Command: grep '^X11Forwarding' /etc/ssh/sshd_config"
 grep "^X11Forwarding" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 9.3.5 Set SSH MaxAuthTries to 4 or Less (Scored)***"
-echo "   Command: grep "^MaxAuthTries" /etc/ssh/sshd_config"
+echo "   Command: grep '^MaxAuthTries' /etc/ssh/sshd_config"
 grep "^MaxAuthTries" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 9.3.6 Set SSH IgnoreRhosts to Yes (Scored)***"
-echo "   Command: grep "^IgnoreRhosts" /etc/ssh/sshd_config"
+echo "   Command: grep '^IgnoreRhosts' /etc/ssh/sshd_config"
 grep "^IgnoreRhosts" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 9.3.7 Set SSH HostbasedAuthentication to No (Scored)***"
-echo "   Command: grep "^HostbasedAuthentication" /etc/ssh/sshd_config"
+echo "   Command: grep '^HostbasedAuthentication' /etc/ssh/sshd_config"
 grep "^HostbasedAuthentication" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 9.3.8 Disable SSH Root Login (Scored)***"
-echo "   Command: grep "^PermitRootLogin" /etc/ssh/sshd_config"
+echo "   Command: grep '^PermitRootLogin' /etc/ssh/sshd_config"
 grep "^PermitRootLogin" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 9.3.9 Set SSH PermitEmptyPasswords to No (Scored)***"
-echo "   Command: grep "^PermitEmptyPasswords" /etc/ssh/sshd_config"
+echo "   Command: grep '^PermitEmptyPasswords' /etc/ssh/sshd_config"
 grep "^PermitEmptyPasswords" /etc/ssh/sshd_config
 
 
@@ -1172,36 +1165,36 @@ grep PermitUserEnvironment /etc/ssh/sshd_config
 
 
 echo "***CIS Ref: 9.3.11 Use Only Approved Cipher in Counter Mode (Scored)***"
-echo "   Command: grep "Ciphers" /etc/ssh/sshd_config"
+echo "   Command: grep 'Ciphers' /etc/ssh/sshd_config"
 grep "Ciphers" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 9.3.12 Set Idle Timeout Interval for User Login (Scored)***"
-echo "   Command: grep "^ClientAliveInterval" /etc/ssh/sshd_config "
+echo "   Command: grep '^ClientAliveInterval' /etc/ssh/sshd_config "
 grep "^ClientAliveInterval" /etc/ssh/sshd_config 
-echo "   Command: grep "^ClientAliveCountMax" /etc/ssh/sshd_config"
+echo "   Command: grep '^ClientAliveCountMax' /etc/ssh/sshd_config"
 grep "^ClientAliveCountMax" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 9.3.13 Limit Access via SSH (Scored)***"
-echo "   Command: grep "^AllowUsers" /etc/ssh/sshd_config"
+echo "   Command: grep '^AllowUsers' /etc/ssh/sshd_config"
 grep "^AllowUsers" /etc/ssh/sshd_config
-echo "   Command: grep "^AllowGroups" /etc/ssh/sshd_config "
+echo "   Command: grep '^AllowGroups' /etc/ssh/sshd_config "
 grep "^AllowGroups" /etc/ssh/sshd_config 
-echo "   Command: grep "^DenyUsers" /etc/ssh/sshd_config "
+echo "   Command: grep '^DenyUsers' /etc/ssh/sshd_config "
 grep "^DenyUsers" /etc/ssh/sshd_config 
-echo "   Command: grep "^DenyGroups" /etc/ssh/sshd_config"
+echo "   Command: grep '^DenyGroups' /etc/ssh/sshd_config"
 grep "^DenyGroups" /etc/ssh/sshd_config
 
 
 
 
 echo "***CIS Ref: 9.3.14 Set SSH Banner (Scored)***"
-echo "   Command: grep "^Banner" /etc/ssh/sshd_config"
+echo "   Command: grep '^Banner' /etc/ssh/sshd_config"
 grep "^Banner" /etc/ssh/sshd_config
 
 
@@ -1237,7 +1230,8 @@ echo "***CIS Ref: 10.1.1 Set Password Expiration Days (Scored)***"
 echo "   Command: grep PASS_MAX_DAYS /etc/login.defs "
 grep PASS_MAX_DAYS /etc/login.defs 
 echo "   Command: chage --list <user>"
-chage --list <user>
+# manual exec required
+# chage --list <user>
 
 
 
@@ -1246,7 +1240,8 @@ echo "***CIS Ref: 10.1.2 Set Password Change Minimum Number of Days (Scored)***"
 echo "   Command: grep PASS_MIN_DAYS /etc/login.defs"
 grep PASS_MIN_DAYS /etc/login.defs
 echo "   Command: chage --list <user>"
-chage --list <user>
+# manual exec required
+# chage --list <user>
 
 
 
@@ -1255,27 +1250,28 @@ echo "***CIS Ref: 10.1.3 Set Password Expiring Warning Days (Scored)***"
 echo "   Command: grep PASS_WARN_AGE /etc/login.defs"
 grep PASS_WARN_AGE /etc/login.defs
 echo "   Command: chage --list <user>"
-chage --list <user>
+# manual exec required
+# chage --list <user>
 
 
 
 
 echo "***CIS Ref: 10.2 Disable System Accounts (Scored)***"
-echo "   Command: egrep -v "^\+" /etc/passwd | awk -F: '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $3<500 && $7!="/usr/sbin/nologin" && $7!="/bin/false") {print}'"
+echo "   Command: [Escaped]"
 egrep -v "^\+" /etc/passwd | awk -F: '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $3<500 && $7!="/usr/sbin/nologin" && $7!="/bin/false") {print}'
 
 
 
 
 echo "***CIS Ref: 10.3 Set Default Group for root Account (Scored)***"
-echo "   Command: grep "^root:" /etc/passwd | cut -f4 -d:"
+echo "   Command: grep '^root:' /etc/passwd | cut -f4 -d:"
 grep "^root:" /etc/passwd | cut -f4 -d:
 
 
 
 
 echo "***CIS Ref: 10.4 Set Default umask for Users (Scored)***"
-echo "   Command: grep "^UMASK" /etc/login.defs"
+echo "   Command: grep '^UMASK' /etc/login.defs"
 grep "^UMASK" /etc/login.defs
 
 
@@ -1405,27 +1401,27 @@ df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -typ
 
 
 echo "***CIS Ref: 13 Review User and Group Settings***"
-echo "   Command: /bin/cat /etc/shadow | /usr/bin/awk -F: '($2 == "" ) { print $1 " does not have a password "}'"
+echo "   Command: [ESCAPED]"
 /bin/cat /etc/shadow | /usr/bin/awk -F: '($2 == "" ) { print $1 " does not have a password "}'
 
 
 
 
-echo "***CIS Ref: 13.2 Verify No Legacy "+" Entries Exist in /etc/passwd File (Scored)***"
+echo "***CIS Ref: 13.2 Verify No Legacy + Entries Exist in /etc/passwd File (Scored)***"
 echo "   Command: /bin/grep '^+:' /etc/passwd"
 /bin/grep '^+:' /etc/passwd
 
 
 
 
-echo "***CIS Ref: 13.3 Verify No Legacy "+" Entries Exist in /etc/shadow File (Scored)***"
+echo "***CIS Ref: 13.3 Verify No Legacy + Entries Exist in /etc/shadow File (Scored)***"
 echo "   Command: /bin/grep '^+:' /etc/shadow"
 /bin/grep '^+:' /etc/shadow
 
 
 
 
-echo "***CIS Ref: 13.4 Verify No Legacy "+" Entries Exist in /etc/group File (Scored)***"
+echo "***CIS Ref: 13.4 Verify No Legacy + Entries Exist in /etc/group File (Scored)***"
 echo "   Command: /bin/grep '^+:' /etc/group"
 /bin/grep '^+:' /etc/group
 
@@ -1437,10 +1433,8 @@ echo "   Command: /bin/cat /etc/passwd | /usr/bin/awk -F: '($3 == 0) { print $1 
 /bin/cat /etc/passwd | /usr/bin/awk -F: '($3 == 0) { print $1 }' root
 
 
-
-
 echo "***CIS Ref: 13.6 Ensure root PATH Integrity (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 if [ "`echo $PATH | grep :: `" != "" ]; then 
   echo "Empty Directory in PATH (::)" 
 fi 
@@ -1450,30 +1444,33 @@ fi
 p=`echo $PATH | sed -e 's/::/:/' -e 's/:$//' -e 's/:/ /g'` 
 set -- $p 
 while [ "$1" != "" ]; do 
-if [ "$1" = "." ]; then 
-  echo "PATH contains ." 
-  shift 
-  continue 
-fi 
-if [ -d $1 ]; then 
-  dirperm=`ls -ldH $1 | cut -f1 -d" "` 
-if [ `echo $dirperm | cut -c6 ` != "-" ]; then 
-  echo "Group Write permission set on directory $1" 
-fi 
-if [ `echo $dirperm | cut -c9 ` != "-" ]; then 
-  echo "Other Write permission set on directory $1" fi 
-  dirown=`ls -ldH $1 | awk '{print $3}'` if [ "$dirown" != "root" ] ; then 
-  echo $1 is not owned by root 
-fi 
-else 
-  echo $1 is not a directory 
-fi  
-
+  if [ "$1" = "." ]; then 
+    echo "PATH contains ." 
+    shift 
+    continue 
+  fi 
+  if [ -d $1 ]; then 
+    dirperm=`ls -ldH $1 | cut -f1 -d" "` 
+  if [ `echo $dirperm | cut -c6 ` != "-" ]; then 
+    echo "Group Write permission set on directory $1" 
+  fi 
+  if [ `echo $dirperm | cut -c9 ` != "-" ]; then 
+    echo "Other Write permission set on directory $1" 
+  fi 
+  dirown=`ls -ldH $1 | awk '{print $3}'` 
+  if [ "$dirown" != "root" ] ; then 
+    echo $1 is not owned by root 
+  fi 
+  else 
+    echo $1 is not a directory 
+  fi  
+shift
+done
 
 
 
 echo "***CIS Ref: 13.7 Check Permissions on User Home Directories (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do 
   if [ -d $dir ]; then 
     dirperm=`/bin/ls -ld $dir | /usr/bin/cut -f1 -d" "` 
@@ -1496,7 +1493,7 @@ done
 
 
 echo "***CIS Ref: 13.8 Check User Dot File Permissions (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do 
   for file in $dir/.[A-Za-z0-9]*; do 
     if [ ! -h "$file" -a -f "$file" ]; then 
@@ -1515,29 +1512,29 @@ done
 
 
 echo "***CIS Ref: 13.9 Check Permissions on User .netrc Files (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do 
   for file in $dir/.netrc; do 
     if [ ! -h "$file" -a -f "$file" ]; then 
       fileperm=`/bin/ls -ld $file | /usr/bin/cut -f1 -d" "` 
-   if [ `echo $fileperm | /usr/bin/cut -c5 ` != "-" ] then 
-     echo "Group Read set on $file" 
-   fi 
-   if [ `echo $fileperm | /usr/bin/cut -c6 ` != "-" ] then 
-     echo "Group Write set on $file" 
-   fi 
-   if [ `echo $fileperm | /usr/bin/cut -c7 ` != "-" ] then 
-     echo "Group Execute set on $file" 
-   fi 
-   if [ `echo $fileperm | /usr/bin/cut -c8 ` != "-" ] then 
-     echo "Other Read set on $file" 
-   fi 
-   if [ `echo $fileperm | /usr/bin/cut -c9 ` != "-" ] then 
-     echo "Other Write set on $file" 
-   fi 
-   if [ `echo $fileperm | /usr/bin/cut -c10 ` != "-" ] then 
-     echo "Other Execute set on $file" 
-   fi 
+      if [ `echo $fileperm | /usr/bin/cut -c5 ` != "-" ]; then 
+        echo "Group Read set on $file" 
+      fi 
+      if [ `echo $fileperm | /usr/bin/cut -c6 ` != "-" ]; then 
+        echo "Group Write set on $file" 
+      fi 
+      if [ `echo $fileperm | /usr/bin/cut -c7 ` != "-" ]; then 
+        echo "Group Execute set on $file" 
+      fi 
+      if [ `echo $fileperm | /usr/bin/cut -c8 ` != "-" ]; then 
+        echo "Other Read set on $file" 
+      fi 
+      if [ `echo $fileperm | /usr/bin/cut -c9 ` != "-" ]; then 
+        echo "Other Write set on $file" 
+      fi 
+      if [ `echo $fileperm | /usr/bin/cut -c10 ` != "-" ]; then 
+        echo "Other Execute set on $file" 
+      fi 
     fi 
   done
 done
@@ -1546,7 +1543,7 @@ done
 
 
 echo "***CIS Ref: 13.10 Check for Presence of User .rhosts Files (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do 
   for file in $dir/.rhosts; do 
     if [ ! -h "$file" -a -f "$file" ]; then 
@@ -1559,7 +1556,7 @@ done
 
 
 echo "***CIS Ref: 13.11 Check Groups in /etc/passwd (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 for i in $(cut -s -d: -f4 /etc/passwd | sort -u ); do 
   grep -q -P "^.*?:[^:]*:$i:" /etc/group 
   if [ $? -ne 0 ]; then 
@@ -1571,7 +1568,7 @@ done
 
 
 echo "***CIS Ref: 13.12 Check That Users Are Assigned Valid Home Directories (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 cat /etc/passwd | awk -F: '{ print $1 " " $3 " " $6 }' | while read user uid dir; do 
   if [ $uid -ge 500 -a ! -d "$dir" -a $user != "nfsnobody" -a $user != "nobody" ]; then 
     echo "The home directory ($dir) of user $user does not exist." 
@@ -1582,7 +1579,7 @@ done
 
 
 echo "***CIS Ref: 13.13 Check User Home Directory Ownership (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 cat /etc/passwd | awk -F: '{ print $1 " " $3 " " $6 }' | while read user uid dir; do 
   if [ $uid -ge 500 -a -d "$dir" -a $user != "nfsnobody" ]; then 
     owner=$(stat -L -c "%U" "$dir") 
@@ -1596,7 +1593,7 @@ done
 
 
 echo "***CIS Ref: 13.14 Check for Duplicate UIDs (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 /bin/cat /etc/passwd | /usr/bin/cut -f3 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do 
   [ -z "${x}" ] && break set - $x 
   if [ $1 -gt 1 ]; then 
@@ -1609,7 +1606,7 @@ done
 
 
 echo "***CIS Ref: 13.15 Check for Duplicate GIDs (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 /bin/cat /etc/group | /usr/bin/cut -f3 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c |  while read x ; do
     [ -z "${x}" ] && break 
  set - $x 
@@ -1622,7 +1619,7 @@ echo "   Command: [SCRIPT]
 
 
 echo "***CIS Ref: 13.16 Check for Duplicate User Names (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 cat /etc/passwd | /usr/bin/cut -f1 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do 
     [ -z "${x}" ] && break 
     set - $x 
@@ -1636,7 +1633,7 @@ done
 
 
 echo "***CIS Ref: 13.17 Check for Duplicate Group Names (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 cat /etc/group | /usr/bin/cut -f1 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do 
   [ -z "${x}" ] && break 
   set - $x 
@@ -1650,7 +1647,7 @@ done
 
 
 echo "***CIS Ref: 13.18 Check for Presence of User .netrc Files (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 for dir in `/bin/cat /etc/passwd |  /usr/bin/awk -F: '{ print $6 }'`; do 
   if [ ! -h "$dir/.netrc" -a -f "$dir/.netrc" ]; then 
     echo ".netrc file $dir/.netrc exists" 
@@ -1661,7 +1658,7 @@ done
 
 
 echo "***CIS Ref: 13.19 Check for Presence of User .forward Files (Scored)***"
-echo "   Command: [SCRIPT]
+echo "   Command: [SCRIPT]"
 for dir in `/bin/cat /etc/passwd | /usr/bin/awk -F: '{ print $6 }'`; do 
   if [ ! -h "$dir/.forward" -a -f "$dir/.forward" ]; then 
     echo ".forward file $dir/.forward exists" 
@@ -1674,8 +1671,9 @@ done
 echo "***CIS Ref: 13.20 Ensure shadow group is empty (Scored)***"
 echo "   Command: grep ^shadow /etc/group"
 grep ^shadow /etc/group
-echo "   Command: awk -F: '($4 == "<shadow-gid>") { print }' /etc/passwd"
-awk -F: '($4 == "<shadow-gid>") { print }' /etc/passwd
+echo "   COMMAND: [SCRIPT]"
+#manual
+# awk -F: '($4 == "<shadow-gid>") { print }' /etc/passwd
 
 
 
