@@ -171,7 +171,8 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 2.17 Set Sticky Bit on All World-Writable Directories (Scored)***"
 echo "   Command: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null"
 df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null
-
+echo "******Expect: no results, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -637,7 +638,7 @@ echo "******net.ipv4.conf.all.accept_source_route = 0"
 echo "   Command: /sbin/sysctl net.ipv4.conf.default.accept_source_route"
 /sbin/sysctl net.ipv4.conf.default.accept_source_route
 echo "******Expect: net.ipv4.conf.default.accept_source_route = 0"
-echo "--------------------------------------------------------------------------------------
+echo "--------------------------------------------------------------------------------------"
   
 
 
@@ -648,7 +649,7 @@ echo "******Expect: net.ipv4.conf.all.accept_redirects = 0"
 echo "   Command: /sbin/sysctl net.ipv4.conf.default.accept_redirects"
 /sbin/sysctl net.ipv4.conf.default.accept_redirects
 echo "******Expect: net.ipv4.conf.default.accept_redirects = 0"
-echo "--------------------------------------------------------------------------------------
+echo "--------------------------------------------------------------------------------------"
 
 
 
