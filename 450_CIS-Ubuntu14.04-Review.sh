@@ -3,7 +3,7 @@ echo "***CIS Ref: Ubuntu 14.04 – CIS Benchmark***"
 #  run this file as the following to get output and error
 # ./450_CIS-Ubuntu14.04-Review.sh > /tmp/file.txt 2>&1
 echo "***CIS Ref: CIS Benchmark Index***"
-
+echo "======================================================================================"
 echo "***CIS Ref: 1 Patching and Software Updates***"
 
 
@@ -18,20 +18,19 @@ apt-get --just-print upgrade
 
 
 
-echo "***CIS Ref: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled (Scored)***"
-
-
-
-
+echo "======================================================================================"
 echo "***CIS Ref: 2 Filesystem Configuration***"
 
-
+echo "***General Reference***"
+echo "   Command: cat /etc/fstab"
+cat /etc/fstab
 
 
 echo "***CIS Ref: 2.1 Create Separate Partition for /tmp (Scored)***"
 echo "   [Escaped command]"
 grep "[[:space:]]/tmp[[:space:]]" /etc/fstab
-
+echo "******Expect: Some output, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -40,7 +39,8 @@ echo "   Command: grep /tmp /etc/fstab | grep nodev "
 grep /tmp /etc/fstab | grep nodev 
 echo "   Command: mount | grep /tmp | grep nodev"
 mount | grep /tmp | grep nodev
-
+echo "******Expect: Output from both, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -49,7 +49,8 @@ echo "   Command: grep /tmp /etc/fstab | grep nosuid "
 grep /tmp /etc/fstab | grep nosuid 
 echo "   Command: mount | grep /tmp | grep nosuid"
 mount | grep /tmp | grep nosuid
-
+echo "******Expect: Output from both, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -58,14 +59,16 @@ echo "   Command: grep /tmp /etc/fstab | grep noexec "
 grep /tmp /etc/fstab | grep noexec 
 echo "   Command: mount | grep /tmp | grep noexec"
 mount | grep /tmp | grep noexec
-
+echo "******Expect: Output from both, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 2.5 Create Separate Partition for /var (Scored)***"
 echo "   [ESCAPED COMMAND]"
 grep "[[:space:]]/var[[:space:]]" /etc/fstab
-
+echo "******Expect: some output, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -74,28 +77,32 @@ echo "   [ESCAPED COMMAND]"
 grep -e "^/tmp" /etc/fstab | grep /var/tmp
 echo "   [ESCAPED COMMAND]"
 mount | grep -e "^/tmp" | grep /var/tmp
-
+echo "******Expect: Output from both, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 2.7 Create Separate Partition for /var/log (Scored)***"
 echo "   Command: [ESCAPED]"
 grep "[[:space:]]/var/log[[:space:]]" /etc/fstab
-
+echo "******Expect: Some output, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 2.8 Create Separate Partition for /var/log/audit (Scored)***"
 echo "   Command: grep [[:space:]]/var/log/audit[[:space:]] /etc/fstab"
 grep "[[:space:]]/var/log/audit[[:space:]]" /etc/fstab
-
+echo "******Expect: Some output, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 2.9 Create Separate Partition for /home (Scored)***"
 echo "   Command: grep [[:space:]]/home[[:space:]] /etc/fstab"
 grep "[[:space:]]/home[[:space:]]" /etc/fstab
-
+echo "******Expect: Some output, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -104,28 +111,32 @@ echo "   Command: grep /home /etc/fstab | grep nodev "
 grep /home /etc/fstab | grep nodev 
 echo "   Command: mount | grep /home | grep nodev"
 mount | grep /home | grep nodev
-
+echo "******Expect: Some output, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 2.11 Add nodev Option to Removable Media Partitions (Not Scored)***"
 echo "   Command: grep <each removable media mountpoint> /etc/fstab"
-grep <each removable media mountpoint> /etc/fstab
-
+# manual grep <each removable media mountpoint> /etc/fstab
+echo "******Expect: manual Review required"
+echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 2.12 Add noexec Option to Removable Media Partitions (Not Scored)***"
 echo "   Command: # manual grep <each removable media mountpoint> /etc/fstab"
 # manual grep <each removable media mountpoint> /etc/fstab
-
+echo "******Expect: manual Review required"
+echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 2.13 Add nosuid Option to Removable Media Partitions (Not Scored)***"
 echo "   Command: #manual grep <each removable media mountpoint> /etc/fstab"
 #manual grep <each removable media mountpoint> /etc/fstab
-
+echo "******Expect: manual Review required"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -134,7 +145,8 @@ echo "   Command: grep /run/shm /etc/fstab | grep nodev "
 grep /run/shm /etc/fstab | grep nodev 
 echo "   Command: mount | grep /run/shm | grep nodev"
 mount | grep /run/shm | grep nodev
-
+echo "******Expect: output from both commands, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -143,14 +155,16 @@ echo "   Command: grep /run/shm /etc/fstab | grep nosuid "
 grep /run/shm /etc/fstab | grep nosuid 
 echo "   Command: mount | grep /run/shm | grep nosuid"
 mount | grep /run/shm | grep nosuid
-
+echo "******Expect: output from both commands, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 2.16 Add noexec Option to /run/shm Partition (Scored)***"
 echo "   Command: grep /run/shm /etc/fstab | grep noexec # mount | grep /run/shm | grep noexec"
 grep /run/shm /etc/fstab | grep noexec # mount | grep /run/shm | grep noexec
-
+echo "******Expect: output from both commands, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -166,7 +180,8 @@ echo "   Command: /sbin/modprobe -n -v cramfs  "
 /sbin/modprobe -n -v cramfs  
 echo "   Command: /sbin/lsmod | grep cramfs"
 /sbin/lsmod | grep cramfs
-
+echo "******Expect: output 'install /bin/true' from first and no output from 2nd, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -175,6 +190,8 @@ echo "   Command: /sbin/modprobe -n -v freevxfs "
 /sbin/modprobe -n -v freevxfs 
 echo "   Command: /sbin/lsmod | grep freexvfs"
 /sbin/lsmod | grep freexvfs
+echo "******Expect: output 'install /bin/true' from first and no output from 2nd, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -184,7 +201,8 @@ echo "   Command: /sbin/modprobe -n -v jffs2"
 /sbin/modprobe -n -v jffs2
 echo "   Command: /sbin/lsmod | grep jffs2"
 /sbin/lsmod | grep jffs2
-
+echo "******Expect: output 'install /bin/true' from first and no output from 2nd, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -193,14 +211,18 @@ echo "   Command: /sbin/modprobe -n -v hfs "
 /sbin/modprobe -n -v hfs 
 echo "   Command: /sbin/lsmod | grep hfs"
 /sbin/lsmod | grep hfs
-
+echo "******Expect: output 'install /bin/true' from first and no output from 2nd, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 2.22 Disable Mounting of hfsplus Filesystems (L2 Not Scored)***"
-echo "   Command: /sbin/modprobe -n -v hfsplus install /bin/true # /sbin/lsmod | grep hfsplus"
-/sbin/modprobe -n -v hfsplus install /bin/true # /sbin/lsmod | grep hfsplus
-
+echo "   Command: /sbin/modprobe -n -v hfsplus /sbin/lsmod | grep hfsplus"
+/sbin/modprobe -n -v hfsplus 
+echo "   Command: /sbin/lsmod | grep hfsplus"
+/sbin/lsmod | grep hfsplus
+echo "******Expect: output 'install /bin/true' from first and no output from 2nd, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -209,7 +231,8 @@ echo "   Command: /sbin/modprobe -n -v squashfs install"
 /sbin/modprobe -n -v squashfs install
 echo "   Command: /sbin/lsmod | grep squashfs"
 /sbin/lsmod | grep squashfs
-
+echo "******Expect: output 'install /bin/true' from first and no output from 2nd, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -218,32 +241,33 @@ echo "   Command: /sbin/modprobe -n -v udf "
 /sbin/modprobe -n -v udf 
 echo "   Command: /sbin/lsmod | grep udf"
 /sbin/lsmod | grep udf
-
+echo "******Expect: output 'install /bin/true' from first and no output from 2nd, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 2.25 Disable Automounting (L2 Scored)***"
 echo "   Command: initctl show-config autofs"
 initctl show-config autofs
+echo "******Expect: no start conditions listed for autofs:, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
-
-
-
+echo "======================================================================================"
 echo "***CIS Ref: 3 Secure Boot Settings***"
-
-
 
 echo "***CIS Ref: 3.1 Set User/Group Owner on bootloader config (Scored)***"
 echo "   Command: stat -c %u %g /boot/grub/grub.cfg | egrep "^0 0""
 stat -c "%u %g" /boot/grub/grub.cfg | egrep "^0 0"
-
+echo "******Expect: some output:, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 3.2 Set Permissions on bootloader config (Scored)***"
 echo "   Command: stat -L -c '%a' /boot/grub/grub.cfg | egrep ".00""
 stat -L -c "%a" /boot/grub/grub.cfg | egrep ".00"
-
+echo "******Expect: some output, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -252,7 +276,8 @@ echo "   Command: grep '^set superusers' /boot/grub/grub.cfg "
 grep "^set superusers" /boot/grub/grub.cfg 
 echo "   Command: grep '^password' /boot/grub/grub.cfg"
 grep "^password" /boot/grub/grub.cfg
-
+echo "******Expect: some output from both, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -260,23 +285,26 @@ echo "***CIS Ref: 3.4 Require Authentication for Single-User Mode (Scored)***"
 echo "   Command: grep ^root:[*\!]: /etc/shadow"
 # run manually, don't save to file
 # grep ^root:[*\!]: /etc/shadow
+echo "******Expect: run manually and no results should be returned, otherwise fail"
+echo "--------------------------------------------------------------------------------------"
 
 
-
-
+echo "======================================================================================"
 echo "***CIS Ref: 4 Additional Process Hardening***"
-
-
-
 
 echo "***CIS Ref: 4.1 Restrict Core Dumps (Scored)***"
 echo "   Command: grep 'hard core' /etc/security/limits.conf "
-grep "hard core" /etc/security/limits.conf 
+grep "hard core" /etc/security/limits.conf
+echo "******Expect:* hard core 0"
 echo "   Command: sysctl fs.suid_dumpable"
 sysctl fs.suid_dumpable
-
-
-
+echo "******Expect:fs.suid_dumpable = 0"
+echo "   Command: initctl show-config apport"
+initctl show-config apport
+echo "******Expect:apport"
+echo "   Command: initctl show-config whoopsie"
+initctl show-config whoopsie
+echo "******Expect:whoopsie"
 
 echo "***CIS Ref: 4.2 Enable XD/NX Support on 32-bit x86 Systems (Not Scored)***"
 echo "   Command: dmesg | grep NX"
