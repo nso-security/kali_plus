@@ -1082,30 +1082,26 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.3.2 Implement Periodic Execution of File Integrity (L2 Scored)***"
 echo "   Command: crontab -u root -l | grep aide"
 crontab -u root -l | grep aide
-echo "******Expect: "
+echo "******Expect: 0 5 * * * /usr/sbin/aide --check"
 echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 8.4 Configure logrotate (Not Scored)***"
-echo "   Command: Manual"
-#Manual
-echo "******Expect: "
+echo "   Command: Manual cat /etc/logrotate.d/rsyslog"
+cat /etc/logrotate.d/rsyslog
+echo "******Expect: some sort of log rotation command "
 echo "--------------------------------------------------------------------------------------"
 
 
 
 
 echo "***CIS Ref: 9 System Access, Authentication and Authorization***"
-
-
 echo "***CIS Ref: 9.1 Configure cron***"
-
-
 echo "***CIS Ref: 9.1.1 Enable cron Daemon (Scored)***"
 echo "   Command: /sbin/initctl show-config cron"
 /sbin/initctl show-config cron
-echo "******Expect: "
+echo "******Expect: Cron results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1113,7 +1109,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.1.2 Set User/Group Owner and Permission on /etc/crontab (Scored)***"
 echo "   Command: stat -c '%a %u %g' /etc/crontab | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/crontab | egrep ".00 0 0"
-echo "******Expect: "
+echo "******Expect: some output or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1121,7 +1117,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.1.3 Set User/Group Owner and Permission on /etc/cron.hourly (Scored)***"
 echo "   Command: stat -c '%a %u %g' /etc/cron.hourly | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/cron.hourly | egrep ".00 0 0"
-echo "******Expect: "
+echo "******Expect:  some output or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1129,7 +1125,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.1.4 Set User/Group Owner and Permission on /etc/cron.daily (Scored)***"
 echo "   Command: stat -c '%a %u %g' /etc/cron.daily | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/cron.daily | egrep ".00 0 0"
-echo "******Expect: "
+echo "******Expect: some output or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1137,7 +1133,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.1.5 Set User/Group Owner and Permission on /etc/cron.weekly (Scored)***"
 echo "   Command: stat -c '%a %u %g' /etc/cron.weekly | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/cron.weekly | egrep ".00 0 0"
-echo "******Expect: "
+echo "******Expect: some output or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1145,7 +1141,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.1.6 Set User/Group Owner and Permission on /etc/cron.monthly (Scored)***"
 echo "   Command: stat -c '%a %u %g' /etc/cron.monthly | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/cron.monthly | egrep ".00 0 0"
-echo "******Expect: "
+echo "******Expect: some output or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1153,17 +1149,24 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.1.7 Set User/Group Owner and Permission on /etc/cron.d (Scored)***"
 echo "   Command: stat -c '%a %u %g' /etc/cron.d | egrep ".00 0 0""
 stat -c "%a %u %g" /etc/cron.d | egrep ".00 0 0"
-echo "******Expect: "
+echo "******Expect: some output or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 9.1.8 Restrict at/cron to Authorized Users (Scored)***"
 echo "   Command: ls -l /etc/cron.deny "
-ls -l /etc/cron.deny 
+ls -l /etc/cron.deny
+echo "******Expect: [no output returned] or fail"
 echo "   Command: ls -l /etc/at.deny"
 ls -l /etc/at.deny
-echo "******Expect: "
+echo "******Expect: [no output returned] or fail"
+echo "   Command: ls -l /etc/cron.allow "
+ls -l /etc/cron.allow
+echo "******Expect: -rw------- 1 root root /etc/at.allow"
+echo "   Command: ls -l /etc/at.allow "
+ls -l /etc/cron.allow
+echo "******Expect: -rw------- 1 root root /etc/at.allow"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1173,7 +1176,7 @@ echo "***CIS Ref: 9.2 Configure PAM***"
 echo "***CIS Ref: 9.2.1 Set Password Creation Requirement Parameters Using pam_cracklib (Scored)***"
 echo "   Command: grep pam_cracklib.so /etc/pam.d/common-password"
 grep pam_cracklib.so /etc/pam.d/common-password
-echo "******Expect: "
+echo "******Expect: password required pam_cracklib.so retry=3 minlen=14 dcredit=-1 ucredit=-1 ocredit=-1 lcredit=-1"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1181,7 +1184,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.2.2 Set Lockout for Failed Password Attempts (Not Scored)***"
 echo "   Command: grep 'pam_tally2' /etc/pam.d/login"
 grep "pam_tally2" /etc/pam.d/login
-echo "******Expect: "
+echo "******Expect: auth required pam_tally2.so onerr=fail audit silent deny=5 unlock_time=900"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1189,7 +1192,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.2.3 Limit Password Reuse (Scored)***"
 echo "   Command: grep 'remember' /etc/pam.d/common-password"
 grep "remember" /etc/pam.d/common-password
-echo "******Expect: "
+echo "******Expect: password [success=1 default=ignore] pam_unix.so obscure sha512 remember=5"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1197,7 +1200,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3 Configure SSH***"
 echo "   Command: dpkg -s openssh-server"
 dpkg -s openssh-server
-echo "******Expect: "
+echo "******Expect: installed or failed"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1205,7 +1208,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.1 Set SSH Protocol to 2 (Scored)***"
 echo "   Command: grep '^Protocol' /etc/ssh/sshd_config"
 grep "^Protocol" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: set to 2"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1213,7 +1216,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.2 Set LogLevel to INFO (Scored)***"
 echo "   Command: grep '^LogLevel' /etc/ssh/sshd_config"
 grep "^LogLevel" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: INFO"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1221,7 +1224,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.3 Set Permissions on /etc/ssh/sshd_config (Scored)***"
 echo "   Command: /bin/ls -l /etc/ssh/sshd_config"
 /bin/ls -l /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: -rw------- 1 root root"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1229,7 +1232,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.4 Disable SSH X11 Forwarding (Scored)***"
 echo "   Command: grep '^X11Forwarding' /etc/ssh/sshd_config"
 grep "^X11Forwarding" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: no"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1237,7 +1240,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.5 Set SSH MaxAuthTries to 4 or Less (Scored)***"
 echo "   Command: grep '^MaxAuthTries' /etc/ssh/sshd_config"
 grep "^MaxAuthTries" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: MaxAuthTries 4 or less"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1245,7 +1248,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.6 Set SSH IgnoreRhosts to Yes (Scored)***"
 echo "   Command: grep '^IgnoreRhosts' /etc/ssh/sshd_config"
 grep "^IgnoreRhosts" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: IgnoreRhosts yes"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1253,7 +1256,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.7 Set SSH HostbasedAuthentication to No (Scored)***"
 echo "   Command: grep '^HostbasedAuthentication' /etc/ssh/sshd_config"
 grep "^HostbasedAuthentication" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: HostbasedAuthentication no"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1261,7 +1264,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.8 Disable SSH Root Login (Scored)***"
 echo "   Command: grep '^PermitRootLogin' /etc/ssh/sshd_config"
 grep "^PermitRootLogin" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: PermitRootLogin no"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1269,7 +1272,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.9 Set SSH PermitEmptyPasswords to No (Scored)***"
 echo "   Command: grep '^PermitEmptyPasswords' /etc/ssh/sshd_config"
 grep "^PermitEmptyPasswords" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: PermitEmptyPasswords no"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1277,7 +1280,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.10 Do Not Allow Users to Set Environment Options (Scored)***"
 echo "   Command: grep PermitUserEnvironment /etc/ssh/sshd_config"
 grep PermitUserEnvironment /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: PermitUserEnvironment no"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1285,17 +1288,18 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.11 Use Only Approved Cipher in Counter Mode (Scored)***"
 echo "   Command: grep 'Ciphers' /etc/ssh/sshd_config"
 grep "Ciphers" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: Ciphers aes128-ctr,aes192-ctr,aes256-ctr"
 echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 9.3.12 Set Idle Timeout Interval for User Login (Scored)***"
 echo "   Command: grep '^ClientAliveInterval' /etc/ssh/sshd_config "
-grep "^ClientAliveInterval" /etc/ssh/sshd_config 
+grep "^ClientAliveInterval" /etc/ssh/sshd_config
+echo "******Expect: ClientAliveInterval 300  "
 echo "   Command: grep '^ClientAliveCountMax' /etc/ssh/sshd_config"
 grep "^ClientAliveCountMax" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: ClientAliveCountMax 0"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1303,13 +1307,16 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.13 Limit Access via SSH (Scored)***"
 echo "   Command: grep '^AllowUsers' /etc/ssh/sshd_config"
 grep "^AllowUsers" /etc/ssh/sshd_config
+echo "******Expect: AllowUsers <userlist>"
 echo "   Command: grep '^AllowGroups' /etc/ssh/sshd_config "
 grep "^AllowGroups" /etc/ssh/sshd_config 
+echo "******Expect: AllowGroups <grouplist>"
 echo "   Command: grep '^DenyUsers' /etc/ssh/sshd_config "
 grep "^DenyUsers" /etc/ssh/sshd_config 
+echo "******Expect: DenyUsers <userlist>"
 echo "   Command: grep '^DenyGroups' /etc/ssh/sshd_config"
 grep "^DenyGroups" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: DenyGroups <grouplist>"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1317,7 +1324,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.3.14 Set SSH Banner (Scored)***"
 echo "   Command: grep '^Banner' /etc/ssh/sshd_config"
 grep "^Banner" /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: Banner <bannerfile>"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1325,7 +1332,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.4 Restrict root Login to System Console (Not Scored)***"
 echo "   Command: cat /etc/securetty"
 cat /etc/securetty
-echo "******Expect: "
+echo "******Expect: --"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1333,9 +1340,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 9.5 Restrict Access to the su Command (Scored)***"
 echo "   Command: grep pam_wheel.so /etc/pam.d/su"
 grep pam_wheel.so /etc/pam.d/su
+echo "******Expect: auth required pam_wheel.so use_uid"
 echo "   Command: grep wheel /etc/group"
 grep wheel /etc/group
-echo "******Expect: "
+echo "******Expect: wheel:x:10:root, <user list>"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1347,10 +1355,11 @@ echo "***CIS Ref: 10.1 Set Shadow Password Suite Parameters (/etc/login.defs)***
 echo "***CIS Ref: 10.1.1 Set Password Expiration Days (Scored)***"
 echo "   Command: grep PASS_MAX_DAYS /etc/login.defs "
 grep PASS_MAX_DAYS /etc/login.defs 
+echo "******Expect: PASS_MAX_DAYS 90"
 echo "   Command: chage --list <user>"
 # manual exec required
-# chage --list <user>
-echo "******Expect: "
+chage --list root | grep "Maximum number of days between password change"
+echo "******Expect: 90"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1360,8 +1369,8 @@ echo "   Command: grep PASS_MIN_DAYS /etc/login.defs"
 grep PASS_MIN_DAYS /etc/login.defs
 echo "   Command: chage --list <user>"
 # manual exec required
-# chage --list <user>
-echo "******Expect: "
+chage --list root | grep "Minimum number of days between password change"
+echo "******Expect: 7"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1370,9 +1379,8 @@ echo "***CIS Ref: 10.1.3 Set Password Expiring Warning Days (Scored)***"
 echo "   Command: grep PASS_WARN_AGE /etc/login.defs"
 grep PASS_WARN_AGE /etc/login.defs
 echo "   Command: chage --list <user>"
-# manual exec required
-# chage --list <user>
-echo "******Expect: "
+chage --list root | grep warn
+echo "******Expect: 7"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1380,7 +1388,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 10.2 Disable System Accounts (Scored)***"
 echo "   Command: [Escaped]"
 egrep -v "^\+" /etc/passwd | awk -F: '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $3<500 && $7!="/usr/sbin/nologin" && $7!="/bin/false") {print}'
-echo "******Expect: "
+echo "******Expect: no results or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1388,7 +1396,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 10.3 Set Default Group for root Account (Scored)***"
 echo "   Command: grep '^root:' /etc/passwd | cut -f4 -d:"
 grep "^root:" /etc/passwd | cut -f4 -d:
-echo "******Expect: "
+echo "******Expect: 0"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1396,7 +1404,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 10.4 Set Default umask for Users (Scored)***"
 echo "   Command: grep '^UMASK' /etc/login.defs"
 grep "^UMASK" /etc/login.defs
-echo "******Expect: "
+echo "******Expect: 077"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1404,7 +1412,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 10.5 Lock Inactive User Accounts (Scored)***"
 echo "   Command: useradd -D | grep INACTIVE"
 useradd -D | grep INACTIVE
-echo "******Expect: "
+echo "******Expect: 35, fail if -1 "
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1414,11 +1422,13 @@ echo "***CIS Ref: 11 Warning Banners***"
 echo "***CIS Ref: 11.1 Set Warning Banner for Standard Login Services (Scored)***"
 echo "   Command: /bin/ls -l /etc/motd"
 /bin/ls -l /etc/motd
-echo "   Command: /bin/ls /etc/issue "
+echo "******Expect: -rw-r--r-- 1 root root"
+echo "   Command: /bin/ls -l /etc/issue "
 /bin/ls /etc/issue 
-echo "   Command: /bin/ls /etc/issue.net"
+echo "******Expect: -rw-r--r-- 1 root root"
+echo "   Command: /bin/ls -l /etc/issue.net"
 /bin/ls /etc/issue.net
-echo "******Expect: "
+echo "******Expect: -rw-r--r-- 1 root root"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1430,14 +1440,15 @@ echo "   Command: egrep '(\\v|\\r|\\m|\\s)' /etc/motd"
 egrep '(\\v|\\r|\\m|\\s)' /etc/motd
 echo "   Command: egrep '(\\v|\\r|\\m|\\s)' /etc/issue.net"
 egrep '(\\v|\\r|\\m|\\s)' /etc/issue.net
-echo "******Expect: "
+echo "******Expect: no results of fail"
 echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 11.3 Set Graphical Warning Banner (Not Scored)***"
 echo "   Command: manual"
-#manual
+echo "******Expect: X Window Access Review"
+echo "--------------------------------------------------------------------------------------"
 
 
 
@@ -1448,7 +1459,7 @@ echo "***CIS Ref: 12 Verify System File Permissions***"
 echo "***CIS Ref: 12.1 Verify Permissions on /etc/passwd (Scored)***"
 echo "   Command: /bin/ls -l /etc/passwd"
 /bin/ls -l /etc/passwd
-echo "******Expect: "
+echo "******Expect: -rw-r--r-- 1 root root"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1456,7 +1467,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 12.2 Verify Permissions on /etc/shadow (Scored)***"
 echo "   Command: /bin/ls -l /etc/shadow"
 /bin/ls -l /etc/shadow
-echo "******Expect: "
+echo "******Expect: -rw-r----- 1 root shadow"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1464,7 +1475,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 12.3 Verify Permissions on /etc/group (Scored)***"
 echo "   Command: /bin/ls -l /etc/group"
 /bin/ls -l /etc/group
-echo "******Expect: "
+echo "******Expect: -rw-r--r-- 1 root root"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1472,7 +1483,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 12.4 Verify User/Group Ownership on /etc/passwd (Scored)***"
 echo "   Command: /bin/ls -l /etc/passwd"
 /bin/ls -l /etc/passwd
-echo "******Expect: "
+echo "******Expect: -rw-r--r-- 1 root root"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1480,7 +1491,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 12.5 Verify User/Group Ownership on /etc/shadow (Scored)***"
 echo "   Command: /bin/ls -l /etc/shadow"
 /bin/ls -l /etc/shadow
-echo "******Expect: "
+echo "******Expect: -rw-r----- 1 root shadow"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1488,7 +1499,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 12.6 Verify User/Group Ownership on /etc/group (Scored)***"
 echo "   Command: /bin/ls -l /etc/group"
 /bin/ls -l /etc/group
-echo "******Expect: "
+echo "******Expect: -rw-r--r-- 1 root root"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1496,7 +1507,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 12.7 Find World Writable Files (Not Scored)***"
 echo "   Command: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002 -print"
 df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002 -print
-echo "******Expect: "
+echo "******Expect: NO results or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1504,7 +1515,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 12.8 Find Un-owned Files and Directories (Scored)***"
 echo "   Command: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser -ls"
 df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser -ls
-echo "******Expect: "
+echo "******Expect: No results or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1512,7 +1523,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 12.9 Find Un-grouped Files and Directories (Scored)***"
 echo "   Command: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup -ls"
 df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup -ls
-echo "******Expect: "
+echo "******Expect: NO results or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1520,7 +1531,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 12.10 Find SUID System Executables (Not Scored)***"
 echo "   Command: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000 -print"
 df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000 -print
-echo "******Expect: "
+echo "******Expect: Manual Review for weird suid executables"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1528,7 +1539,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 12.11 Find SGID System Executables (Not Scored)***"
 echo "   Command: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000 -print"
 df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000 -print
-echo "******Expect: "
+echo "******Expect: Manual Review"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1536,7 +1547,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 13 Review User and Group Settings***"
 echo "   Command: [ESCAPED]"
 /bin/cat /etc/shadow | /usr/bin/awk -F: '($2 == "" ) { print $1 " does not have a password "}'
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1544,7 +1555,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 13.2 Verify No Legacy + Entries Exist in /etc/passwd File (Scored)***"
 echo "   Command: /bin/grep '^+:' /etc/passwd"
 /bin/grep '^+:' /etc/passwd
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1552,7 +1563,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 13.3 Verify No Legacy + Entries Exist in /etc/shadow File (Scored)***"
 echo "   Command: /bin/grep '^+:' /etc/shadow"
 /bin/grep '^+:' /etc/shadow
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1560,15 +1571,15 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 13.4 Verify No Legacy + Entries Exist in /etc/group File (Scored)***"
 echo "   Command: /bin/grep '^+:' /etc/group"
 /bin/grep '^+:' /etc/group
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 13.5 Verify No UID 0 Accounts Exist Other Than root (Scored)***"
 echo "   Command: /bin/cat /etc/passwd | /usr/bin/awk -F: '($3 == 0) { print $1 }' root"
-/bin/cat /etc/passwd | /usr/bin/awk -F: '($3 == 0) { print $1 }' root
-echo "******Expect: "
+/bin/cat /etc/passwd | /usr/bin/awk -F: '($3 == 0) { print $1 }' 
+echo "******Expect: root"
 echo "--------------------------------------------------------------------------------------"
 
 echo "***CIS Ref: 13.6 Ensure root PATH Integrity (Scored)***"
@@ -1576,7 +1587,7 @@ echo "   Command: [SCRIPT]"
 if [ "`echo $PATH | grep :: `" != "" ]; then 
   echo "Empty Directory in PATH (::)" 
 fi 
-if [ "`echo $PATH | bin/grep :$`" != "" ]; then 
+if [ "`echo $PATH | /bin/grep :$`" != "" ]; then 
   echo "Trailing : in PATH" 
 fi 
 p=`echo $PATH | sed -e 's/::/:/' -e 's/:$//' -e 's/:/ /g'` 
@@ -1604,7 +1615,7 @@ while [ "$1" != "" ]; do
   fi  
 shift
 done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1627,7 +1638,7 @@ for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown)' | /
  fi 
   fi
 done
-echo "******Expect: "
+echo "******Expect: no results or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1647,7 +1658,7 @@ for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown)' | /
  fi 
   done 
 done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1679,7 +1690,7 @@ for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown)' | /
     fi 
   done
 done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1693,7 +1704,7 @@ for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown)' | /
  fi
   done
 done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1706,7 +1717,7 @@ for i in $(cut -s -d: -f4 /etc/passwd | sort -u ); do
     echo "Group $i is referenced by /etc/passwd but does not exist in /etc/group" 
   fi 
 done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1718,7 +1729,7 @@ cat /etc/passwd | awk -F: '{ print $1 " " $3 " " $6 }' | while read user uid dir
     echo "The home directory ($dir) of user $user does not exist." 
   fi 
 done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1733,7 +1744,7 @@ cat /etc/passwd | awk -F: '{ print $1 " " $3 " " $6 }' | while read user uid dir
  fi 
   fi
 done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1741,13 +1752,14 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 13.14 Check for Duplicate UIDs (Scored)***"
 echo "   Command: [SCRIPT]"
 /bin/cat /etc/passwd | /usr/bin/cut -f3 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do 
-  [ -z "${x}" ] && break set - $x 
-  if [ $1 -gt 1 ]; then 
+  [ -z "${x}" ] && break 
+  set - $x 
+  if [ "$1" -gt "1" ]; then 
     users=`/usr/bin/awk -F: '($3 == n) { print $1 }' n=$2 /etc/passwd | /usr/bin/xargs` 
  echo "Duplicate UID ($2): ${users}" 
   fi
 done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1756,12 +1768,12 @@ echo "***CIS Ref: 13.15 Check for Duplicate GIDs (Scored)***"
 echo "   Command: [SCRIPT]"
 /bin/cat /etc/group | /usr/bin/cut -f3 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c |  while read x ; do
     [ -z "${x}" ] && break 
- set - $x 
+   set - $x 
  if [ $1 -gt 1 ]; then grps=`/usr/bin/awk -F: '($3 == n) { print $1 }' n=$2  /etc/group | xargs` 
    echo "Duplicate GID ($2): ${grps}" 
  fi
   done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1776,7 +1788,7 @@ cat /etc/passwd | /usr/bin/cut -f1 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c |
    echo "Duplicate User Name ($2): ${uids}" 
  fi 
 done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1791,7 +1803,7 @@ cat /etc/group | /usr/bin/cut -f1 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | 
  echo "Duplicate Group Name ($2): ${gids}" 
   fi
 done
-echo "******Expect: "
+echo "******Expect: no results "
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1803,7 +1815,7 @@ for dir in `/bin/cat /etc/passwd |  /usr/bin/awk -F: '{ print $6 }'`; do
     echo ".netrc file $dir/.netrc exists" 
   fi 
 done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1815,7 +1827,7 @@ for dir in `/bin/cat /etc/passwd | /usr/bin/awk -F: '{ print $6 }'`; do
     echo ".forward file $dir/.forward exists" 
   fi
 done
-echo "******Expect: "
+echo "******Expect: no results"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1824,9 +1836,8 @@ echo "***CIS Ref: 13.20 Ensure shadow group is empty (Scored)***"
 echo "   Command: grep ^shadow /etc/group"
 grep ^shadow /etc/group
 echo "   COMMAND: [SCRIPT]"
-#manual
-# awk -F: '($4 == "<shadow-gid>") { print }' /etc/passwd
-echo "******Expect: "
+#manual  RUN THIS: awk -F: '($4 == "<shadow-gid>") { print }' /etc/passwd
+echo "******Expect: Manual check required, then no results"
 echo "--------------------------------------------------------------------------------------"
 
 
