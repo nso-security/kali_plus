@@ -696,9 +696,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.2.7 Enable RFC-recommended Source Route Validation (Scored)***"
 echo "   Command: /sbin/sysctl net.ipv4.conf.all.rp_filter "
 /sbin/sysctl net.ipv4.conf.all.rp_filter 
+echo "******Expect: net.ipv4.conf.all.rp_filter = 1"
 echo "   Command: /sbin/sysctl net.ipv4.conf.default.rp_filter"
 /sbin/sysctl net.ipv4.conf.default.rp_filter
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.default.rp_filter = 1"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -706,7 +707,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.2.8 Enable TCP SYN Cookies (Scored)***"
 echo "   Command: /sbin/sysctl net.ipv4.tcp_syncookies"
 /sbin/sysctl net.ipv4.tcp_syncookies
-echo "******Expect: "
+echo "******Expect: net.ipv4.tcp_syncookies = 1"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -717,9 +718,10 @@ echo "***CIS Ref: 7.3 Configure IPv6***"
 echo "***CIS Ref: 7.3.1 Disable IPv6 Router Advertisements (Not Scored)***"
 echo "   Command: /sbin/sysctl net.ipv6.conf.all.accept_ra "
 /sbin/sysctl net.ipv6.conf.all.accept_ra 
+echo "******Expect: net.ipv6.conf.all.accept_ra = 0"
 echo "   Command: /sbin/sysctl net.ipv6.conf.default.accept_ra"
 /sbin/sysctl net.ipv6.conf.default.accept_ra
-echo "******Expect: "
+echo "******Expect: net.ipv6.conf.default.accept_ra = 0"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -727,9 +729,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.3.2 Disable IPv6 Redirect Acceptance (Not Scored)***"
 echo "   Command: /sbin/sysctl net.ipv6.conf.all.accept_redirects "
 /sbin/sysctl net.ipv6.conf.all.accept_redirects 
+echo "******Expect: net.ipv4. net.ipv6.conf.all.accept_redirect = 0"
 echo "   Command: /sbin/sysctl net.ipv6.conf.default.accept_redirects"
 /sbin/sysctl net.ipv6.conf.default.accept_redirects
-echo "******Expect: "
+echo "******Expect: net.ipv4. net.ipv6.conf.default.accept_redirect = 0"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -737,7 +740,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.3.3 Disable IPv6 (Not Scored)***"
 echo "   Command: ip addr | grep inet6"
 ip addr | grep inet6
-echo "******Expect: "
+echo "******Expect: No Results or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -748,7 +751,7 @@ echo "***CIS Ref: 7.4 Install TCP Wrappers***"
 echo "***CIS Ref: 7.4.1 Install TCP Wrappers (Scored)***"
 echo "   Command: dpkg -s tcpd"
 dpkg -s tcpd
-echo "******Expect: "
+echo "******Expect: installed or failed"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -756,7 +759,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.4.2 Create /etc/hosts.allow (Not Scored)***"
 echo "   Command: cat /etc/hosts.allow"
 cat /etc/hosts.allow
-echo "******Expect: "
+echo "******Expect: listing or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -764,7 +767,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.4.3 Verify Permissions on /etc/hosts.allow (Scored)***"
 echo "   Command: /bin/ls -l /etc/hosts.allow"
 /bin/ls -l /etc/hosts.allow
-echo "******Expect: "
+echo "******Expect: -rw-r--r--"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -772,7 +775,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.4.4 Create /etc/hosts.deny (Not Scored)***"
 echo "   Command: grep 'ALL: ALL' /etc/hosts.deny"
 grep "ALL: ALL" /etc/hosts.deny
-echo "******Expect: "
+echo "******Expect: ALL: ALL or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -780,7 +783,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.4.5 Verify Permissions on /etc/hosts.deny (Scored)***"
 echo "   Command: /bin/ls -l /etc/hosts.deny"
 /bin/ls -l /etc/hosts.deny
-echo "******Expect: "
+echo "******Expect: -rw-r--r--"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -791,7 +794,7 @@ echo "***CIS Ref: 7.5 Uncommon Network Protocols***"
 echo "***CIS Ref: 7.5.1 Disable DCCP (Not Scored)***"
 echo "   Command: grep 'install dccp /bin/true' /etc/modprobe.d/CIS.conf"
 grep "install dccp /bin/true" /etc/modprobe.d/CIS.conf
-echo "******Expect: "
+echo "******Expect:  install dccp /bin/true  -- or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -799,7 +802,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.5.2 Disable SCTP (Not Scored)***"
 echo "   Command: grep 'install sctp /bin/true' /etc/modprobe.d/CIS.conf"
 grep "install sctp /bin/true" /etc/modprobe.d/CIS.conf
-echo "******Expect: "
+echo "******Expect: install sctp /bin/true -- or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -807,7 +810,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.5.3 Disable RDS (Not Scored)***"
 echo "   Command: grep 'install rds /bin/true' /etc/modprobe.d/CIS.conf"
 grep "install rds /bin/true" /etc/modprobe.d/CIS.conf
-echo "******Expect: "
+echo "******Expect: install rds /bin/true --or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -815,7 +818,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.5.4 Disable TIPC (Not Scored)***"
 echo "   Command: grep 'install tipc /bin/true' /etc/modprobe.d/CIS.conf"
 grep "install tipc /bin/true" /etc/modprobe.d/CIS.conf
-echo "******Expect: "
+echo "******Expect: install tipc /bin/true --or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -823,7 +826,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.6 Deactivate Wireless Interfaces (Not Scored)***"
 echo "   Command: ifconfig -a"
 ifconfig -a
-echo "******Expect: "
+echo "******Expect: No wireless interfaces"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -831,11 +834,11 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 7.7 Ensure Firewall is active (Scored)***"
 echo "   Command: ufw status"
 ufw status
-echo "******Expect: "
+echo "******Expect: Status: active"
 echo "--------------------------------------------------------------------------------------"
 
 
-
+echo "======================================================================================"
 echo "***CIS Ref: 8 Logging and Auditing***"
 
 
@@ -846,7 +849,7 @@ echo "***CIS Ref: 8.1.1 Configure Data Retention***"
 echo "***CIS Ref: 8.1.1.1 Configure Audit Log Storage Size (L2 Not Scored)***"
 echo "   Command: grep max_log_file /etc/audit/auditd.conf"
 grep max_log_file /etc/audit/auditd.conf
-echo "******Expect: "
+echo "******Expect: max_log_file = <MB>"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -854,11 +857,13 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.1.2 Disable System on Audit Log Full (L2 Not Scored)***"
 echo "   Command: grep space_left_action /etc/audit/auditd.conf "
 grep space_left_action /etc/audit/auditd.conf 
+echo "******Expect: space_left_action = email"
 echo "   Command: grep action_mail_acct /etc/audit/auditd.conf "
 grep action_mail_acct /etc/audit/auditd.conf 
+echo "******Expect: action_mail_acct = root"
 echo "   Command: grep admin_space_left_action /etc/audit/auditd.conf"
 grep admin_space_left_action /etc/audit/auditd.conf
-echo "******Expect: "
+echo "******Expect: admin_space_left_action = halt"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -874,7 +879,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.2 Install and Enable auditd Service (L2 Scored)***"
 echo "   Command: dpkg -s auditd"
 dpkg -s auditd
-echo "******Expect: "
+echo "******Expect: install results or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -882,7 +887,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.3 Enable Auditing for Processes That Start Prior to auditd (L2 Scored)***"
 echo "   Command: grep 'linux' /boot/grub/grub.cfg"
 grep "linux" /boot/grub/grub.cfg
-echo "******Expect: "
+echo "******Expect: each line that starts with linux has the audit=1 parameter set."
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -890,7 +895,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.4 Record Events That Modify Date and Time Information (Scored)***"
 echo "   Command: grep time-change /etc/audit/audit.rules"
 grep time-change /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: Some results, see benchmark for requirements.  if nothing fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -898,7 +903,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.5 Record Events That Modify User/Group Information (L2 Scored)***"
 echo "   Command: grep identity /etc/audit/audit.rules"
 grep identity /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: Some results, see benchmark for requirements.  if nothing fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -906,7 +911,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.6 Record Events That Modify the System's Network Environment (L2 Scored)***"
 echo "   Command: grep system-locale /etc/audit/audit.rules"
 grep system-locale /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: Some results, see benchmark for requirements.  if nothing fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -914,7 +919,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.7 Record Events That Modify the System's Mandatory Access Controls (L2 Scored)***"
 echo "   Command: grep MAC-policy /etc/audit/audit.rules"
 grep MAC-policy /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: -w /etc/selinux/ -p wa -k MAC-policy -- or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -922,7 +927,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.8 Collect Login and Logout Events (L2 Scored)***"
 echo "   Command: grep logins /etc/audit/audit.rules"
 grep logins /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: Some results, see benchmark for requirements.  if nothing fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -930,7 +935,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.9 Collect Session Initiation Information (L2 Scored)***"
 echo "   Command: grep session /etc/audit/audit.rules"
 grep session /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: Some results, see benchmark for requirements.  if nothing fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -938,7 +943,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.10 Collect Discretionary Access Control Permission Modification Events (L2 Scored)***"
 echo "   Command: grep perm_mod /etc/audit/audit.rules"
 grep perm_mod /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: Some results, see benchmark for requirements.  if nothing fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -946,17 +951,25 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.11 Collect Unsuccessful Unauthorized Access Attempts to Files (Scored)***"
 echo "   Command: grep access /etc/audit/audit.rules"
 grep access /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: Some results, see benchmark for requirements.  if nothing fail"
 echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 8.1.12 Collect Use of Privileged Commands (L2 Scored)***"
+echo "   Command: Script"
+find PART -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print  "-a always,exit -F path=" $1 " -F perm=x -F auid>=500 -F auid!=4294967295  -k privileged" }'
+echo "******Expect: Any results should be part of /etc/audit/audit.rules"
+echo "   Command: cat /etc/audit/audit.rules"
+cat /etc/audit/audit.rules
+echo "******Expect: something is in there or fail"
+echo "--------------------------------------------------------------------------------------"
+
 
 echo "***CIS Ref: 8.1.13 Collect Successful File System Mounts (L2 Scored)***"
 echo "   Command: grep mounts /etc/audit/audit.rules"
 grep mounts /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: Some results, see benchmark for requirements.  if nothing fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -964,17 +977,22 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.14 Collect File Deletion Events by User (L2 Scored)***"
 echo "   Command: grep delete /etc/audit/audit.rules"
 grep delete /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: Some results, see benchmark for requirements.  if nothing fail"
 echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 8.1.15 Collect Changes to System Administration Scope (sudoers) (L2 Scored)***"
+echo "   Command: scope /etc/audit/audit.rules"
+scope /etc/audit/audit.rules
+echo "******Expect: -w /etc/sudoers -p wa -k scope.  if nothing fail"
+echo "--------------------------------------------------------------------------------------"
+
 
 echo "***CIS Ref: 8.1.16 Collect System Administrator Actions (sudolog) (L2 Scored)***"
 echo "   Command: grep actions /etc/audit/audit.rules"
 grep actions /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: -w /var/log/sudo.log -p wa -k actions or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -982,7 +1000,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.17 Collect Kernel Module Loading and Unloading (L2 Scored)***"
 echo "   Command: grep modules /etc/audit/audit.rules"
 grep modules /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: 3 rules see benchmark, if nothing fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -990,7 +1008,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.1.18 Make the Audit Configuration Immutable (L2 Scored)***"
 echo "   Command: tail -n 1 /etc/audit/audit.rules"
 tail -n 1 /etc/audit/audit.rules
-echo "******Expect: "
+echo "******Expect: -e 2 -- or fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1000,7 +1018,7 @@ echo "***CIS Ref: 8.2 Configure rsyslog***"
 echo "***CIS Ref: 8.2.1 Install the rsyslog package (Scored)***"
 echo "   Command: dpkg -s rsyslog"
 dpkg -s rsyslog
-echo "******Expect: "
+echo "******Expect: installed ok installed."
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1008,7 +1026,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.2.2 Ensure the rsyslog Service is activated (Scored)***"
 echo "   Command: initctl show-config rsyslog"
 initctl show-config rsyslog
-echo "******Expect: "
+echo "******Expect: start on filesystem"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1016,15 +1034,15 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.2.3 Configure /etc/rsyslog.conf (Not Scored)***"
 echo "   Command: ls -l /var/log/"
 ls -l /var/log/
-echo "******Expect: "
+echo "******Expect: logs are rotating"
 echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 8.2.4 Create and Set Permissions on rsyslog Log Files (Scored)***"
-echo "   Command: # nanual ls -l <logfile>"
-# manual ls -l <logfile>
-echo "******Expect: "
+echo "   Command: ls -l *"
+ls -l /var/log/
+echo "******Expect: root:root and the permissions are -rw-------"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1032,7 +1050,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 8.2.5 Configure rsyslog to Send Logs to a Remote Log Host (Scored)***"
 echo "   Command: grep '^*.*[^I][^I]*@' /etc/rsyslog.conf"
 grep "^*.*[^I][^I]*@" /etc/rsyslog.conf
-echo "******Expect: "
+echo "******Expect: *.* @@loghost.example.com -- some sort of destination host"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1040,10 +1058,11 @@ echo "--------------------------------------------------------------------------
 
 echo "***CIS Ref: 8.2.6 Accept Remote rsyslog Messages Only on Designated Log Hosts (Not Scored)***"
 echo "   Command: grep '$ModLoad imtcp.so' /etc/rsyslog.conf "
-grep '$ModLoad imtcp.so' /etc/rsyslog.conf 
+grep '$ModLoad imtcp.so' /etc/rsyslog.conf
+echo "******Expect: $ModLoad imtcp.so "
 echo "   Command: grep '$InputTCPServerRun' /etc/rsyslog.conf"
 grep '$InputTCPServerRun' /etc/rsyslog.conf
-echo "******Expect: "
+echo "******Expect: $InputTCPServerRun 514"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1055,7 +1074,7 @@ echo "***CIS Ref: 8.3 Advanced Intrusion Detection Environment (AIDE)***"
 echo "***CIS Ref: 8.3.1 Install AIDE (L2 Scored)***"
 echo "   Command: dpkg -s aide"
 dpkg -s aide
-echo "******Expect: "
+echo "******Expect: aide is installed"
 echo "--------------------------------------------------------------------------------------"
 
 
