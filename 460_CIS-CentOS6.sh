@@ -351,8 +351,8 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 1.4 Secure Boot Settings***"
 
 echo "***CIS Ref: 1.4.1 Ensure permissions on bootloader config are configured (Scored)***"
-echo "   Command: stat /boot/grub2/grub.cfg"
-stat /boot/grub2/grub.cfg
+echo "   Command: stat /boot/grub2/grub.conf"
+stat /boot/grub/grub.conf
 echo "******Expect: Uid and Gid are both 0/root and Access does not grant permissions to group or other "
 echo "--------------------------------------------------------------------------------------"
 
@@ -360,8 +360,8 @@ echo "--------------------------------------------------------------------------
 
 
 echo "***CIS Ref: 1.4.2 Ensure bootloader password is set (Scored)***"
-echo "   Command: grep "^password" /boot/grub2/grub.cfg"
-grep "^password" /boot/grub2/grub.cfg
+echo "   Command: grep "^password" /boot/grub2/grub.cconf"
+grep "^password" /boot/grub/grub.conf
 echo "******Expect:  password --md5 <encrypted-password>"
 echo "--------------------------------------------------------------------------------------"
 
@@ -430,8 +430,8 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 1.6 Mandatory Access Control***"
 
 echo "***CIS Ref: 1.6.1.1 Ensure SELinux is not disabled in bootloader configuration (L2 Scored)***"
-echo "   Command: grep "^\s*linux" /boot/grub2/grub.cfg"
-grep "^\s*linux" /boot/grub2/grub.cfg
+echo "   Command: grep "^\s*linux" /boot/grub/grub.conf"
+grep "^\s*linux" /boot/grub/grub.conf
 echo "******Expect:  no kernel line has the selinux=0 or enforcing=0 parameters set"
 echo "--------------------------------------------------------------------------------------"
 
@@ -976,7 +976,7 @@ sysctl net.ipv4.conf.all.accept_redirects
 echo "******Expect:  net.ipv4.conf.all.accept_redirects = 0"
 echo "   Command: sysctl net.ipv4.conf.default.accept_redirects"
 sysctl net.ipv4.conf.default.accept_redirects
-echo "******Expect:  "
+echo "******Expect:   net.ipv4.conf.default.accept_redirects = 0"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -985,7 +985,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.2.3 Ensure secure ICMP redirects are not accepted (Scored)***"
 echo "   Command: sysctl net.ipv4.conf.all.secure_redirects "
 sysctl net.ipv4.conf.all.secure_redirects 
-echo "******Expect:  "
+echo "******Expect:  net.ipv4.conf.all.accept_redirects = 0"
 echo "   Command: sysctl net.ipv4.conf.default.secure_redirects"
 sysctl net.ipv4.conf.default.secure_redirects
 echo "******Expect:  net.ipv4.conf.default.accept_redirects = 0"
@@ -1110,7 +1110,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.4.3 Ensure /etc/hosts.deny is configured (Scored)***"
 echo "   Command: cat /etc/hosts.deny"
 cat /etc/hosts.deny
-echo "******Expect:  "
+echo "******Expect: All:All "
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1392,7 +1392,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 4.1.13 Ensure successful file system mounts are collected (L2 Scored)***"
 echo "   Command: grep mounts /etc/audit/audit.rules"
 grep mounts /etc/audit/audit.rules
-echo "******Expect:  "
+echo "******Expect:  see benchmark, if no output, fail"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1596,7 +1596,7 @@ echo "--------------------------------------------------------------------------
 
 
 
-echo "***CIS Ref: 5.1.3 Ensure permissions on /etc/cron.hourly are configured (Scored***"
+echo "***CIS Ref: 5.1.3 Ensure permissions on /etc/cron.hourly are configured (Scored)***"
 echo "   Command: stat /etc/cron.hourly"
 stat /etc/cron.hourly
 echo "******Expect:  Uid and Gid are both 0/root and Access does not grant permissions to group or other"
