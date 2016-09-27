@@ -168,9 +168,9 @@ echo ~~~~~~~~~~~~~~~~~~~~Display route information ~~~~~~~~~~~~~~~~~~~~ >>enum.t
 route >> enum.txt
 echo ~~~~~~~~~~~~~~~~~~~~Show configured DNS sever addresses ~~~~~~~~~~~~~~~~~~~~ >>enum.txt
 cat /etc/resolv.conf >> enum.txt
-echo ~~~~~~~~~~~~~~~~~~~~List all TCP sockets and related PIDs (-p Privileged command) ~~~~~~~~~~~~~~~~~~~~ >>enum.txt
+echo ~~~~~~~~~~~~~~~~~~~~List all TCP sockets and related PIDs -p Privileged command ~~~~~~~~~~~~~~~~~~~~ >>enum.txt
 netstat -antp >> enum.txt
-echo ~~~~~~~~~~~~~~~~~~~~List all UDP sockets and related PIDs (-p Privileged command) ~~~~~~~~~~~~~~~~~~~~ >>enum.txt
+echo ~~~~~~~~~~~~~~~~~~~~List all UDP sockets and related PIDs -p Privileged command ~~~~~~~~~~~~~~~~~~~~ >>enum.txt
 netstat -anup >> enum.txt
 echo ~~~~~~~~~~~~~~~~~~~~List rules – Privileged command ~~~~~~~~~~~~~~~~~~~~ >>enum.txt
 iptables -L >> enum.txt
