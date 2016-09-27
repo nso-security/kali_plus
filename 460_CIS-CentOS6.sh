@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "***CIS RHEL 6.0 – CIS Benchmark***"
-
+#run as ./460_CIS-CentOS6.sh >/tmp/`hostname`-audit-`(date +%m%d%Y)`.txt 2>&1
 
 echo "======================================================================================"
 echo "***CIS Ref: 1 Initial Setup***"
@@ -478,7 +478,7 @@ echo "--------------------------------------------------------------------------
 
 
 echo "***CIS Ref: 1.6.1.6 Ensure no unconfined daemons exist (L2 Scored)***"
-echo "   Command: ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{ print $NF }'"
+echo "   Command: [ESCAPED]"
 ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{ print $NF }'
 echo "******Expect:  not output is produced"
 echo "--------------------------------------------------------------------------------------"
@@ -1230,8 +1230,8 @@ echo "--------------------------------------------------------------------------
 
 
 echo "***CIS Ref: 3.6.5 Ensure firewall rules exist for all open ports (Scored)***"
-echo "   Command: netatat -ln"
-netatat -ln
+echo "   Command: netstat -ln"
+netstat -ln
 echo "******Expect:  Compare these rules"
 echo "   Command: iptables -L INPUT -v -n"
 iptables -L INPUT -v -n
@@ -2284,10 +2284,11 @@ echo "--------------------------------------------------------------------------
 
 echo "***CIS Ref: 6.2.13 Ensure users' .netrc Files are not group or world accessible (Scored)***"
 for dir in `cat /etc/passwd | egrep -v '(root|sync|halt|shutdown)' | awk -F: '($7 != "/sbin/nologin") { print $6 }'`; do 
-  for file in $dir/.netrc; do if [ ! -h "$file" -a -f "$file" ]; then 
-    fileperm=`ls -ld $file | cut -f1 -d" "` 
-    if [ `echo $fileperm | cut -c5 ` != "-" ]; then 
-      echo "Group Read set on $file"
+  for file in $dir/.netrc; do 
+    if [ ! -h "$file" -a -f "$file" ]; then 
+      fileperm=`ls -ld $file | cut -f1 -d" "` 
+      if [ `echo $fileperm | cut -c5 ` != "-" ]; then 
+        echo "Group Read set on $file"
       fi
       if [ `echo $fileperm | cut -c6 ` != "-" ]; then 
         echo "Group Write set on $file" 
@@ -2299,7 +2300,8 @@ for dir in `cat /etc/passwd | egrep -v '(root|sync|halt|shutdown)' | awk -F: '($
         echo "Other Read set on $file" 
       fi
       if [ `echo $fileperm | cut -c9 ` != "-" ]; then 
-        echo "Other Write set on $file" fi 
+        echo "Other Write set on $file" 
+      fi 
       if [ `echo $fileperm | cut -c10 ` != "-" ]; then 
         echo "Other Execute set on $file" 
       fi

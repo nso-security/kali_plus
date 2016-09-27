@@ -1,7 +1,6 @@
 #!/bin/bash
 echo "*** CentOS 7.0 – CIS Benchmark***"
-echo "***CIS Ref: CIS Benchmark Index***"
-
+#run as ./465_CIS-CentOS7.sh >/tmp/`hostname`-audit-`(date +%m%d%Y)`.txt 2>&1
 echo "***CIS Ref: 1 Initial Setup***"
 echo "***CIS Ref: 1.1 Filesystem Configuration***"
 
@@ -2168,7 +2167,8 @@ echo "--------------------------------------------------------------------------
 
 echo "***CIS Ref: 6.2.18 Ensure no duplicate user names exist (Scored)***"
 cat /etc/passwd | cut -f1 -d":" | sort -n | uniq -c | while read x ; do 
-  [ -z "${x}" ] && break set - $x 
+  [ -z "${x}" ] && break 
+  set - $x 
   if [ $1 -gt 1 ]; then uids=`awk -F: '($1 == n) { print $3 }' n=$2 /etc/passwd | xargs` 
     echo "Duplicate User Name ($2): ${uids}" 
   fi 

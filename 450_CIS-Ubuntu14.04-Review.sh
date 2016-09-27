@@ -1,7 +1,6 @@
 #!/bin/bash
 echo "***CIS Ref: Ubuntu 14.04 – CIS Benchmark***"
-#  run this file as the following to get output and error
-# ./450_CIS-Ubuntu14.04-Review.sh > /tmp/file.txt 2>&1
+# run this file as ./450_CIS-Ubuntu14.04.sh >/tmp/`hostname`-audit-`(date +%m%d%Y)`.txt 2>&1
 echo "***CIS Ref: CIS Benchmark Index***"
 echo "======================================================================================"
 echo "***CIS Ref: 1 Patching and Software Updates***"
@@ -985,7 +984,7 @@ echo "--------------------------------------------------------------------------
 
 echo "***CIS Ref: 8.1.15 Collect Changes to System Administration Scope (sudoers) (L2 Scored)***"
 echo "   Command: scope /etc/audit/audit.rules"
-scope /etc/audit/audit.rules
+grep scope /etc/audit/audit.rules
 echo "******Expect: -w /etc/sudoers -p wa -k scope.  if nothing fail"
 echo "--------------------------------------------------------------------------------------"
 
