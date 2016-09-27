@@ -205,7 +205,7 @@ echo ~~~~~~~~~~~~~~~~~~~~Installed Python version details ~~~~~~~~~~~~~~~~~~~~ >
 python --version  >>enum.txt
 echo ~~~~~~~~~~~~~~~~~~~~ Installed Ruby version details ~~~~~~~~~~~~~~~~~~~~ >>enum.txt
 ruby -v  >>enum.txt
-echo ~~~~~~~~~~~~~~~~~~~~Locate ‘useful’ programs (netcat, wget etc) $(date)~~~~~~~~~~~~~~~~~~~~ >>enum.txt
+echo "~~~~~~~~~~~~~~~~~~~~Locate ‘useful’ programs (netcat, wget etc) $(date)~~~~~~~~~~~~~~~~~~~~" >>enum.txt
 #find / -name %program_name% 2>/dev/null (i.e. nc, netcat, wget, nmap etc)
 echo ~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~ >>enum.txt
 #which %program_name% (i.e. nc, netcat, wget, nmap etc)
