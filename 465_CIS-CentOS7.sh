@@ -304,21 +304,18 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 1.3.2 Ensure filesystem integrity is regularly checked (Scored)***"
 echo "   Command: crontab -u root -l | grep aide"
 crontab -u root -l | grep aide
-echo "******Expect: "
+echo "******Expect: crontab exists"
 echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 1.4 Secure Boot Settings***"
-echo "******Expect: "
-echo "--------------------------------------------------------------------------------------"
-
 
 
 echo "***CIS Ref: 1.4.1 Ensure permissions on bootloader config are configured (Scored)***"
 echo "   Command: stat /boot/grub2/grub.cfg"
 stat /boot/grub2/grub.cfg
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access does not grant permissions to group or other"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -326,10 +323,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 1.4.2 Ensure bootloader password is set (Scored)***"
 echo "   Command: grep '^set superusers' /boot/grub2/grub.cfg "
 grep "^set superusers" /boot/grub2/grub.cfg 
-echo "******Expect: "
+echo "******Expect: set superusers="<username>""
 echo "   Command: grep '^password' /boot/grub2/grub.cfg"
 grep "^password" /boot/grub2/grub.cfg
-echo "******Expect: "
+echo "******Expect: password_pbkdf2 <username> <encrypted-password>"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -387,7 +384,7 @@ echo "***CIS Ref: 1.6 Mandatory Access Control***"
 echo "***CIS Ref: 1.6.1.1 Ensure SELinux is not disabled in bootloader configuration (L2 Scored)***"
 echo "   Command: grep '^\s*linux' /boot/grub2/grub.cfg"
 grep "^\s*linux" /boot/grub2/grub.cfg
-echo "******Expect: "
+echo "******Expect: no linux line has the selinux=0 or enforcing=0 parameters set:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -481,7 +478,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 1.7.1.4 Ensure permissions on /etc/motd are configured (Not Scored)***"
 echo "   Command: stat /etc/motd"
 stat /etc/motd
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access is 644:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -489,7 +486,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 1.7.1.5 Ensure permissions on /etc/issue are configured (Scored)***"
 echo "   Command: stat /etc/issue"
 stat /etc/issue
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access is 644:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -497,7 +494,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 1.7.1.6 Ensure permissions on /etc/issue.net are configured (Not Scored)***"
 echo "   Command: stat /etc/issue.net"
 stat /etc/issue.net
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access is 644:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -627,31 +624,32 @@ grep "^server" /etc/chrony.conf
 echo "******Expect: "
 echo "   Command: grep ^OPTIONS /etc/sysconfig/chronyd"
 grep ^OPTIONS /etc/sysconfig/chronyd
-echo "******Expect: "
-echo "   Command: rpm -qa xorg-x11*"
-rpm -qa xorg-x11*
-echo "******Expect: "
+echo "******Expect: OPTIONS='-u chrony'"
+
 echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 2.2.2 Ensure X Window System is not installed (Scored)***"
-echo "   Command: systemctl is-enabled avahi-daemon"
-systemctl is-enabled avahi-daemon
-echo "******Expect: "
+echo "   Command: rpm -qa xorg-x11*"
+rpm -qa xorg-x11*
+echo "******Expect: not installed"
 echo "--------------------------------------------------------------------------------------"
 
-
-
 echo "***CIS Ref: 2.2.3 Ensure Avahi Server is not enabled (Scored)***"
+echo "   Command: systemctl is-enabled avahi-daemon"
+systemctl is-enabled avahi-daemon
+echo "******Expect: disabled"
+echo "--------------------------------------------------------------------------------------"
+
+echo "***CIS Ref: 2.2.4 Ensure CUPS is not enabled (Scored)***"
 echo "   Command: systemctl is-enabled cups"
 systemctl is-enabled cups
 echo "******Expect: "
 echo "--------------------------------------------------------------------------------------"
 
 
-
-echo "***CIS Ref: 2.2.4 Ensure CUPS is not enabled (Scored)***"
+echo "***CIS Ref: 2.2.5 Ensure DHCP Server is not enabled (Scored)***"
 echo "   Command: systemctl is-enabled dhcpd"
 systemctl is-enabled dhcpd
 echo "******Expect: "
@@ -659,7 +657,8 @@ echo "--------------------------------------------------------------------------
 
 
 
-echo "***CIS Ref: 2.2.5 Ensure DHCP Server is not enabled (Scored)***"
+
+echo "***CIS Ref: 2.2.6 Ensure LDAP server is not enabled (Scored)***"
 echo "   Command: systemctl is-enabled slapd"
 systemctl is-enabled slapd
 echo "******Expect: "
@@ -667,15 +666,16 @@ echo "--------------------------------------------------------------------------
 
 
 
-echo "***CIS Ref: 2.2.6 Ensure LDAP server is not enabled (Scored)***"
-echo "   Command: systemctl is-enabled nfs"
-systemctl is-enabled nfs
-echo "******Expect: "
-echo "--------------------------------------------------------------------------------------"
+
+
 
 
 
 echo "***CIS Ref: 2.2.7 Ensure NFS and RPC are not enabled (Scored)***"
+echo "   Command: systemctl is-enabled nfs"
+systemctl is-enabled nfs
+echo "******Expect: "
+echo "--------------------------------------------------------------------------------------"
 echo "   Command: systemctl is-enabled rpcbind"
 systemctl is-enabled rpcbind
 echo "******Expect: "
@@ -850,7 +850,7 @@ echo "***CIS Ref: 3.1 Network Parameters (Host Only)***"
 echo "***CIS Ref: 3.1.1 Ensure IP forwarding is disabled (Scored)***"
 echo "   Command: sysctl net.ipv4.ip_forward"
 sysctl net.ipv4.ip_forward
-echo "******Expect: "
+echo "******Expect: net.ipv4.ip_forward = 0"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -858,10 +858,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.1.2 Ensure packet redirect sending is disabled (Scored)***"
 echo "   Command: sysctl net.ipv4.conf.all.send_redirects "
 sysctl net.ipv4.conf.all.send_redirects
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.all.send_redirects = 0"
 echo "   Command: sysctl net.ipv4.conf.default.send_redirects"
 sysctl net.ipv4.conf.default.send_redirects
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.default.send_redirects = 0"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -874,10 +874,10 @@ echo "***CIS Ref: 3.2 Network Parameters (Host and Router)***"
 echo "***CIS Ref: 3.2.1 Ensure source routed packets are not accepted (Scored)***"
 echo "   Command: sysctl net.ipv4.conf.all.accept_source_route"
 sysctl net.ipv4.conf.all.accept_source_route
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.all.accept_source_route = 0"
 echo "   Command: sysctl net.ipv4.conf.default.accept_source_route"
 sysctl net.ipv4.conf.default.accept_source_route
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.default.accept_source_route = 0"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -885,10 +885,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.2.2 Ensure ICMP redirects are not accepted (Scored)***"
 echo "   Command: sysctl net.ipv4.conf.all.accept_redirects"
 sysctl net.ipv4.conf.all.accept_redirects
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.all.accept_redirects = 0"
 echo "   Command: sysctl net.ipv4.conf.default.accept_redirects"
 sysctl net.ipv4.conf.default.accept_redirects
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.default.accept_redirects = 0"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -896,10 +896,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.2.3 Ensure secure ICMP redirects are not accepted (Scored)***"
 echo "   Command: sysctl net.ipv4.conf.all.secure_redirects "
 sysctl net.ipv4.conf.all.secure_redirects 
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.all.secure_redirects = 0"
 echo "   Command: sysctl net.ipv4.conf.default.secure_redirects"
 sysctl net.ipv4.conf.default.secure_redirects
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.default.secure_redirects = 0"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -907,10 +907,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.2.4 Ensure suspicious packets are logged (Scored)***"
 echo "   Command: sysctl net.ipv4.conf.all.log_martians "
 sysctl net.ipv4.conf.all.log_martians 
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.all.log_martians = 1"
 echo "   Command: sysctl net.ipv4.conf.default.log_martians"
 sysctl net.ipv4.conf.default.log_martians
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.all.log_martians = 1"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -918,7 +918,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.2.5 Ensure broadcast ICMP requests are ignored (Scored)***"
 echo "   Command: sysctl net.ipv4.icmp_echo_ignore_broadcasts"
 sysctl net.ipv4.icmp_echo_ignore_broadcasts
-echo "******Expect: "
+echo "******Expect: net.ipv4.icmp_echo_ignore_broadcasts = 1"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -926,7 +926,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.2.6 Ensure bogus ICMP responses are ignored (Scored)***"
 echo "   Command: sysctl net.ipv4.icmp_ignore_bogus_error_responses"
 sysctl net.ipv4.icmp_ignore_bogus_error_responses
-echo "******Expect: "
+echo "******Expect: net.ipv4.icmp_ignore_bogus_error_responses = 1"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -945,7 +945,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.2.8 Ensure TCP SYN Cookies is enabled (Scored)***"
 echo "   Command: sysctl net.ipv4.tcp_syncookies"
 sysctl net.ipv4.tcp_syncookies
-echo "******Expect: "
+echo "******Expect: net.ipv4.tcp_syncookies = 1"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -955,20 +955,20 @@ echo "***CIS Ref: 3.3 IPv6***"
 echo "***CIS Ref: 3.3.1 Ensure IPv6 router advertisements are not accepted (Scored)***"
 echo "   Command: sysctl net.ipv6.conf.all.accept_ra "
 sysctl net.ipv6.conf.all.accept_ra 
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.all.rp_filter = 1"
 echo "   Command: sysctl net.ipv6.conf.default.accept_ra"
 sysctl net.ipv6.conf.default.accept_ra
-echo "******Expect: "
+echo "******Expect: net.ipv4.conf.default.rp_filter = 1"
 echo "--------------------------------------------------------------------------------------"
 
 
 echo "***CIS Ref: 3.3.2 Ensure IPv6 redirects are not accepted (Scored)***"
 echo "   Command: sysctl net.ipv6.conf.all.accept_redirects "
 sysctl net.ipv6.conf.all.accept_redirects 
-echo "******Expect: "
+echo "******Expect: net.ipv6.conf.all.accept_ra = 0"
 echo "   Command: sysctl net.ipv6.conf.default.accept_redirects"
 sysctl net.ipv6.conf.default.accept_redirects
-echo "******Expect: "
+echo "******Expect: net.ipv6.conf.default.accept_ra = 0"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -976,7 +976,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.3.3 Ensure IPv6 is disabled (Not Scored)***"
 echo "   Command: modprobe -c | grep ipv6"
 modprobe -c | grep ipv6
-echo "******Expect: "
+echo "******Expect: options ipv6 disable=1"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -989,10 +989,10 @@ echo "***CIS Ref: 3.4 TCP Wrappers***"
 echo "***CIS Ref: 3.4.1 Ensure TCP Wrappers is installed (Scored)***"
 echo "   Command: rpm -q tcp_wrappers"
 rpm -q tcp_wrappers
-echo "******Expect: "
+echo "******Expect: tcp_wrappers-<version>"
 echo "   Command: rpm -q tcp_wrappers-libs"
 rpm -q tcp_wrappers-libs
-echo "******Expect: "
+echo "******Expect: tcp_wrappers-libs-<version>"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1000,7 +1000,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.4.2 Ensure /etc/hosts.allow is configured (Scored)***"
 echo "   Command: cat /etc/hosts.allow"
 cat /etc/hosts.allow
-echo "******Expect: "
+echo "******Expect: in use"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1008,7 +1008,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.4.3 Ensure /etc/hosts.deny is configured (Scored)***"
 echo "   Command: cat /etc/hosts.deny"
 cat /etc/hosts.deny
-echo "******Expect: "
+echo "******Expect: ALL: ALL"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1016,7 +1016,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.4.4 Ensure permissions on /etc/hosts.allow are configured (Scored)***"
 echo "   Command: stat /etc/hosts.allow"
 stat /etc/hosts.allow
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access is 644:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1024,7 +1024,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 3.4.5 Ensure permissions on /etc/hosts.deny are 644 (Scored)***"
 echo "   Command: stat /etc/hosts.deny"
 stat /etc/hosts.deny
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access is 644:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1147,7 +1147,7 @@ echo "***CIS Ref: 4.1 Configure System Accounting (auditd)***"
 echo "***CIS Ref: 4.1.1.1 Ensure audit log storage size is configured (L2 Not Scored)***"
 echo "   Command: grep max_log_file /etc/audit/auditd.conf"
 grep max_log_file /etc/audit/auditd.conf
-echo "******Expect: "
+echo "******Expect: max_log_file = <MB>"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1155,13 +1155,13 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 4.1.1.2 Ensure system is disabled when audit logs are full (L2 Scored)***"
 echo "   Command: grep space_left_action /etc/audit/auditd.conf "
 grep space_left_action /etc/audit/auditd.conf 
-echo "******Expect: "
+echo "******Expect: space_left_action = email"
 echo "   Command: grep action_mail_acct /etc/audit/auditd.conf "
 grep action_mail_acct /etc/audit/auditd.conf
-echo "******Expect: "
+echo "******Expect: action_mail_acct = root"
 echo "   Command: grep admin_space_left_action /etc/audit/auditd.conf"
 grep admin_space_left_action /etc/audit/auditd.conf
-echo "******Expect: "
+echo "******Expect: admin_space_left_action = halt"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1169,7 +1169,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 4.1.1.3 Ensure audit logs are not automatically deleted (L2 Scored)***"
 echo "   Command: grep max_log_file_action /etc/audit/auditd.conf"
 grep max_log_file_action /etc/audit/auditd.conf
-echo "******Expect: "
+echo "******Expect: max_log_file_action = keep_logs"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1177,7 +1177,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 4.1.2 Ensure auditd service is enabled (L2 Scored)***"
 echo "   Command: systemctl is-enabled auditd"
 systemctl is-enabled auditd
-echo "******Expect: "
+echo "******Expect: enabled"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1319,7 +1319,7 @@ echo "***CIS Ref: 4.2 Configure Logging***"
 echo "***CIS Ref: 4.2.1.1 Ensure rsyslog Service is enabled (Scored)***"
 echo "   Command: systemctl is-enabled rsyslog"
 systemctl is-enabled rsyslog
-echo "******Expect: "
+echo "******Expect: enabled"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1335,7 +1335,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 4.2.1.3 Ensure rsyslog default file permissions configured (Scored)***"
 echo "   Command: grep ^\$FileCreateMode /etc/rsyslog.conf"
 grep ^\$FileCreateMode /etc/rsyslog.conf
-echo "******Expect: "
+echo "******Expect: $FileCreateMode is 0640 or more restrictive"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1343,7 +1343,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 4.2.1.4 Ensure rsyslog is configured to send logs to a remote log host (Scored)***"
 echo "   Command: grep '^*.*[^I][^I]*@' /etc/rsyslog.conf"
 grep "^*.*[^I][^I]*@" /etc/rsyslog.conf
-echo "******Expect: "
+echo "******Expect: *.* @@loghost.example.com"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1351,10 +1351,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 4.2.1.5 Ensure remote rsyslog messages are only accepted on designated log hosts. (Not Scored)***"
 echo "   Command: grep '$ModLoad imtcp.so' /etc/rsyslog.conf"
 grep '$ModLoad imtcp.so' /etc/rsyslog.conf
-echo "******Expect: "
+echo "******Expect: ModLoad imtcp.so"
 echo "   Command: grep '$InputTCPServerRun' /etc/rsyslog.conf"
 grep '$InputTCPServerRun' /etc/rsyslog.conf
-echo "******Expect: "
+echo "******Expect: InputTCPServerRun 514"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1392,9 +1392,8 @@ echo "--------------------------------------------------------------------------
 
 
 echo "***CIS Ref: 4.2.2.5 Ensure remote syslog-ng messages are only accepted on designated log hosts (Not Scored)***"
-echo "   Command: #review previsou conf"
-#review previsou conf
-echo "******Expect: "
+echo "   Command: #review previous conf"
+
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1412,7 +1411,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 4.2.4 Ensure permissions on all logfiles are configured (Scored)***"
 echo "   Command: find /var/log -type f -ls"
 find /var/log -type f -ls
-echo "******Expect: "
+echo "******Expect: other has no permissions on any files and group does not have write or execute"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1441,7 +1440,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 5.1.2 Ensure permissions on /etc/crontab are configured (Scored)***"
 echo "   Command: stat /etc/crontab"
 stat /etc/crontab
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access does not grant permissions to group or other"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1449,7 +1448,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 5.1.3 Ensure permissions on /etc/cron.hourly are configured (Scored***"
 echo "   Command: stat /etc/cron.hourly"
 stat /etc/cron.hourly
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access does not grant permissions to group or other:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1457,7 +1456,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 5.1.4 Ensure permissions on /etc/cron.daily are configured (Scored)***"
 echo "   Command: stat /etc/cron.daily"
 stat /etc/cron.daily
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access does not grant permissions to group or other:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1465,7 +1464,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 5.1.5 Ensure permissions on /etc/cron.weekly are configured (Scored)***"
 echo "   Command: stat /etc/cron.weekly"
 stat /etc/cron.weekly
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access does not grant permissions to group or other:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1473,7 +1472,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 5.1.6 Ensure permissions on /etc/cron.monthly are configured (Scored)***"
 echo "   Command: stat /etc/cron.monthly"
 stat /etc/cron.monthly
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access does not grant permissions to group or other:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1481,7 +1480,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 5.1.7 Ensure permissions on /etc/cron.d are configured (Scored)***"
 echo "   Command: stat /etc/cron.d"
 stat /etc/cron.d
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access does not grant permissions to group or other:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1491,7 +1490,7 @@ echo "   Command: /etc/cron.deny "
 /etc/cron.deny 
 echo "   Command: stat /etc/at.deny"
 stat /etc/at.deny
-echo "******Expect: "
+echo "******Expect: Neither of these exist"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1502,7 +1501,7 @@ echo "***CIS Ref: 5.2 SSH Server Configuration***"
 echo "***CIS Ref: 5.2.1 Ensure permissions on /etc/ssh/sshd_config are configured (Scored)***"
 echo "   Command: stat /etc/ssh/sshd_config"
 stat /etc/ssh/sshd_config
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access does not grant permissions to group or other"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1648,36 +1647,37 @@ echo "***CIS Ref: 5.3.1 Ensure password creation requirements are configured (Sc
 
 echo "   Command: grep pam_pwquality.so /etc/pam.d/password-auth"
 grep pam_pwquality.so /etc/pam.d/password-auth
-echo "******Expect: "
+echo "******Expect: password requisite pam_pwquality.so try_first_pass retry=3"
 echo "   Command: grep pam_pwquality.so /etc/pam.d/system-auth"
 grep pam_pwquality.so /etc/pam.d/system-auth 
-echo "******Expect: "
+echo "******Expect: password requisite pam_pwquality.so try_first_pass retry=3"
 echo "   Command: grep ^minlen /etc/security/pwquality.conf "
 grep ^minlen /etc/security/pwquality.conf 
-echo "******Expect: "
+echo "******Expect: minlen=14"
 echo "   Command: grep ^dcredit /etc/security/pwquality.conf"
 grep ^dcredit /etc/security/pwquality.conf
-echo "******Expect: "
+echo "******Expect: dcredit=-1"
 
 echo "   Command:grep ^lcredit /etc/security/pwquality.conf"
 grep ^lcredit /etc/security/pwquality.conf 
 echo "******Expect: grep ^ocredit /etc/security/pwquality.conf "
-echo "   Command: "
+echo "   Command: lcredit=-1"
 grep ^ocredit /etc/security/pwquality.conf 
-echo "******Expect: "
+echo "******Expect: ocredit=-1"
 echo "   Command: grep ^ucredit /etc/security/pwquality.conf"
 grep ^ucredit /etc/security/pwquality.conf
-echo "******Expect: "
+echo "******Expect: ucredit=-1"
 echo "--------------------------------------------------------------------------------------"
 
 
 
 echo "***CIS Ref: 5.3.2 Ensure lockout for failed password attempts is configured (Scored***"
-echo "   Command: # maual review /etc/pam.d/password-auth"
-# maual review /etc/pam.d/password-auth
-echo "   Command: # manual review /etc/pam.d/system-auth"
-# manual review /etc/pam.d/system-auth
-echo "******Expect: "
+echo "   Command: # cat /etc/pam.d/password-auth"
+cat /etc/pam.d/password-auth
+echo "******Expect: see benchmark"
+echo "   Command: cat /etc/pam.d/system-auth"
+cat /etc/pam.d/system-auth
+echo "******Expect: see benchmark"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1685,10 +1685,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 5.3.3 Ensure password reuse is limited (Scored***"
 echo "   Command: egrep '^password\s+sufficient\s+pam_unix.so' /etc/pam.d/password-auth "
 egrep '^password\s+sufficient\s+pam_unix.so' /etc/pam.d/password-auth 
-echo "******Expect: "
+echo "******Expect: password sufficient pam_unix.so remember=5"
 echo "   Command: egrep '^password\s+sufficient\s+pam_unix.so' /etc/pam.d/system-auth"
 egrep '^password\s+sufficient\s+pam_unix.so' /etc/pam.d/system-auth
-echo "******Expect: "
+echo "******Expect:  password sufficient pam_unix.so remember=5"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1696,10 +1696,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 5.3.4 Ensure password hashing algorithm is SHA-512 (Scored)***"
 echo "   Command: egrep '^password\s+sufficient\s+pam_unix.so' /etc/pam.d/password-auth "
 egrep '^password\s+sufficient\s+pam_unix.so' /etc/pam.d/password-auth 
-echo "******Expect: "
+echo "******Expect: password sufficient pam_unix.so sha512"
 echo "   Command: egrep '^password\s+sufficient\s+pam_unix.so' /etc/pam.d/system-auth"
 egrep '^password\s+sufficient\s+pam_unix.so' /etc/pam.d/system-auth
-echo "******Expect: "
+echo "******Expect:password sufficient pam_unix.so sha512"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1794,10 +1794,10 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 5.6 Ensure access to the su command is restricted (Scored)***"
 echo "   Command: grep pam_wheel.so /etc/pam.d/su"
 grep pam_wheel.so /etc/pam.d/su
-echo "******Expect: "
+echo "******Expect: auth required pam_wheel.so use_uid"
 echo "   Command: grep wheel /etc/group"
 grep wheel /etc/group
-echo "******Expect: "
+echo "******Expect: wheel:x:10:root,<user list>"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1825,7 +1825,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 6.1.2 Ensure permissions on /etc/passwd are configured (Scored)***"
 echo "   Command: stat /etc/passwd"
 stat /etc/passwd
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access is 644:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1833,7 +1833,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 6.1.3 Ensure permissions on /etc/shadow are configured (Scored)***"
 echo "   Command: stat /etc/shadow"
 stat /etc/shadow
-echo "******Expect: "
+echo "******Expect: Uid and Gid are 0/root, and Access is 000"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1841,7 +1841,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 6.1.4 Ensure permissions on /etc/group are configured (Scored)***"
 echo "   Command: stat /etc/group"
 stat /etc/group
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access is 644"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1849,7 +1849,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 6.1.5 Ensure permissions on /etc/gshadow are configured (Scored)***"
 echo "   Command: stat /etc/gshadow"
 stat /etc/gshadow
-echo "******Expect: "
+echo "******Expect: Uid and Gid are 0/root, and Access is 000:"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1857,7 +1857,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 6.1.6 Ensure permissions on /etc/passwd- are configured (Scored)***"
 echo "   Command: stat /etc/passwd-"
 stat /etc/passwd-
-echo "******Expect: "
+echo "******Expect: id and Gid are both 0/root and Access is 600 or more restrictive"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1865,7 +1865,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 6.1.7 Ensure permissions on /etc/shadow- are configured (Scored)***"
 echo "   Command: stat /etc/shadow-"
 stat /etc/shadow-
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access is 600 or more restrictive"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1873,7 +1873,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 6.1.8 Ensure permissions on /etc/group- are configured (Scored)***"
 echo "   Command: stat /etc/group-"
 stat /etc/group-
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access is 600 or more restrictive"
 echo "--------------------------------------------------------------------------------------"
 
 
@@ -1881,7 +1881,7 @@ echo "--------------------------------------------------------------------------
 echo "***CIS Ref: 6.1.9 Ensure permissions on /etc/gshadow- are configured (Scored)***"
 echo "   Command: stat /etc/gshadow-"
 stat /etc/gshadow-
-echo "******Expect: "
+echo "******Expect: Uid and Gid are both 0/root and Access is 600 or more restrictive:"
 echo "--------------------------------------------------------------------------------------"
 
 
