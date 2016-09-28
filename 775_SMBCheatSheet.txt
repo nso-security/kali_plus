@@ -1,0 +1,15 @@
+#enum4linux
+enum4linux -v 10.10.10.10
+
+#NMAP NSE scripts
+ls -l /usr/share/nmap/scripts/|grep smb
+nmap -p 139,445 --script=smb-enum-users 10.10.10.10
+nmap -p 139,445 --script=smb-check-vulns 10.10.10.10
+
+
+#RPC CLient
+rpcclient -U "" 10.10.10.10
+<empty password>
+srvinfor #basic server infor
+enumdomusers # local accounts
+getdompwinfo # passowrd info
