@@ -1,5 +1,6 @@
 --spider the website
-cewl -a -v http://target.com/  -w [FileName]
+cewl -a -v http://target.com/  -w [OUTFILENAME]
+cewl -m 6 -w [OUTFILENAME]
 
 --brutescrape
 cd /opt/brutescrape
