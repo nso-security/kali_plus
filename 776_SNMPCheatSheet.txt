@@ -23,3 +23,15 @@ snmpwalk –c public –v1 10.10.10.10 [MIB Reference from above]
 #other tools
 snmpenum
 snmpcheck
+
+
+#SNMP Script looking for write strings
+nmap -Pn -sU -p 161 -v -oA snmp 10.10.10.0/24
+grep ‘161/open/udp’ snmp.gnmap | awk ‘{ print $2 }’ | while read IP
+do
+     snmpwalk -v1 -c private $IP >/dev/null 2>&1
+     if [ “$?” == “0” ]; then
+         echo “$IP accepts private community"
+         echo $IP >>vulnerable_ip.tmp
+     fi
+done
