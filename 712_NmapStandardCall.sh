@@ -10,3 +10,6 @@ nmap -n -Pn -A -iL IPList.txt  -oA ./nmapresults/[CLIENT]-[PROJECT]-NmapScan
 
 #poodle test
 nmap -sV --version-light --script ssl-poodle -p 443 [IP]
+
+# all scripts
+nmap --script all 10.10.10.10
