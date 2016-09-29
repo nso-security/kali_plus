@@ -1,0 +1,69 @@
+#===================================================================
+#TFTP Linux Server
+atftpd --daeemon --port 69 [DIRECTORY PATH]
+
+#TFTPD Client Windows
+   #Perk non interactive
+tftp -i [SERVER IP] GET [FILENAME]
+
+#===================================================================
+#FTP Server Setup
+apt-get install pure-ftp
+groupadd ftpg
+useradd -g ftpg -d /dev/null -s /etc ftpu
+pure-pw useradd ftpuser -u ftpu /ftphome
+pure-pw mkdb
+cd /etc/pure-fptd/auth
+ln -s ../conf/PureDB 60pdb
+mkdir -p /ftphome
+chown -R ftpu:ftpg /ftphome
+/etc/init.d/pure-ftpd restart
+./setup-ftp
+
+#Windows Client FTP Script creation for non-interactive ftp session
+echo open [IP] 21 >ftpcommands.txt
+echo ftpuser >>ftpcommands.txt
+echo [PASSWORD used in setup-ftp] >>ftpcommands.txt
+echo ftp bye >>ftpcommands.txt
+ftp -s ftpcommands.txt
+#===================================================================
+#VBS Web downlownloader
+echo strUrl = WScript.Arguments.Item(0) > web-dl.vbs
+echo StrFile = WScript.Arguments.Item(1) >> web-dl.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DEFAULT = 0 >> web-dl.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PRECONFIG = 0 >> web-dl.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DIRECT = 1 >> web-dl.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PROXY = 2 >> web-dl.vbs
+echo Dim http, varByteArray, strData, strBuffer, lngCounter, fs, ts >> web-dl.vbs
+echo Err.Clear >> web-dl.vbs
+echo Set http = Nothing >> web-dl.vbs
+echo Set http = CreateObject("WinHttp.WinHttpRequest.5.1") >> web-dl.vbs
+echo If http Is Nothing Then Set http = CreateObject("WinHttp.WinHttpRequest") >> web-dl.vbs
+echo If http Is Nothing Then Set http = CreateObject("MSXML2.ServerXMLHTTP") >> web-dl.vbs
+echo If http Is Nothing Then Set http = CreateObject("Microsoft.XMLHTTP") >> web-dl.vbs
+echo http.Open "GET", strURL, False >> web-dl.vbs
+echo http.Send >> web-dl.vbs
+echo varByteArray = http.ResponseBody >> web-dl.vbs
+echo Set http = Nothing >> web-dl.vbs
+echo Set fs = CreateObject("Scripting.FileSystemObject") >> web-dl.vbs
+echo Set ts = fs.CreateTextFile(StrFile, True) >> web-dl.vbs
+echo strData = "" >> web-dl.vbs
+echo strBuffer = "" >> web-dl.vbs
+echo For lngCounter = 0 to UBound(varByteArray) >> web-dl.vbs
+echo ts.Write Chr(255 And Ascb(Midb(varByteArray,lngCounter + 1, 1))) >> web-dl.vbs
+echo Next >> web-dl.vbs
+echo ts.Close >> web-dl.vbs
+
+#then cscript web-dl.vbs [URL] [LOCAL FILE NAME]
+
+#===================================================================
+
+#Powershell web downloader
+echo $storageDir = $pwd > web-dl.ps1
+echo $webclient = New-Object System.Net.WebClient >>web-dl.ps1
+echo $url = "[URL]" >>web-dl.ps1
+echo $file = "[LOCAL FILE NAME]" >>web-dl.ps1
+echo $webclient.DownloadFile($url,$file) >>web-dl.ps1
+
+#then run it with 
+powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File web-dl.ps1
