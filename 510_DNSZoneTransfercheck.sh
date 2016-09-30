@@ -1,5 +1,5 @@
 #/bin/bash
-
+#also review this command: dnsrecon -d domain.com -taxfr
 # only one argument site.com or echo usage and die
 if [ -z "$1" ]; then
 	echo "*** Sorry, you need to provide the domain name (e.g. site.com) like this $0 <domain name> "
