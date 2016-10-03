@@ -1,0 +1,4 @@
+#Track bandwidth usage by IP
+iptables -I INPUT 1 -s 10.10.10.10 -j ACCEPT
+iptables -I OUTPUT 1 -d 10.10.10.10 -j ACCEPT
+iptables -Z
