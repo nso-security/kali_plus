@@ -72,8 +72,9 @@ cd /opt/kali_plus
 cd /opt/kali_plus
 ./055_NessusParser.sh
 
-cd /opt/wbm_kali
+cd /opt/kali_plus
 ./056_Impacket.sh
 
-#misc apt-get
-sudo apt-get -y install pdftk
+cd /opt/kali_plus
+./061_EICAR.sh
+

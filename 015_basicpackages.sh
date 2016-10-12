@@ -19,3 +19,5 @@ apt-get install -y mongodb python3-pymongo python3-dateutil python3-redis
 #search for header files
 apt-get install -y apt-file
 
+#pdf libraries
+apt-get -y install pdftk

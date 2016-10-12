@@ -22,7 +22,7 @@ open ($fh, "> $outfile") or die $!;
 print $fh <<EOF;
 [Desktop Entry]
 Type=Application
-Exec=/usr/bin/shutter
+Exec=/usr/bin/shutter --min_at_startup
 EOF
 close($fh);
 

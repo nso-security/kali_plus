@@ -1,4 +1,4 @@
-#!/usr/bin/bash -v
+#!/bin/bash -v
 mkdir -p /opt/eicar
 wget --directory-prefix=/opt/eicar https://secure.eicar.org/eicar.com 
 wget --directory-prefix=/opt/eicar https://secure.eicar.org/eicar.com.txt 
